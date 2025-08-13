@@ -1,20 +1,17 @@
-import { useState } from "react"
 
-export default function EntryName({ playerName, setPlayerName, ws, handleWebsocket }) {
-  const [nameError, setNameError] = useState("")
-
+export default function EntryName({ playerName, setPlayerName, handleWebsocket, nameError, setNameError }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     let data = new FormData(e.target)
     let playerName = data.get("userName")
     if (!playerName || playerName.trim() === "") {
-      setNameError("You need to provide a name");
-      return; // stop here if invalid
+      setNameError("You need to provide a name")
+      return
     }
     handleWebsocket()
-
   }
 
+  console.log(nameError)
   return (
     <form style={form} onSubmit={handleSubmit} >
       <label style={label} htmlFor="userNmae"> Enter Name </label>
@@ -25,7 +22,7 @@ export default function EntryName({ playerName, setPlayerName, ws, handleWebsock
         style={input}
         value={playerName}
         onChange={e => setPlayerName(e.target.value)} />
-      {nameError && <span style={error}>{nameError}</span>}
+      {nameError  && <span style={error}>{nameError }</span>}
     </form>
   )
 }

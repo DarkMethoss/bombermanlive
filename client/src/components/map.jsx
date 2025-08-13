@@ -22,7 +22,7 @@ export default function Map() {
     return (
         <div className="game-map">
             {map.map((row, rowIndex) => (
-                <div className="map-row" key={rowIndex} style={{ display: "flex", display:"contents"}}>
+                <div className="map-row" key={rowIndex} style={{display:"contents"}}>
                     {row.map((cell, colIndex) => (
                         <div
                             key={colIndex}

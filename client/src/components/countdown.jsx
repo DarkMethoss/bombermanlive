@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function CountdownTimer ({ initialSeconds }){
-    const [seconds, setSeconds] = useState(initialSeconds)
+export default function CountdownTimer ({ seconds, setSeconds }){
     useEffect(() => {
         if (seconds <= 0) {
             return

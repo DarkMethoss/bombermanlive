@@ -5,25 +5,42 @@ import GameMap from './pages/gameMap'
 
 function App() {
   const [page, setPage] = useState("nameEntry")
-  const [playerName, setPlayerName] = useState("")
-  const [players, setPlayers] = useState([])
-  const [group, setGroup] = useState(null);
   const [ws, setWs] = useState(null);
 
+  //* nameEntry page states :
+  const [playerName, setPlayerName] = useState("")
+  const [nameError, setNameError] = useState("")
+  useEffect(() => {
+    if (page === "nameEntry" && ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "setName", data: { name: playerName } }))
+    }
+  }, [ws])
+  
+  //* waitingLobby page states:
+  const [players, setPlayers] = useState([])
+  const [seconds, setSeconds] = useState(null)
+  
   const handleWebsocket = () => {
     const socket = new WebSocket('ws://localhost:8080');
-
     socket.onopen = () => {
       console.log('Connected to websocket server');
       setWs(socket);
     };
-
+    
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      switch (data.type) {
+      const message = JSON.parse(event.data);
+      console.log("====>", message);
+      const data = message.data
+      switch (message.type) {
+        case "nameEntry":
+          setNameError(data.error)
+          break;
         case "waitingLobby":
-          setPage()
+          if (page !== "waitingLobby") {
+            setPage("waitingLobby")
+          }
+          setPlayers(data.players)
+          if (data.seconds) setSeconds(data.seconds)
           break;
         default:
           break;
@@ -39,15 +56,24 @@ function App() {
     };
   }
 
-  useEffect(()=>{
-    if ( page === "nameEntry" && ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({type:"setName", data:{name:playerName}}))
-    }
-  },[ws])
 
-  console.log(ws)
-  if (page === "nameEntry") return <EntryName playerName={playerName} setPlayerName={setPlayerName} handleWebsocket={handleWebsocket} />
-  if (page === "waitingLoby") return <WaitingLobby ws={ws} />
+  if (page === "nameEntry") return (
+    <EntryName 
+      playerName={playerName} 
+      setPlayerName={setPlayerName} 
+      handleWebsocket={handleWebsocket} 
+      nameError={nameError}
+      setNameError={setNameError}
+    />)
+
+  if (page === "waitingLobby") return (
+    <WaitingLobby
+      ws={ws}
+      players={players}
+      setPlayers={setPlayers}
+      seconds={seconds}
+      setSeconds={setSeconds}
+    />)
   if (page === "gameMap") return <GameMap ws={ws} />
 }
 
