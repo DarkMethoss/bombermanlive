@@ -1,24 +1,13 @@
-import { useState } from "react"
-import CountdownTimer from "../components/countdown"
+
 import Chat from "../components/chat"
-import { useEffect } from "react"
 
-export default function WaitingLobby({ ws, players, setPlayers, seconds, setSeconds }) {
-    useEffect(() => {
-
-    }, seconds)
-
-    useEffect(() => {
-        if (players.length >= 2) setSeconds(20)
-        if (players.length == 1) setSeconds(null)
-
-    }, [players, setPlayers])
-
+export default function WaitingLobby({ ws, players, seconds,lobbyState  }) {
     return (
         <section className={"waiting-lobby page"}>
             <div className="count-down-container">
-                <h1>Waiting for players...</h1>
-                {seconds && <CountdownTimer seconds={seconds} setSeconds={setSeconds} />}
+                {lobbyState === "waitingCountDown" && <h1>Waiting for players...</h1>} 
+                {lobbyState === "gameStartCountDown" && <h1>Game starts in: </h1>}
+                {players.length > 1 && <span style={{ fontSize: "2rem", fontWeight: "bold" }}>00:{+seconds < 10 ? `0${seconds}`: seconds}</span>}
             </div>
             <div className="players-container" >
                 {

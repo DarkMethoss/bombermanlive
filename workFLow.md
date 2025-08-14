@@ -104,71 +104,57 @@
 ### "uiControlEvents":
 
 -       {
-            "type": "enterName",
-            "payload": {
+            "type": "enteryName",
+            "data": {
                 "state": "enterName"
             }
         }
 -       {
             "type": "waitingLobby",
-            "payload": {
-                "state": "waitingLobby",
+            "data": {
+                "state": "waitingCountDown" || "gameStartCountDown",
                 "players": ["ayoub", "lucas"]
             }
         }
 -       {
-            "type": "lobbyCountdown",
-            "payload": {
-                "state": "lobbyCountdown",
-                "remaining": 15,
-                "players": ["ayoub", "lucas"]
+            "type": "startGame",
+            "data": {
+                "map":,
+                "blocks",
+                "players":[
+                    {pos:{x:1, y:1}, color:"red"},
+                    {pos:{x:13, y:1}, color:"green"},
+                    {pos:{x:1, y:13}, color:"yellow"},
+                    {pos: {x:13, y:13}, color:"blue"},
+                ]
             }
         }
--       {
-            "type": "preGameCountdown",
-            "payload": {
-                "state": "preGameCountdown",
-                "remaining": 8
-            }
-        }
--       {
-            "type": "inGame",
-            "payload": {
-                "state": "inGame",
-                "gameData": {
-                    "map": [],
-                    "players": [{},],
-                    "blocks": [{x,y},]
-                }
-            }
-        }
+
 -       {
              "type": "gameOver",
-             "payload": {
-                 "resutl": "Win"
-             }
+             "isWon": true
          }
 
 ### "GamePlayEvents":
+
 -        {
              "type": "playerInputEvents",
-             "payload": {
+             "data": {
                 "action" : " "
              }
          }
 -       {
             "type": "gameStateUpdate",
-            "payload": {
+            "data": {
                 "players": [
                     { "id": "player1", "x": 100, "y": 50, "alive": true },
                     { "id": "player2", "x": 150, "y": 70, "alive": false }
                 ],
                 "bombs": [
-                    { "id": "bomb1", "x": 120, "y": 60, "timeLeft": 3000 }
+                    { "id": "bomb1", "x": 120, "y": 60 , "timeLeft": 3000 }
                 ],
                 "powerUps": [
                     { "type": "speed", "x": 200, "y": 150 }
-                ],
-                "timer": 7500
+                ]
             }
         }

@@ -28,14 +28,14 @@ export default function EntryName({ playerName, setPlayerName, handleWebsocket, 
 }
 
 const form = {
-  padding :"30vh" ,
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
+  // alignItems: "center",
   gap: "1rem"
 }
 
 const label = {
+  width:"max-width",
   fontSize: "1.5rem",
   letterSpacing: ".5rem"
 }

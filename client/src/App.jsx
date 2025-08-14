@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import EntryName from './pages/entryName'
 import WaitingLobby from './pages/waitingLoby'
 import GameMap from './pages/gameMap'
+import GameOver from './pages/gameOver'
 
 function App() {
   const [page, setPage] = useState("nameEntry")
@@ -15,18 +16,22 @@ function App() {
       ws.send(JSON.stringify({ type: "setName", data: { name: playerName } }))
     }
   }, [ws])
-  
+
   //* waitingLobby page states:
   const [players, setPlayers] = useState([])
   const [seconds, setSeconds] = useState(null)
-  
+  const [lobbyState, setLobbyState] = useState(null)
+
+  //* game over page states : 
+  const [isWon, setIsWon] = useState(null)
+
   const handleWebsocket = () => {
     const socket = new WebSocket('ws://localhost:8080');
     socket.onopen = () => {
       console.log('Connected to websocket server');
       setWs(socket);
     };
-    
+
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log("====>", message);
@@ -40,8 +45,18 @@ function App() {
             setPage("waitingLobby")
           }
           setPlayers(data.players)
-          if (data.seconds) setSeconds(data.seconds)
+          setSeconds(data.seconds)
+          setLobbyState(data.state)
           break;
+        case "startGame": {
+          setPage("startGame")
+          break;
+        }
+        case "gameOver": {
+          setPage("gameOver")
+          setIsWon(data.isWon)
+          break;
+        }
         default:
           break;
       }
@@ -58,10 +73,10 @@ function App() {
 
 
   if (page === "nameEntry") return (
-    <EntryName 
-      playerName={playerName} 
-      setPlayerName={setPlayerName} 
-      handleWebsocket={handleWebsocket} 
+    <EntryName
+      playerName={playerName}
+      setPlayerName={setPlayerName}
+      handleWebsocket={handleWebsocket}
       nameError={nameError}
       setNameError={setNameError}
     />)
@@ -70,11 +85,15 @@ function App() {
     <WaitingLobby
       ws={ws}
       players={players}
-      setPlayers={setPlayers}
       seconds={seconds}
-      setSeconds={setSeconds}
+      lobbyState={lobbyState}
     />)
-  if (page === "gameMap") return <GameMap ws={ws} />
+  if (page === "startGame") return (
+    <GameMap ws={ws} />
+  )
+  if (page === "gameOver") return (
+    <GameOver isWon={isWon}/>
+  )
 }
 
 export default App

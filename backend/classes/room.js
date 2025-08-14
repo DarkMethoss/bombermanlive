@@ -1,14 +1,15 @@
+import Game from "./game.js"
 
 export default class Room {
     constructor(id, server) {
         this.id = id
         this.gameServer = server
         this.players = new Map()
-        // this.game = new Game(this)
-    }
-
-    getPlayers() {
-        return `Players: ${[...this.players.keys()]}`
+        this.waitingCounter = 20
+        this.gameStartCounter = 10
+        this.isClosed = false
+        this.countDownInterval = null
+        this.game = null
     }
 
     isEmpty() {
@@ -21,25 +22,100 @@ export default class Room {
     }
 
     addPlayer(playerId, playerName, newPlayer) {
-        this.players.set(playerId, newPlayer);
+        this.players.set(playerId, newPlayer)
         newPlayer.userName = playerName
         newPlayer.roomId = this.id
+
+        this.waitingCounter = 20
+        let pCnt = this.players.size
+        if (pCnt === 4) {
+            this.startGameStartCountDown()
+            return
+        }
         this.brodcast("waitingLobby")
+        if (pCnt >= 2) {
+            this.startWaitingCountdown()
+        }
     }
 
     removePlayer(playerId) {
-        this.players.delete(playerId)
-        this.brodcast("waitingLobby")
+        this.players.delete(playerId);
+        let pCnt = this.players.size
+
+        // determine if there is a last standing player
+        if (this.isClosed && this.game) {
+            if (pCnt === 1) {
+                const lastPlayer = this.players.values().next().value;
+                lastPlayer.isWon()
+            }
+            return
+        }
+
+        if (pCnt == 1) {
+            this.isClosed = false
+            this.waitingCounter = 20
+            this.stopWaitingCountdown();
+        }
+        this.brodcast("waitingLobby");
     }
 
-    brodcast(type) {
+    startWaitingCountdown() {
+        if (this.countDownInterval) {
+            clearInterval(this.countDownInterval);
+        }
+        this.countDownInterval = setInterval(() => {
+            if (this.waitingCounter > 0) {
+                this.waitingCounter--;
+                this.brodcast("waitingLobby");
+            } else {
+                this.gameStartCounter = 10
+                this.startGameStartCountDown()
+            }
+        }, 1000);
+    }
+
+    stopWaitingCountdown() {
+        this.waitingCounter = 20
+        if (this.countDownInterval) {
+            clearInterval(this.countDownInterval)
+            this.countDownInterval = null
+        }
+    }
+
+    startGameStartCountDown() {
+        this.isClosed = true
+        if (this.countDownInterval) {
+            clearInterval(this.countDownInterval);
+        }
+        this.brodcast("waitingLobby", { state: "gameStartCountDown" });
+        this.countDownInterval = setInterval(() => {
+            if (this.gameStartCounter > 0) {
+                this.gameStartCounter--;
+                this.brodcast("waitingLobby", { state: "gameStartCountDown" });
+            } else {
+                this.startGame()
+            }
+        }, 1000);
+    }
+
+    startGame() {
+        console.log(this)
+        clearInterval(this.countDownInterval)
+        this.game = new Game(this)
+        this.brodcast("startGame")
+    }
+
+    brodcast(type, options) {
         let message = { type };
         switch (type) {
             case "waitingLobby":
-                let onlinePlayers = [...this.players.values()].map(player=>player.userName)
-                message.data = { players: onlinePlayers, seconds:20}
+                let players = [...this.players.values()].map(player => player.userName)
+                let state = options?.state || "waitingCountDown"
+                let seconds = state === "waitingCountDown" ? this.waitingCounter : this.gameStartCounter
+                message.data = { players, seconds, state }
                 break;
-
+            case "startGame":
+                break;
             default:
                 break;
         }
@@ -48,5 +124,4 @@ export default class Room {
             player.ws.send(JSON.stringify(message))
         })
     }
-
 }
