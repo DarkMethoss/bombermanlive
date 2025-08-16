@@ -11,7 +11,6 @@ export default function EntryName({ playerName, setPlayerName, handleWebsocket, 
     handleWebsocket()
   }
 
-  console.log(nameError)
   return (
     <form style={form} onSubmit={handleSubmit} >
       <label style={label} htmlFor="userNmae"> Enter Name </label>

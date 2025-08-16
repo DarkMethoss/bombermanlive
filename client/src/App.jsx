@@ -8,6 +8,44 @@ function App() {
   const [page, setPage] = useState("nameEntry")
   const [ws, setWs] = useState(null);
 
+
+  //* Game Map States
+  const [bricks, setBricks] = useState()
+  const [bombs, setBombs] = useState()
+  const [players, setPlayers] = useState()
+
+  //* Player states 
+  const [movements, setMovements] = useState(new Set())
+  useEffect(() => {
+    let addMovement = (e) => {
+      let key = e.key
+      console.log("key down: ", key)
+      let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
+      if (keys.includes(key)) setMovements(prev => new Set(prev).add(key))
+    }
+
+    let removeMovement = (e) => {
+      let key = e.key
+      let copy = new Set(movements)
+      copy.delete(key)
+      setMovements(copy)
+    }
+
+    if (page === "startGame") {
+      document.addEventListener("keydown", addMovement)
+      document.addEventListener("keyup", removeMovement)
+    } else {
+      document.removeEventListener("keydown", addMovement)
+      document.removeEventListener("keyup", removeMovement)
+    }
+
+    return () => {
+      document.removeEventListener("keydown", addMovement)
+      document.removeEventListener("keyup", removeMovement)
+    }
+  }, [page])
+
+
   //* nameEntry page states :
   const [playerName, setPlayerName] = useState("")
   const [nameError, setNameError] = useState("")
@@ -17,8 +55,15 @@ function App() {
     }
   }, [ws])
 
+  useEffect(() => {
+    let lastTime = 0;
+    function gameLoop(timeStamp) {
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop(0);
+  },[])
+
   //* waitingLobby page states:
-  const [players, setPlayers] = useState([])
   const [seconds, setSeconds] = useState(null)
   const [lobbyState, setLobbyState] = useState(null)
 
@@ -72,6 +117,9 @@ function App() {
   }
 
 
+
+
+  //* UI Section:
   if (page === "nameEntry") return (
     <EntryName
       playerName={playerName}
@@ -92,7 +140,7 @@ function App() {
     <GameMap ws={ws} />
   )
   if (page === "gameOver") return (
-    <GameOver isWon={isWon}/>
+    <GameOver isWon={isWon} />
   )
 }
 
