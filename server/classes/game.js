@@ -11,17 +11,15 @@ export default class Game {
     update(data){
         const {deltaTime, playerMovements} = data
         if (!playerMovements) return 
-        console.log("Updating the game: ", playerMovements)
-
-        
+        console.log("Updating the game: ",deltaTime, playerMovements)   
     }
 
     getGameData(){
+        
         return {
             blocks: this.blocks,
             powerUps: this.powerUps,
             bombs: this.powerUps,
         }
     }
-
 }

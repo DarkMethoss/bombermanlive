@@ -121,8 +121,6 @@ export default class Room {
                 break;
         }
 
-        console.log(message);
-
         [...this.players.values()].forEach(player => {
             player.ws.send(JSON.stringify(message))
         })

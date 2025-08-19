@@ -21,10 +21,10 @@ export default class Server {
             this.handleDisconnection(playerId)
         })
 
+
         ws.on("message", (message) => {
             const parsed = JSON.parse(message);
             const { type, data } = parsed;
-            console.log(type, "=====> ", data)
             switch (type) {
                 case "setName":
                     this.handlePlayer(ws, data.name, playerId)
@@ -82,7 +82,7 @@ export default class Server {
         let { roomId } = playerData
 
         let room = this.rooms.get(roomId)
-        return room
+        return room 
     }
 
     handleGamesUpdates(playreId, data){
@@ -90,6 +90,6 @@ export default class Server {
         if (room) {
             room.game.update(data)
         }
-        
+        room.brodcast("gameUpdates")
     }
 }

@@ -7,6 +7,7 @@ import GameOver from './pages/gameOver'
 function App() {
   const [page, setPage] = useState("nameEntry")
   const [ws, setWs] = useState(null)
+  const wsRef = useRef(null)
 
   //* Game Map States
   const [bricks, setBricks] = useState()
@@ -16,7 +17,8 @@ function App() {
 
   //* Player states 
   const [movements, setMovements] = useState(new Set())
-  const movementsRef = useRef(movements)
+  const movementsRef = useRef(movements)          
+
 
   useEffect(() => {
     movementsRef.current = movements
@@ -57,6 +59,7 @@ function App() {
     if (page === "nameEntry" && ws && ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: "setName", data: { name: playerName } }))
     }
+    wsRef.current = ws
   }, [ws])
 
   const lastTimeRef = useRef(0)
@@ -64,6 +67,9 @@ function App() {
     if (page !== "startGame") return
 
     function gameLoop(timeStamp) {
+
+      if (!ws) return;
+      
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
 
@@ -73,9 +79,8 @@ function App() {
         message.data.playerMovements = playerMovements
       }
       message.data.deltaTime = deltaTime
-      ws.send(JSON.stringify(message))
-      let id = requestAnimationFrame(gameLoop)
-      console.log("idddd: ", id)
+      wsRef.current?.send(JSON.stringify(message))
+      requestAnimationFrame(gameLoop)
     }
     requestAnimationFrame(gameLoop)
   }, [page])
@@ -101,6 +106,7 @@ function App() {
         case "nameEntry":
           setNameError(data.error)
           break;
+
         case "waitingLobby":
           if (page !== "waitingLobby") {
             setPage("waitingLobby")
@@ -109,10 +115,10 @@ function App() {
           setSeconds(data.seconds)
           setLobbyState(data.state)
           break;
+
         case "startGame":
         case "gameUpdates":
           setPage("startGame")
-          
           break;
 
         case "gameOver":

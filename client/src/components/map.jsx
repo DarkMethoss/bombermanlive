@@ -45,7 +45,7 @@ const getColorForCell = (value) => {
             case 1:
             return "#fff"; // empty space
         case 2:
-            return "#ff0"; // player
+            return "#ff0"; // bricks
         case 3:
             return "#f00"; // bomb
         default:
