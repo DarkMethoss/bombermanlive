@@ -1,9 +1,10 @@
-{ 
+{
   "type": "module",
   "dependencies": {
+    "nodemon": "^3.1.10",
     "ws": "^8.18.3"
   },
   "scripts": {
-    "start": "nodejs index.js"
+    "start": "nodemon server.js"
   }
 }
