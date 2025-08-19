@@ -1,4 +1,6 @@
 import Game from "./game.js"
+import GameMap from "./map.js"
+
 
 export default class Room {
     constructor(id, server) {
@@ -10,6 +12,7 @@ export default class Room {
         this.isClosed = false
         this.countDownInterval = null
         this.game = null
+        this.GameMap = new GameMap(15)
     }
 
     isEmpty() {
@@ -113,7 +116,9 @@ export default class Room {
                 let seconds = state === "waitingCountDown" ? this.waitingCounter : this.gameStartCounter
                 message.data = { players, seconds, state }
                 break;
-            case "startGame": 
+            case "startGame":
+                message.data = this.GameMap.board
+                break;
             case "gameUpdates":
                 message.data = this.game.getGameData()
                 break;
