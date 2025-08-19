@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import EntryName from './pages/entryName'
 import WaitingLobby from './pages/waitingLoby'
 import GameMap from './pages/gameMap'
@@ -6,7 +6,49 @@ import GameOver from './pages/gameOver'
 
 function App() {
   const [page, setPage] = useState("nameEntry")
-  const [ws, setWs] = useState(null);
+  const [ws, setWs] = useState(null)
+
+  //* Game Map States
+  const [bricks, setBricks] = useState()
+  const [bombs, setBombs] = useState()
+  const [flames, setFlames] = useState()
+  const [players, setPlayers] = useState()
+
+  //* Player states 
+  const [movements, setMovements] = useState(new Set())
+  const movementsRef = useRef(movements)
+
+  useEffect(() => {
+    movementsRef.current = movements
+  }, [movements])
+
+  useEffect(() => {
+    let addMovement = (e) => {
+      let key = e.key
+      let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
+      if (keys.includes(key)) setMovements(prev => new Set(prev).add(key))
+    }
+
+    let removeMovement = (e) => {
+      let key = e.key
+      let copy = new Set(movements)
+      copy.delete(key)
+      setMovements(copy)
+    }
+
+    if (page === "startGame") {
+      document.addEventListener("keydown", addMovement)
+      document.addEventListener("keyup", removeMovement)
+    } else {
+      document.removeEventListener("keydown", addMovement)
+      document.removeEventListener("keyup", removeMovement)
+    }
+
+    return () => {
+      document.removeEventListener("keydown", addMovement)
+      document.removeEventListener("keyup", removeMovement)
+    }
+  }, [page])
 
   //* nameEntry page states :
   const [playerName, setPlayerName] = useState("")
@@ -17,14 +59,33 @@ function App() {
     }
   }, [ws])
 
+  const lastTimeRef = useRef(0)
+  useEffect(() => {
+    if (page !== "startGame") return
+
+    function gameLoop(timeStamp) {
+      let deltaTime = timeStamp - lastTimeRef.current
+      lastTimeRef.current = timeStamp
+
+      let message = { type: "getGameUpdates", data: {} }
+      let playerMovements = [...movementsRef.current.values()]
+      if (playerMovements.length > 0) {
+        message.data.playerMovements = playerMovements
+      }
+      message.data.deltaTime = deltaTime
+      ws.send(JSON.stringify(message))
+      let id = requestAnimationFrame(gameLoop)
+      console.log("idddd: ", id)
+    }
+    requestAnimationFrame(gameLoop)
+  }, [page])
+
   //* waitingLobby page states:
-  const [players, setPlayers] = useState([])
   const [seconds, setSeconds] = useState(null)
   const [lobbyState, setLobbyState] = useState(null)
 
   //* game over page states : 
   const [isWon, setIsWon] = useState(null)
-
   const handleWebsocket = () => {
     const socket = new WebSocket('ws://localhost:8080');
     socket.onopen = () => {
@@ -48,15 +109,17 @@ function App() {
           setSeconds(data.seconds)
           setLobbyState(data.state)
           break;
-        case "startGame": {
+        case "startGame":
+        case "gameUpdates":
           setPage("startGame")
+          
           break;
-        }
-        case "gameOver": {
+
+        case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)
           break;
-        }
+
         default:
           break;
       }
@@ -64,6 +127,8 @@ function App() {
 
     socket.onclose = () => {
       console.log('Disconnected from websocket server');
+      setWs(null)
+      setPage("nameEntry")
     };
 
     socket.onerror = (err) => {
@@ -71,7 +136,7 @@ function App() {
     };
   }
 
-
+  //* UI Section:
   if (page === "nameEntry") return (
     <EntryName
       playerName={playerName}
@@ -79,7 +144,8 @@ function App() {
       handleWebsocket={handleWebsocket}
       nameError={nameError}
       setNameError={setNameError}
-    />)
+    />
+  )
 
   if (page === "waitingLobby") return (
     <WaitingLobby
@@ -87,12 +153,15 @@ function App() {
       players={players}
       seconds={seconds}
       lobbyState={lobbyState}
-    />)
+    />
+  )
+
   if (page === "startGame") return (
     <GameMap ws={ws} />
   )
+
   if (page === "gameOver") return (
-    <GameOver isWon={isWon}/>
+    <GameOver isWon={isWon} />
   )
 }
 

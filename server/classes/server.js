@@ -31,12 +31,16 @@ export default class Server {
             const parsed = JSON.parse(message);
             console.log(parsed, "message");
             const { type, data } = parsed;
+            console.log(type, "=====> ", data)
             switch (type) {
                 case "setName":
                     this.handlePlayer(ws, data.name, playerId)
-                    break;
+                    break
+                case "getGameUpdates":
+                    this.handleGamesUpdates(playerId, data)
+                    break
                 default:
-                    break;
+                    break
             }
         })
 
@@ -65,20 +69,35 @@ export default class Server {
     }
 
     handleDisconnection(playerId) {
-        let playerData = this.players.get(playerId)
-        if (!playerData) return
+        let room = this.getPlayerRoom(playerId)
 
-        let { roomId } = playerData
-
-        let room = this.rooms.get(roomId)
         if (room) {
             room.removePlayer(playerId)
             if (room.players.size === 0) {
-                this.rooms.delete(roomId)
+                this.rooms.delete(room.id)
             }
         }
 
         this.players.delete(playerId)
+
+        console.log("Remaining roooms: ", this.rooms.size)
     }
 
+
+    getPlayerRoom(playerId) {
+        let playerData = this.players.get(playerId)
+        if (!playerData) return null
+        let { roomId } = playerData
+
+        let room = this.rooms.get(roomId)
+        return room
+    }
+
+    handleGamesUpdates(playreId, data){
+        let room = this.getPlayerRoom(playreId)
+        if (room) {
+            room.game.update(data)
+        }
+        
+    }
 }
