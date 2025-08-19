@@ -14,6 +14,7 @@ function App() {
   const [bombs, setBombs] = useState()
   const [flames, setFlames] = useState()
   const [players, setPlayers] = useState()
+  const [map, setMap] = useState()
 
   //* Player states 
   const [movements, setMovements] = useState(new Set())
@@ -117,10 +118,12 @@ function App() {
           break;
 
         case "startGame":
-        case "gameUpdates":
+          console.log("hnaaaaaaaaaaa");
           setPage("startGame")
+          console.log("data :", data);
+          setMap(data)
+        case "gameUpdates":
           break;
-
         case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)
@@ -163,7 +166,7 @@ function App() {
   )
 
   if (page === "startGame") return (
-    <GameMap ws={ws} />
+    <GameMap ws={ws} map={map} />
   )
 
   if (page === "gameOver") return (

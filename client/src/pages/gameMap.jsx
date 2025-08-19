@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Map from "../components/map";
 
-export default function GameMap({ws}) {
+export default function GameMap({ws  , map}) {
     const [speed, setSpeed] = useState(1)
     const [bombs, setBombs] = useState(1)
     const [flame, setFlame] = useState(1)
@@ -19,7 +19,7 @@ export default function GameMap({ws}) {
                     <div className="powerup">🔥<span>x{flame}</span></div>
                 </div>
             </div>
-            <Map />
+            <Map  map={map} />
         </section>
     )
 }

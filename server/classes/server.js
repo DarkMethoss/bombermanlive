@@ -1,6 +1,7 @@
 import { generateId } from "../utils/utils.js"
 import { Player } from "./player.js"
 import Room from "./room.js"
+import GameMap  from "./map.js";
 
 //* Server class : handles websocket game server
 //* - handle players ( remove and add to rooms )
@@ -10,7 +11,10 @@ export default class Server {
         this.server = wss
         this.players = new Map() // [playerId, {player: new Player(), roomId: RoomId} ]
         this.rooms = new Map() // [groupId, Room]
-        wss.on("connection", ws => this.handleConnection(ws))
+        this.Map = new GameMap({}, 15) // Initialize the game map with size 15   // Generate walls on the map
+        wss.on("connection", ws => {
+            this.handleConnection(ws)
+        })
     }
 
     handleConnection(ws) {
@@ -32,10 +36,15 @@ export default class Server {
                 case "getGameUpdates":
                     this.handleGamesUpdates(playerId, data)
                     break
+                case "startGame":
+                    console.log("hhhhhhhhhh", data);
+                case  "board":
+                    console.log("hnaaaaaaaaa");
                 default:
                     break
             }
         })
+
     }
 
     handlePlayer(ws, playerName, playerId) {
