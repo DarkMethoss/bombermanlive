@@ -2,7 +2,7 @@ export default class GameMap {
     constructor(size) {
         this.size = size
         // this is the correct way to initilizz it 
-        this.proportion = 0.6
+        this.proportion = 1
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
     }
@@ -26,8 +26,8 @@ export default class GameMap {
             let randomized = Math.round(emptyElements[row].length * this.proportion)
             let indices = Array.from(Array(randomized), () => Math.floor(Math.random() * (this.size - 1)))
             for (let index of indices) {
-                if (((row == 1 || row == this.size - 2) && (index == 1 || index == 2 || index == this.size - 2 || index == this.size - 1)) ||
-                    ((row == 2 || row == this.size - 3) && (index == 1 || index == this.size - 1))
+                if (((row == 1 || row == this.size - 2) && (index == 1 || index == 2 || index == this.size - 2 || index == this.size - 3)) ||
+                    ((row == 2 || row == this.size - 3) && (index == 1 || index == this.size - 2))
                 ) continue
                 if (this.board[row][index] == 0) {
                     this.board[row][index] = 2
