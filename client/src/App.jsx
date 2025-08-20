@@ -12,13 +12,17 @@ function App() {
   //* Game Map States
   const [bricks, setBricks] = useState()
   const [bombs, setBombs] = useState()
+  const [powerUps, setPowerUps] = useState()
   const [flames, setFlames] = useState()
   const [players, setPlayers] = useState()
   const [map, setMap] = useState()
 
   //* Player states 
   const [movements, setMovements] = useState(new Set())
-  const movementsRef = useRef(movements)          
+  const [speedStat, setSpeedStat] = useState(1)
+  const [bombStat, setBombStat] = useState(1)
+  const [flameStat, setFlameStat] = useState(1)
+  const movementsRef = useRef(movements)
 
 
   useEffect(() => {
@@ -70,7 +74,7 @@ function App() {
     function gameLoop(timeStamp) {
 
       if (!ws) return;
-      
+
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
 
@@ -101,7 +105,6 @@ function App() {
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("====>", message);
       const data = message.data
       switch (message.type) {
         case "nameEntry":
@@ -118,12 +121,18 @@ function App() {
           break;
 
         case "startGame":
-          console.log("hnaaaaaaaaaaa");
           setPage("startGame")
-          console.log("data :", data);
-          setMap(data)
-        case "gameUpdates":
+          setMap(data.map)
+          setPlayers(data.players)
+          setBricks(data.bricks)
+          console.log(data)
           break;
+
+        case "gameUpdates":
+          setPlayers(data.players)
+          setBricks(data.bricks)
+          break;
+
         case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)
@@ -166,7 +175,17 @@ function App() {
   )
 
   if (page === "startGame") return (
-    <GameMap ws={ws} map={map} />
+    <GameMap
+      map={map}
+      players={players}
+      bricks={bricks}
+      bombs={bombs}
+      powerUps={powerUps}
+      flames={flames}
+      speedStat={speedStat}
+      bombStat={bombStat}
+      flameStat={flameStat}
+    />
   )
 
   if (page === "gameOver") return (

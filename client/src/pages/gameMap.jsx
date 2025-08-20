@@ -1,10 +1,20 @@
-import { useState } from "react";
 import Map from "../components/map";
 
-export default function GameMap({ws  , map}) {
-    const [speed, setSpeed] = useState(1)
-    const [bombs, setBombs] = useState(1)
-    const [flame, setFlame] = useState(1)
+export default function GameMap({
+    // game map state
+    map,
+    players,
+    bricks,
+    bombs,
+    powerUps,
+    flames,
+
+    // player stats states
+    speedStat,
+    bombStat,
+    flameStat,
+
+}) {
 
     return (
         <section className="page game-page">
@@ -14,12 +24,23 @@ export default function GameMap({ws  , map}) {
                 </span>
                 <span> ♥️♥️♥️</span>
                 <div className="game-powerups-container">
-                    <div className="powerup">💣<span>x{bombs}</span></div>
-                    <div className="powerup">⚡<span>x{speed}</span></div>
-                    <div className="powerup">🔥<span>x{flame}</span></div>
+                    <div className="powerup">💣<span>x{bombStat}</span></div>
+                    <div className="powerup">⚡<span>x{speedStat}</span></div>
+                    <div className="powerup">🔥<span>x{flameStat}</span></div>
                 </div>
             </div>
-            <Map  map={map} />
+            <div className="game-map-container">
+                <Map map={map} />
+                {/* todo: place game elements  */}
+                {
+                    bricks?.map((brick, index)=> <div key={index} className="brick" 
+                        style={{transform:`translate(${brick.x}px, ${brick.y}px)`}}></div>)
+                }
+                {
+                    players?.map((player,index)=><div key={index} className="brick" 
+                        style={{transform:`translate(${player.x}px, ${player.y}px)`,background:`${player.color}`}}></div>)
+                }
+            </div>
         </section>
     )
 }

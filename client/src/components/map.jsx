@@ -6,32 +6,15 @@ export default function Map({map}) {
         <div className="game-map">
             {map.map((row, rowIndex) => (
                 <div className="map-row" key={rowIndex} style={{display:"contents"}}>
-                    {row.map((cell, colIndex) => (
+                    {row.map((col, colIndex) => (
                         <div
                             key={colIndex}
-                            className={`map-cell`}
-                            style={{
-                                backgroundColor: getColorForCell(cell)
-                            }}
+                            className = {col === 0 ? "empty-space": "wall"}
                         />
                     ))}
+                    
                 </div>
             ))}
         </div>
     )
 }
-
-const getColorForCell = (value) => {
-    switch (value) {
-        case 0:
-            return "#333"; // wall
-            case 1:
-            return "#fff"; // empty space
-        case 2:
-            return "#ff0"; // bricks
-        case 3:
-            return "#f00"; // bomb
-        default:
-            return "#fff";
-    }
-};

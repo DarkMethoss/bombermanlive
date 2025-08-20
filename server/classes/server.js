@@ -11,7 +11,6 @@ export default class Server {
         this.server = wss
         this.players = new Map() // [playerId, {player: new Player(), roomId: RoomId} ]
         this.rooms = new Map() // [groupId, Room]
-        this.Map = new GameMap({}, 15) // Initialize the game map with size 15   // Generate walls on the map
         wss.on("connection", ws => {
             this.handleConnection(ws)
         })
@@ -25,7 +24,6 @@ export default class Server {
             this.handleDisconnection(playerId)
         })
 
-
         ws.on("message", (message) => {
             const parsed = JSON.parse(message);
             const { type, data } = parsed;
@@ -36,15 +34,10 @@ export default class Server {
                 case "getGameUpdates":
                     this.handleGamesUpdates(playerId, data)
                     break
-                case "startGame":
-                    console.log("hhhhhhhhhh", data);
-                case  "board":
-                    console.log("hnaaaaaaaaa");
                 default:
                     break
             }
         })
-
     }
 
     handlePlayer(ws, playerName, playerId) {
@@ -62,7 +55,7 @@ export default class Server {
         if (roomCanJoin) {
             this.players.set(playerId, { player: newPlayer, roomId: roomCanJoin.id })
             roomCanJoin.addPlayer(playerId, playerName, newPlayer)
-        } else if (!roomCanJoin) {
+        } else {
             let message = { type: "nameEntry", data: { error: "userName already exists" } }
             ws.send(JSON.stringify(message))
         }
@@ -80,10 +73,8 @@ export default class Server {
         }
 
         this.players.delete(playerId)
-
         console.log("Remaining roooms: ", this.rooms.size)
     }
-
 
     getPlayerRoom(playerId) {
         let playerData = this.players.get(playerId)
@@ -96,8 +87,9 @@ export default class Server {
 
     handleGamesUpdates(playreId, data){
         let room = this.getPlayerRoom(playreId)
+        
         if (room) {
-            room.game.update(data)
+            room.game.update(playreId, data)
         }
         room.brodcast("gameUpdates")
     }

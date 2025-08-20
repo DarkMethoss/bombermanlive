@@ -1,5 +1,6 @@
 /* client/src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -90,7 +91,7 @@ body {
   display: flex;
   gap: 1rem;
 
-  
+
 
   input {
     flex-grow: 1;
@@ -126,31 +127,39 @@ body {
   }
 }
 
-/* Ingame Page */ 
-.game-page{
+/* Ingame Page */
+.game-page {
   padding: 2rem;
 }
 
 .game-stats {
   display: flex;
   justify-content: space-between;
-  max-width : 700px !important;
-  padding:  1rem 0;
+  max-width: 700px !important;
+  padding: 1rem 0;
   margin: auto;
 }
 
 .game-powerups-container {
-    display: flex;
-    gap: .5rem;
-  }
+  display: flex;
+  gap: .5rem;
+}
 
 .powerup {
   font-size: 1.2rem;
+
   span {
     /* display: none; */
     font-size: 1rem;
     text-decoration: wavy;
   }
+}
+
+.game-map-container {
+  width: 700px;
+  height: 700px;
+  position: relative;
+  margin: auto;
 }
 
 .game-map {
@@ -159,8 +168,43 @@ body {
   grid-template-rows: repeat(15, 1fr);
   gap: 1px;
   width: 100%;
-  max-width :700px;
-  max-height:700px;
   height: 100%;
-  margin: auto;
+}
+
+.brick, .player, .powerUp, .flame, .bomb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(700px / 15);
+  height: calc(700px / 15);
+}
+
+.player {
+
+}
+
+.empty-space{
+  background-color: #333;
+}
+
+.wall {
+  background-color: #fff;
+}
+
+.brick {
+  background-color: #ff0;
+  box-shadow: 1px 1px 10px inset #333;
+  /* transform: translate(); */
+}
+
+.powerUp {
+
+}
+
+.bomb {
+  
+}
+
+.flame {
+
 }

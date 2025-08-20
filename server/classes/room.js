@@ -1,5 +1,4 @@
 import Game from "./game.js"
-import GameMap from "./map.js"
 
 
 export default class Room {
@@ -12,7 +11,6 @@ export default class Room {
         this.isClosed = false
         this.countDownInterval = null
         this.game = null
-        this.GameMap = new GameMap(15)
     }
 
     isEmpty() {
@@ -28,7 +26,6 @@ export default class Room {
         this.players.set(playerId, newPlayer)
         newPlayer.userName = playerName
         newPlayer.roomId = this.id
-
         this.waitingCounter = 5
         let pCnt = this.players.size
         if (pCnt === 4) {
@@ -104,6 +101,7 @@ export default class Room {
     startGame() {
         clearInterval(this.countDownInterval)
         this.game = new Game(this)
+        // this.game.
         this.brodcast("startGame")
     }
 
@@ -117,14 +115,19 @@ export default class Room {
                 message.data = { players, seconds, state }
                 break;
             case "startGame":
-                message.data = this.GameMap.board
+                message.data = {
+                    map : this.game.gameMap,
+                    ...this.game.gameData
+                }
+                console.log(message);
                 break;
             case "gameUpdates":
-                message.data = this.game.getGameData()
+                message.data = this.game.gameData
                 break;
             default:
                 break;
         }
+
 
         [...this.players.values()].forEach(player => {
             player.ws.send(JSON.stringify(message))
