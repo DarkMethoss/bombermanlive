@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export default function Map({map}) {
-  console.log("map inside the", map);
     return (
         <div className="game-map">
             {map.map((row, rowIndex) => (

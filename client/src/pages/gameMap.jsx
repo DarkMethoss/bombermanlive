@@ -14,7 +14,9 @@ export default function GameMap({
     bombStat,
     flameStat,
 
-}) {
+}) {   
+
+    // console.log(players)
 
     return (
         <section className="page game-page">
@@ -37,7 +39,7 @@ export default function GameMap({
                         style={{transform:`translate(${brick.x}px, ${brick.y}px)`}}></div>)
                 }
                 {
-                    players?.map((player,index)=><div key={index} className="brick" 
+                    players?.map((player,index)=><div key={index} className="player" 
                         style={{transform:`translate(${player.x}px, ${player.y}px)`,background:`${player.color}`}}></div>)
                 }
             </div>

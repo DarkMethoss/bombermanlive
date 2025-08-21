@@ -27,6 +27,7 @@ function App() {
 
   useEffect(() => {
     movementsRef.current = movements
+    console.log(movements)
   }, [movements])
 
   useEffect(() => {
@@ -87,7 +88,7 @@ function App() {
       wsRef.current?.send(JSON.stringify(message))
       requestAnimationFrame(gameLoop)
     }
-    requestAnimationFrame(gameLoop)
+    gameLoop(0)
   }, [page])
 
   //* waitingLobby page states:
@@ -103,6 +104,8 @@ function App() {
       setWs(socket);
     };
 
+
+
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const data = message.data
@@ -110,7 +113,6 @@ function App() {
         case "nameEntry":
           setNameError(data.error)
           break;
-
         case "waitingLobby":
           if (page !== "waitingLobby") {
             setPage("waitingLobby")
@@ -125,7 +127,6 @@ function App() {
           setMap(data.map)
           setPlayers(data.players)
           setBricks(data.bricks)
-          console.log(data)
           break;
 
         case "gameUpdates":
