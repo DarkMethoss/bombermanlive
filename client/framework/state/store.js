@@ -1,4 +1,5 @@
 import { reconcile } from "../core/reconcile.js"
+import { deepEqual } from "../utils/deepEqual.js"
 
 let currentComponent = null
 
@@ -14,7 +15,7 @@ export function useState(initialValue) {
 
     const setState = (newValue) => {
         const oldValue = component.states[stateIndex]
-        if (newValue !== oldValue) {
+        if (deepEqual(oldValue, newValue)) {
             component.states[stateIndex] = newValue
             rerender(component)
         }

@@ -1,3 +1,4 @@
+import { deepEqual } from './utils/deepEqual.js'
 export { createElement, generateId } from './core/createElement.js'
 export { render, createDomNode } from './core/render.js'
 export { useState, useRef, useEffect, withState, rerender } from './state/store.js'
