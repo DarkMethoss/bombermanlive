@@ -7,7 +7,7 @@ export default class Room {
         this.gameServer = server
         this.players = new Map()
         this.waitingCounter = 5
-        this.gameStartCounter = 5
+        this.gameStartCounter = 1
         this.isClosed = false
         this.countDownInterval = null
         this.game = null
@@ -68,7 +68,7 @@ export default class Room {
                 this.waitingCounter--
                 this.brodcast("waitingLobby")
             } else {
-                this.gameStartCounter = 5
+                this.gameStartCounter = 1
                 this.startGameStartCountDown()
             }
         }, 1000);
@@ -119,7 +119,6 @@ export default class Room {
                     map : this.game.gameMap,
                     ...this.game.gameData
                 }
-                console.log(message);
                 break;
             case "gameUpdates":
                 message.data = this.game.gameData

@@ -58,6 +58,8 @@ export function withState(componentFn) {
             stateIndex: 0,
             effects: [],
             effectIndex: 0,
+            refs: [],
+            refIndex: 0,
             renderFn: null,
             vnode: null
         }
@@ -68,6 +70,7 @@ export function withState(componentFn) {
         component.renderFn = () => {
             component.stateIndex = 0
             component.effectIndex = 0
+            component.refIndex = 0
             return componentFn(component)
         }
 

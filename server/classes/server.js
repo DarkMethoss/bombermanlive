@@ -73,7 +73,6 @@ export default class Server {
         }
 
         this.players.delete(playerId)
-        console.log("Remaining roooms: ", this.rooms.size)
     }
 
     getPlayerRoom(playerId) {

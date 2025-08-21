@@ -96,25 +96,25 @@ export default function GameMap({
                 children: [
                     Map({ map }),
 
-                    bricks?.map((brick, index) => {
+                    ...bricks?.map((brick, index) => {
                         return {
                             tag: 'div',
                             key: index,
                             attrs: {
                                 className: 'brick',
-                                style: `transform': translate(${brick.x}px, ${brick.y}px)`
+                                style: `transform: translate(${brick.x}px, ${brick.y}px)`
                             },
                             children: [],
                         }
                     }),
 
-                    players?.map((player, index) => {
+                    ...players?.map((player, index) => {
                         return {
                             tag: 'div',
                             key: index,
                             attrs: {
-                                className: 'brick',
-                                style: `transform': translate(${player.x}px, ${player.y}px);  background: ${player.color}`
+                                className: 'player',
+                                style: `transform: translate(${player.x}px, ${player.y}px);  background: ${player.color}`
                             },
                             children: [],
                         }

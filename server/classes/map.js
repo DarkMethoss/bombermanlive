@@ -1,18 +1,19 @@
 export default class GameMap {
     constructor(game, size) {
         this.game = game
-        this.width = 700
-        this.size = size
-        // this is the correct way to initilizz it 
+        this.width = 750
+        this.height = 750
+        this.cols = size.cols
+        this.rows = size.rows
         this.proportion = 1
-        this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
+        this.board = Array(this.rows).fill(0).map(() => Array(this.cols).fill(0))
         this.generateBricks()
     }
 
     generateWalls() {
-        for (let row = 0; row < this.size; row++) {
-            for (let column = 0; column < this.size; column++) {
-                if ((row == 0 || row == this.size - 1 || column == 0 || column == this.size - 1) || (row % 2 == 0 && column % 2 == 0)) {
+        for (let row = 0; row < this.rows; row++) {
+            for (let column = 0; column < this.cols; column++) {
+                if ((row == 0 || row == this.rows - 1 || column == 0 || column == this.cols - 1) || (row % 2 == 0 && column % 2 == 0)) {
                     this.board[row][column] = 1
                 }
             }
@@ -20,22 +21,19 @@ export default class GameMap {
         this.game.initialBoard = JSON.parse(JSON.stringify(this.board))
     }
 
-
-
     generateBricks() {
         this.generateWalls()
         let emptyElements = this.#FindEmptyElementsBoard()
-        for (let row = 0; row < this.size; row++) {
+        for (let row = 0; row < this.rows; row++) {
             let randomized = Math.round(emptyElements[row].length * this.proportion)
-            let indices = Array.from(Array(randomized), () => Math.floor(Math.random() * (this.size - 1)))
-            for (let index of indices) {
-                if (((row == 1 || row == this.size - 2) && (index == 1 || index == 2 || index == this.size - 2 || index == this.size - 3)) ||
-                    ((row == 2 || row == this.size - 3) && (index == 1 || index == this.size - 2))
+            let indices = Array.from(Array(randomized), () => Math.floor(Math.random() * (this.cols - 1)))
+            for (let col of indices) {
+                if (((row == 1 || row == this.rows - 2) && (col == 1 || col == 2 || col == this.cols - 2 || col == this.cols - 3)) ||
+                    ((row == 2 || row == this.rows - 3) && (col == 1 || col == this.cols - 2))
                 ) continue
-                if (this.board[row][index] == 0) {
-                    console.log("gaaaaaame briiiiiicks: ", this.game.bricks)
-                    this.game.bricks.push({ x: index * 700 / 15, y: row * 700 / 15 })
-                    this.board[row][index] = 2
+                if (this.board[row][col] == 0) {
+                    this.game.bricks.push({ x: col * 700 / 15, y: row * 700 / 15 })
+                    this.board[row][col] = 2
                 }
             }
         }
@@ -43,31 +41,19 @@ export default class GameMap {
 
     isWalkable(x,y){
         const {col,row} = this.getCell(x, y)
-        console.log("cooooooooooool, roooooooooow", col, row)
-
-
-
         let cellValue = this.board[row][col]
-
-        console.log(cellValue)
-        return cellValue !== 1
+        return cellValue != 1
     }
-    
+
     getCell(x,y) {
-
-        let col = Math.ceil(x / (this.width / this.size)) -1
-        let row = Math.ceil(y / (this.width / this.size)) -1
-        
-        console.log("from to pixel to grid", `${x},${y}=====> ${col},${row}`)
-
-        if (row >= this.size) row = this.size -1
+        let col = Math.floor(x / (this.width / this.cols))
+        let row = Math.floor(y / (this.height / this.rows))
+        if (row >= this.rows) row = this.rows -1
         if (row < 0) row = 0
-        if (col >= this.size) col = this.size -1
+        if (col >= this.cols) col = this.cols -1
         if (col < 0) col = 0
-
         return {col, row}
     }
-
 
     #FindEmptyElementsBoard() {
         const EmptyELements = this.board.map((row, i) => {

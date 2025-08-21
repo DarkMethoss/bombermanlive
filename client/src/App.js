@@ -29,14 +29,14 @@ export const App = withState(function App(component) {
 
 
   useEffect(() => {
-    movementsRef.current = movements
+    movementsRef.current = movements  
   }, [movements])
 
   useEffect(() => {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key)) setMovements(prev => new Set(prev).add(key))
+      if (keys.includes(key)) setMovements(new Set(movements).add(key))
     }
 
     let removeMovement = (e) => {
@@ -47,6 +47,7 @@ export const App = withState(function App(component) {
     }
 
     if (page === "startGame") {
+
       document.addEventListener("keydown", addMovement)
       document.addEventListener("keyup", removeMovement)
     } else {
@@ -74,6 +75,7 @@ export const App = withState(function App(component) {
   const lastTimeRef = useRef(0)
 
   useEffect(() => {
+
     if (page !== "startGame") return
 
     function gameLoop(timeStamp) {
@@ -88,11 +90,11 @@ export const App = withState(function App(component) {
       if (playerMovements.length > 0) {
         message.data.playerMovements = playerMovements
       }
-      message.data.deltaTime = deltaTime
+      message.data.deltaTime = deltaTime      
       wsRef.current?.send(JSON.stringify(message))
       requestAnimationFrame(gameLoop)
     }
-    requestAnimationFrame(gameLoop)
+    gameLoop(0)
   }, [page])
 
   //* waitingLobby page states:
@@ -108,6 +110,8 @@ export const App = withState(function App(component) {
       setWs(socket);
     };
 
+
+
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const data = message.data
@@ -115,7 +119,6 @@ export const App = withState(function App(component) {
         case "nameEntry":
           setNameError(data.error)
           break;
-
         case "waitingLobby":
           if (page !== "waitingLobby") {
             setPage("waitingLobby")
@@ -130,10 +133,10 @@ export const App = withState(function App(component) {
           setMap(data.map)
           setPlayers(data.players)
           setBricks(data.bricks)
-          console.log(data)
           break;
 
         case "gameUpdates":
+
           setPlayers(data.players)
           setBricks(data.bricks)
           break;
