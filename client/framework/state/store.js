@@ -13,8 +13,11 @@ export function useState(initialValue) {
     }
 
     const setState = (newValue) => {
-        component.states[stateIndex] = newValue
-        rerender(component)
+        const oldValue = component.states[stateIndex]
+        if (newValue !== oldValue) {
+            component.states[stateIndex] = newValue
+            rerender(component)
+        }
     }
 
     return [component.states[stateIndex], setState]
