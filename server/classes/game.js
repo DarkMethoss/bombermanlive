@@ -10,14 +10,13 @@ export default class Game {
         this.powerUps = []
         this.bombs = []
         this.flames = []
-        this.map = new GameMap(this, { cols: 15, rows: 15 })
+        this.map = new GameMap(this, 15)
         this.initPlayerPositions()
     }
     // 14 x 10
     initPlayerPositions() {
-        const cols = this.map.cols
-        const rows = this.map.rows
-        const startPositions = [{ x: 1, y: 1 }, { x: cols - 2, y: rows - 2 }, { x: 1, y: rows - 2 }, { x: cols - 2, y: 1 }]
+        const size = this.map.size
+        const startPositions = [{ x: 1, y: 1 }, { x: size - 2, y: size - 2 }, { x: 1, y: size - 2 }, { x: size - 2, y: 1 }]
         const colors = ["red", "green", "blue", "yellow"];
         [...this.players.values()].forEach((player) => {
             const { x, y } = startPositions.shift()

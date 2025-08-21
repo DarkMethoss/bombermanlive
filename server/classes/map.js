@@ -3,17 +3,16 @@ export default class GameMap {
         this.game = game
         this.width = 750
         this.height = 750
-        this.cols = size.cols
-        this.rows = size.rows
-        this.proportion = 1
-        this.board = Array(this.rows).fill(0).map(() => Array(this.cols).fill(0))
+        this.size = size
+        this.proportion = 0.7
+        this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
     }
 
     generateWalls() {
-        for (let row = 0; row < this.rows; row++) {
-            for (let column = 0; column < this.cols; column++) {
-                if ((row == 0 || row == this.rows - 1 || column == 0 || column == this.cols - 1) || (row % 2 == 0 && column % 2 == 0)) {
+        for (let row = 0; row < this.size; row++) {
+            for (let column = 0; column < this.size; column++) {
+                if ((row == 0 || row == this.size - 1 || column == 0 || column == this.size - 1) || (row % 2 == 0 && column % 2 == 0)) {
                     this.board[row][column] = 1
                 }
             }
@@ -24,19 +23,20 @@ export default class GameMap {
     generateBricks() {
         this.generateWalls()
         let emptyElements = this.#FindEmptyElementsBoard()
-        for (let row = 0; row < this.rows; row++) {
+        for (let row = 0; row < this.size; row++) {
             let randomized = Math.round(emptyElements[row].length * this.proportion)
-            let indices = Array.from(Array(randomized), () => Math.floor(Math.random() * (this.cols - 1)))
-            for (let col of indices) {
-                if (((row == 1 || row == this.rows - 2) && (col == 1 || col == 2 || col == this.cols - 2 || col == this.cols - 3)) ||
-                    ((row == 2 || row == this.rows - 3) && (col == 1 || col == this.cols - 2))
+            let indices = new Set(Array.from(Array(randomized), () => Math.floor(Math.random() * (this.size - 1))))
+            for (let col of [...indices.values()]) {
+                if (((row == 1 || row == this.size - 2) && (col == 1 || col == 2 || col == this.size - 2 || col == this.size - 3)) ||
+                    ((row == 2 || row == this.size - 3) && (col == 1 || col == this.size - 2))
                 ) continue
                 if (this.board[row][col] == 0) {
-                    this.game.bricks.push({ x: col * 700 / 15, y: row * 700 / 15 })
+                    this.game.bricks.push({ x: col * 750 / 15, y: row * 750 / 15 })
                     this.board[row][col] = 2
                 }
             }
         }
+        console.log(`size:${this.game.bricks.length}`,this.game.bricks)
     }
 
     isWalkable(x,y){
@@ -46,11 +46,11 @@ export default class GameMap {
     }
 
     getCell(x,y) {
-        let col = Math.floor(x / (this.width / this.cols))
-        let row = Math.floor(y / (this.height / this.rows))
-        if (row >= this.rows) row = this.rows -1
+        let col = Math.floor(x / (this.width / this.size))
+        let row = Math.floor(y / (this.height / this.size))
+        if (row >= this.size) row = this.size -1
         if (row < 0) row = 0
-        if (col >= this.cols) col = this.cols -1
+        if (col >= this.size) col = this.size -1
         if (col < 0) col = 0
         return {col, row}
     }
