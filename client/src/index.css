@@ -1,4 +1,3 @@
-/* client/src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
 * {
@@ -179,9 +178,9 @@ body {
   height: calc(700px / 15);
 }
 
-.player {
+/* .player {
 
-}
+} */
 
 .empty-space{
   background-color: #333;
@@ -197,7 +196,7 @@ body {
   /* transform: translate(); */
 }
 
-.powerUp {
+/* .powerUp {
 
 }
 
@@ -207,4 +206,4 @@ body {
 
 .flame {
 
-}
+} */

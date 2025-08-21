@@ -1,21 +1,24 @@
-import { useEffect, useState, useRef } from 'react'
-import EntryName from './pages/entryName'
-import WaitingLobby from './pages/waitingLoby'
-import GameMap from './pages/gameMap'
-import GameOver from './pages/gameOver'
+import { createElement, withState, useEffect, useState, useRef } from '../framework/index.js'
+import EntryName from './pages/entryName.js'
+import WaitingLobby from './pages/waitingLoby.js'
+import GameMap from './pages/gameMap.js'
+import GameOver from './pages/gameOver.js'
 
-function App() {
+export let appComponent
+
+export const App = withState(function App(component) {
+  appComponent = component
   const [page, setPage] = useState("nameEntry")
   const [ws, setWs] = useState(null)
   const wsRef = useRef(null)
 
   //* Game Map States
-  const [bricks, setBricks] = useState()
-  const [bombs, setBombs] = useState()
-  const [powerUps, setPowerUps] = useState()
-  const [flames, setFlames] = useState()
-  const [players, setPlayers] = useState()
-  const [map, setMap] = useState()
+  const [bricks, setBricks] = useState([])
+  const [bombs, setBombs] = useState([])
+  const [powerUps, setPowerUps] = useState([])
+  const [flames, setFlames] = useState([])
+  const [players, setPlayers] = useState([])
+  const [map, setMap] = useState([])
 
   //* Player states 
   const [movements, setMovements] = useState(new Set())
@@ -60,6 +63,7 @@ function App() {
   //* nameEntry page states :
   const [playerName, setPlayerName] = useState("")
   const [nameError, setNameError] = useState("")
+
   useEffect(() => {
     if (page === "nameEntry" && ws && ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: "setName", data: { name: playerName } }))
@@ -68,6 +72,7 @@ function App() {
   }, [ws])
 
   const lastTimeRef = useRef(0)
+
   useEffect(() => {
     if (page !== "startGame") return
 
@@ -155,42 +160,35 @@ function App() {
   }
 
   //* UI Section:
-  if (page === "nameEntry") return (
-    <EntryName
-      playerName={playerName}
-      setPlayerName={setPlayerName}
-      handleWebsocket={handleWebsocket}
-      nameError={nameError}
-      setNameError={setNameError}
-    />
-  )
+  if (page === "nameEntry") {
+    return createElement(EntryName({
+      playerName,
+      setPlayerName,
+      handleWebsocket,
+      nameError,
+      setNameError
+    }))
+  }
 
-  if (page === "waitingLobby") return (
-    <WaitingLobby
-      ws={ws}
-      players={players}
-      seconds={seconds}
-      lobbyState={lobbyState}
-    />
-  )
+  if (page === "waitingLobby") {
+    return createElement(WaitingLobby({ players, seconds, lobbyState }))
+  }
 
-  if (page === "startGame") return (
-    <GameMap
-      map={map}
-      players={players}
-      bricks={bricks}
-      bombs={bombs}
-      powerUps={powerUps}
-      flames={flames}
-      speedStat={speedStat}
-      bombStat={bombStat}
-      flameStat={flameStat}
-    />
-  )
+  if (page === "startGame") {
+    return createElement(GameMap({
+      map,
+      players,
+      bricks,
+      bombs,
+      powerUps,
+      flames,
+      speedStat,
+      bombStat,
+      flameStat,
+    }))
+  }
 
-  if (page === "gameOver") return (
-    <GameOver isWon={isWon} />
-  )
-}
+  if (page === "gameOver") return createElement(GameOver({ isWon }))
+})
 
 export default App
