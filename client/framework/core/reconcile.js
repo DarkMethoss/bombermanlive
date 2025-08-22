@@ -81,20 +81,20 @@ function diffChildren(parentDom, newChildren, oldChildren) {
 }
 
 
-function placeChild(parentDom, childDom, anchor) {
-    if (!childDom) return anchor
+// function placeChild(parentDom, childDom, anchor) {
+//     if (!childDom) return anchor
 
-    // The node after the current anchor (where this child should go)
-    const nextSibling = anchor ? anchor.nextSibling : parentDom.firstChild
+//     // The node after the current anchor (where this child should go)
+//     const nextSibling = anchor ? anchor.nextSibling : parentDom.firstChild
 
-    // Insert child before the expected sibling (which ensures correct order)
-    if (childDom !== nextSibling) {
-        parentDom.insertBefore(childDom, nextSibling)
-    }
+//     // Insert child before the expected sibling (which ensures correct order)
+//     if (childDom !== nextSibling) {
+//         parentDom.insertBefore(childDom, nextSibling)
+//     }
 
-    // Return this child as the new anchor
-    return childDom
-}
+//     // Return this child as the new anchor
+//     return childDom
+// }
 
 
 // ---------- attributes ----------
@@ -107,7 +107,7 @@ function updateDomAttributes(dom, newAttrs = {}, oldAttrs = {}) {
         if (!(key in newAttrs)) {
             if (key === "className") dom.removeAttribute("class")
             else if (key === "htmlFor") dom.removeAttribute("for")
-            else if (key === "ref") { }
+            // else if (key === "ref") { }
             else if (key.startsWith("on") && typeof oldAttrs[key] === "function") {
                 dom[key.toLowerCase()] = null
             } else if (key in dom) {
