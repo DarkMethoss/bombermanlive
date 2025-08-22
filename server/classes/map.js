@@ -41,13 +41,13 @@ export default class GameMap {
         console.log(`size:${this.game.bricks.length}`,this.game.bricks)
     }
 
-    isWalkable(x,y){
+    isWalkable(x,y) { // check wall by pixelPosition
         const {col,row} = this.getCell(x,y)
         let cellValue = this.board[row][col]
         return cellValue != 1
     }
 
-    isWalkable2(x,y){
+    isWalkable2(x,y){ // check wall by grid
         let cellValue = this.board[y][x]
         return cellValue != 0
     }
