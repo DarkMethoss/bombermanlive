@@ -13,7 +13,13 @@ export default class Bomb {
         this.startDetonationCountDown()
     }
 
-    startDetonationCountDown(){
+
+
+
+
+
+    startDetonationCountDown(deltaTime){
+    
         this.detonationInterval = setInterval(()=>{
             if (this.detonationCounter > 0 ){
                 this.detonationCounter--
@@ -23,6 +29,6 @@ export default class Bomb {
     }
 
     handleExplosion() {
-        // todo: handle the bomb flames
+
     }
 }

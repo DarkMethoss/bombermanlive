@@ -2,7 +2,6 @@ export class Player {
     constructor(wss, ws, id) {
         this.id = id
         this.ws = ws
-        // this.wss = wss
         this.hearts = 3
         this.x = null
         this.y = null

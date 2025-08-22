@@ -28,6 +28,10 @@ export default class Game {
         })
     }
 
+
+
+    
+
     update(playerId, data) {
         const { deltaTime, playerMovements, bombs } = data
         if (!playerMovements) return

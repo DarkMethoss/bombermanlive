@@ -7,6 +7,7 @@ export default class GameMap {
         this.proportion = 0.7
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
+        this.generatePowerUps()
     }
 
     generateWalls() {
@@ -36,23 +37,37 @@ export default class GameMap {
                 }
             }
         }
-        console.log(`size:${this.game.bricks.length}`,this.game.bricks)
     }
 
-    isWalkable(x,y){
-        const {col,row} = this.getCell(x, y)
+    // we need 
+    generatePowerUps() {
+        let powerUpKeys = ['speed', 'bomb', 'range']
+        if (this.game.bricks.length != 0) {
+            let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
+            powerUpKeys.forEach((element, index) => {
+                this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
+            })
+        }
+    }
+
+
+
+
+
+    isWalkable(x, y) {
+        const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
         return cellValue != 1
     }
 
-    getCell(x,y) {
+    getCell(x, y) {
         let col = Math.floor(x / (this.width / this.size))
         let row = Math.floor(y / (this.height / this.size))
-        if (row >= this.size) row = this.size -1
+        if (row >= this.size) row = this.size - 1
         if (row < 0) row = 0
-        if (col >= this.size) col = this.size -1
+        if (col >= this.size) col = this.size - 1
         if (col < 0) col = 0
-        return {col, row}
+        return { col, row }
     }
 
     #FindEmptyElementsBoard() {
@@ -60,5 +75,18 @@ export default class GameMap {
             return row.filter((column, j) => column == 0)
         })
         return EmptyELements
+    }
+
+    // for later to make it generic for everyithing 
+    #getThreeUniqueIndices(arr) {
+        const indices = new Set()
+        const maxIndex = arr.length - 1
+
+        while (indices.size < 3) {
+            const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
+            indices.add(randomIndex)
+        }
+
+        return [...indices]
     }
 }

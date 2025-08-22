@@ -1,5 +1,0 @@
-class UserInputs {
-    constructor(parameters) {
-        
-    }
-}
