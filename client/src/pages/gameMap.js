@@ -99,7 +99,7 @@ export default function GameMap({
                     ...bricks?.map((brick, index) => {
                         return {
                             tag: 'div',
-                            key: index,
+                            key: `brick-${index}`,
                             attrs: {
                                 className: 'brick',
                                 style: `transform: translate(${brick.x}px, ${brick.y}px)`
@@ -111,7 +111,7 @@ export default function GameMap({
                     ...players?.map((player, index) => {
                         return {
                             tag: 'div',
-                            key: index,
+                            key: `player-${index}`,
                             attrs: {
                                 className: 'player',
                                 style: `transform: translate(${player.x}px, ${player.y}px);  background: ${player.color}`

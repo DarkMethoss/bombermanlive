@@ -21,29 +21,22 @@ export const App = withState(function App(component) {
   const [map, setMap] = useState([])
 
   //* Player states 
-  const [movements, setMovements] = useState(new Set())
   const [speedStat, setSpeedStat] = useState(1)
   const [bombStat, setBombStat] = useState(1)
   const [flameStat, setFlameStat] = useState(1)
-  const movementsRef = useRef(movements)
+  const movementsRef = useRef(new Set())
 
-
-  useEffect(() => {
-    movementsRef.current = movements  
-  }, [movements])
 
   useEffect(() => {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key)) setMovements(new Set(movements).add(key))
+      if (keys.includes(key)) movementsRef.current.add(key)
     }
 
     let removeMovement = (e) => {
       let key = e.key
-      let copy = new Set(movements)
-      copy.delete(key)
-      setMovements(copy)
+      movementsRef.current.delete(key)
     }
 
     if (page === "startGame") {
@@ -136,9 +129,8 @@ export const App = withState(function App(component) {
           break;
 
         case "gameUpdates":
-
           setPlayers(data.players)
-          setBricks(data.bricks)
+          // setBricks(data.bricks)
           break;
 
         case "gameOver":
