@@ -13,18 +13,16 @@ export default function GameMap({
     speedStat,
     bombStat,
     flameStat,
-
-}) {   
-
+}) {
     // console.log(players)
-
     return (
         <section className="page game-page">
             <div className="game-stats">
-                <span>
-                    00:00
-                </span>
-                <span> ♥️♥️♥️</span>
+                <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
                 <div className="game-powerups-container">
                     <div className="powerup">💣<span>x{bombStat}</span></div>
                     <div className="powerup">⚡<span>x{speedStat}</span></div>
@@ -35,12 +33,12 @@ export default function GameMap({
                 <Map map={map} />
                 {/* todo: place game elements  */}
                 {
-                    bricks?.map((brick, index)=> <div key={index} className="brick" 
-                        style={{transform:`translate(${brick.x}px, ${brick.y}px)`}}></div>)
+                    bricks?.map((brick, index) => <div key={index} className="brick"
+                        style={{ transform: `translate(${brick.x}px, ${brick.y}px)` }}></div>)
                 }
                 {
-                    players?.map((player,index)=><div key={index} className="player" 
-                        style={{transform:`translate(${player.x}px, ${player.y}px)`,background:`${player.color}`}}></div>)
+                    players?.map((player, index) => <div key={index} className="player"
+                        style={{ transform: `translate(${player.x}px, ${player.y}px)`, background: `${player.color}` }}></div>)
                 }
             </div>
         </section>

@@ -18,30 +18,24 @@ function App() {
   const [map, setMap] = useState()
 
   //* Player states 
-  const [movements, setMovements] = useState(new Set())
   const [speedStat, setSpeedStat] = useState(1)
   const [bombStat, setBombStat] = useState(1)
   const [flameStat, setFlameStat] = useState(1)
-  const movementsRef = useRef(movements)
-
-
-  useEffect(() => {
-    movementsRef.current = movements
-    console.log(movements)
-  }, [movements])
+  const movementsRef = useRef(new Set())
+  const bombPlacedRef = useRef(false)
 
   useEffect(() => {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key)) setMovements(prev => new Set(prev).add(key))
+      if (keys.includes(key))  movementsRef.current.add(key)
+      if (key === " ") bombPlacedRef.current = true
     }
 
     let removeMovement = (e) => {
-      let key = e.key
-      let copy = new Set(movements)
-      copy.delete(key)
-      setMovements(copy)
+      let key = e.key 
+      movementsRef.current.delete(key)
+      if (key === " ") bombPlacedRef.current = false
     }
 
     if (page === "startGame") {
@@ -84,6 +78,11 @@ function App() {
       if (playerMovements.length > 0) {
         message.data.playerMovements = playerMovements
       }
+      if (bombPlacedRef.current){
+        message.data.placedBomb
+        bombPlacedRef.current = false
+      } 
+
       message.data.deltaTime = deltaTime
       wsRef.current?.send(JSON.stringify(message))
       requestAnimationFrame(gameLoop)
@@ -91,7 +90,7 @@ function App() {
     gameLoop(0)
   }, [page])
 
-  //* waitingLobby page states:
+  //* waitingLobby page states :
   const [seconds, setSeconds] = useState(null)
   const [lobbyState, setLobbyState] = useState(null)
 
@@ -104,8 +103,7 @@ function App() {
       setWs(socket);
     };
 
-
-
+    //* handle messages send from server
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const data = message.data
@@ -113,6 +111,7 @@ function App() {
         case "nameEntry":
           setNameError(data.error)
           break;
+
         case "waitingLobby":
           if (page !== "waitingLobby") {
             setPage("waitingLobby")
