@@ -178,10 +178,25 @@ body {
   height: 50px;
 }
 
+.powerup {
+  /* display: none; */
+  animation: test 0.5s infinite ;
+}
+
+@keyframes test {
+  0%{
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
 .player {
   will-change: auto;
   width : 40px ;
   height: 40px ;
+  will-change: transform;
 }
 
 .empty-space{

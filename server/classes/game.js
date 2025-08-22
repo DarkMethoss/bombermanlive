@@ -29,7 +29,8 @@ export default class Game {
     }
 
     update(playerId, data) {
-        const { deltaTime, playerMovements, bombs } = data
+        const { deltaTime, playerMovements, placedBomb } = data
+
         if (!playerMovements) return
         let player = this.room.players.get(playerId)
 
@@ -37,7 +38,7 @@ export default class Game {
         if (playerMovements) player.update(deltaTime, playerMovements)
 
         // todo: update game bombs
-        if (bombs) this.bombs.append(new Bomb(this, playerId, player.x, player.y))
+        if (placedBomb) this.bombs.append(new Bomb(this, playerId, player.x, player.y))
 
         // todo: update game map
     }
@@ -54,4 +55,5 @@ export default class Game {
             bombs: this.bombs
         }
     }
+
 }

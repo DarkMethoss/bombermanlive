@@ -2,7 +2,6 @@
 export default class Bomb {
 
     constructor(game, playerId, x, y) {
-        // this.placer = playerId
         this.game = game
         this.playerId = playerId
         this.x =  x
@@ -14,13 +13,16 @@ export default class Bomb {
     }
 
     startDetonationCountDown(){
-        this.detonationInterval = setInterval(()=>{
-            if (this.detonationCounter > 0 ){
-                this.detonationCounter--
-            }
-            this.isExploded = true
-        }, 1000)
+        this.placeBomb()
+        this.detonationInterval = setTimeout(() => {
+            setInterval
+        }, 3000);
     }
+
+    placeBomb() {
+        
+    }
+
 
     handleExplosion() {
         // todo: handle the bomb flames
