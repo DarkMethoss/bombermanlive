@@ -9,7 +9,7 @@ export default class Game {
         this.bricks = new Map()
         this.powerUps = []
         this.bombs = []
-        this.flames = []
+        this.flames = new Map()
         this.map = new GameMap(this, 15)
         this.bombTest = new Bomb(this, "3333333333", 51, 51)
         this.initPlayerPositions()
