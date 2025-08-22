@@ -1,8 +1,8 @@
 import { createElement, withState, useEffect, useState, useRef } from '../framework/index.js'
-import EntryName from './pages/entryName.js'
-import WaitingLobby from './pages/waitingLoby.js'
-import GameMap from './pages/gameMap.js'
-import GameOver from './pages/gameOver.js'
+import EntryName from './pages/entryName.jsx'
+import WaitingLobby from './pages/waitingLoby.jsx'
+import GameMap from './pages/gameMap.jsx'
+import GameOver from './pages/gameOver.jsx'
 
 export let appComponent
 
@@ -25,9 +25,10 @@ export const App = withState(function App(component) {
   const [speedStat, setSpeedStat] = useState(1)
   const [bombStat, setBombStat] = useState(1)
   const [flameStat, setFlameStat] = useState(1)
-  const movementsRef = useRef(movements)
+  const movementsRef = useRef(new Set())
 
 
+  
   useEffect(() => {
     movementsRef.current = movements  
   }, [movements])
@@ -36,7 +37,9 @@ export const App = withState(function App(component) {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key)) setMovements(new Set(movements).add(key))
+      if (keys.includes(key)) movementsRef.current.add(key)
+      if (keys === ' ') bom
+
     }
 
     let removeMovement = (e) => {

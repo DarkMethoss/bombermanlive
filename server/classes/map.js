@@ -31,7 +31,9 @@ export default class GameMap {
                     ((row == 2 || row == this.size - 3) && (col == 1 || col == this.size - 2))
                 ) continue
                 if (this.board[row][col] == 0) {
-                    this.game.bricks.push({ x: col * 750 / 15, y: row * 750 / 15 })
+                    let mapIndex = `${col}-${row}`
+                    let mapValue = { x: col * 750 / 15, y: row * 750 / 15 }
+                    this.game.bricks.set(mapIndex,mapValue)
                     this.board[row][col] = 2
                 }
             }
@@ -40,9 +42,19 @@ export default class GameMap {
     }
 
     isWalkable(x,y){
-        const {col,row} = this.getCell(x, y)
+        const {col,row} = this.getCell(x,y)
         let cellValue = this.board[row][col]
         return cellValue != 1
+    }
+
+    isWalkable2(x,y){
+        let cellValue = this.board[y][x]
+        return cellValue != 0
+    }
+
+    isBricks(x, y) {
+        let cellValue = this.board[y][x]
+        return cellValue == 2
     }
 
     getCell(x,y) {
