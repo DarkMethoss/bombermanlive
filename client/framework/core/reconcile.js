@@ -2,11 +2,9 @@ import { createDomNode } from '../index.js'
 
 // Public API: reconcile an existing subtree (oldVNode already mounted under parentDom)
 export function reconcile(parentDom, newVNode, oldVNode) {
-    console.log("let's reconcile");
     
     // Create
     if (!oldVNode) {
-        console.log('diffing inside the !oldVnode: adding the newDom')
         const newDom = createDomNode(newVNode)
         newVNode.dom = newDom
         parentDom.appendChild(newDom)
@@ -17,7 +15,6 @@ export function reconcile(parentDom, newVNode, oldVNode) {
 
     // Remove
     if (!newVNode) {
-        console.log('diffing inside the !newNode: removing the oldVNode')
         
         if (dom && dom.parentNode) dom.parentNode.removeChild(dom)
         return
@@ -25,7 +22,6 @@ export function reconcile(parentDom, newVNode, oldVNode) {
 
     // Replace if tag changed
     if (newVNode.tag !== oldVNode.tag) {
-        console.log('diffing inside the tags')
         
         const newDom = createDomNode(newVNode)
         newVNode.dom = newDom
@@ -54,25 +50,35 @@ export function reconcile(parentDom, newVNode, oldVNode) {
 // ---------- keyed children diff ----------
 
 function diffChildren(parentDom, newChildren, oldChildren) {
+
+    // Build a map of old children by key
     const oldKeyed = new Map()
     for (let i = 0; i < oldChildren.length; i++) {
-        oldKeyed.set(oldChildren[i].key, oldChildren[i])
+        const c = oldChildren[i]
+        oldKeyed.set(c.key, c)
     }
 
+    let anchor = null
+
+    // Loop over new children and reconcile with old
     for (let i = 0; i < newChildren.length; i++) {
         const nextVNode = newChildren[i]
         const match = oldKeyed.get(nextVNode.key)
 
         if (match) {
+            // Reuse + reconcile existing node
             reconcile(parentDom, nextVNode, match)
             oldKeyed.delete(nextVNode.key)
+            anchor = placeChild(parentDom, nextVNode.dom, anchor)
         } else {
+            // Create new node
             const childDom = createDomNode(nextVNode)
             nextVNode.dom = childDom
-            parentDom.appendChild(childDom) // no reorder, just append
+            anchor = placeChild(parentDom, childDom, anchor)
         }
     }
 
+    // Remove leftover old keyed nodes
     for (const [, leftover] of oldKeyed) {
         if (leftover.dom && leftover.dom.parentNode === parentDom) {
             parentDom.removeChild(leftover.dom)
@@ -81,20 +87,21 @@ function diffChildren(parentDom, newChildren, oldChildren) {
 }
 
 
-// function placeChild(parentDom, childDom, anchor) {
-//     if (!childDom) return anchor
 
-//     // The node after the current anchor (where this child should go)
-//     const nextSibling = anchor ? anchor.nextSibling : parentDom.firstChild
+function placeChild(parentDom, childDom, anchor) {
+    if (!childDom) return anchor
 
-//     // Insert child before the expected sibling (which ensures correct order)
-//     if (childDom !== nextSibling) {
-//         parentDom.insertBefore(childDom, nextSibling)
-//     }
+    // The node after the current anchor (where this child should go)
+    const nextSibling = anchor ? anchor.nextSibling : parentDom.firstChild
 
-//     // Return this child as the new anchor
-//     return childDom
-// }
+    // Insert child before the expected sibling (which ensures correct order)
+    if (childDom !== nextSibling) {
+        parentDom.insertBefore(childDom, nextSibling)
+    }
+
+    // Return this child as the new anchor
+    return childDom
+}
 
 
 // ---------- attributes ----------

@@ -16,9 +16,6 @@ export function useState(initialValue) {
     const setState = (newValue) => {
         const oldValue = component.states[stateIndex]
         if (!deepEqual(oldValue, newValue)) {
-            // console.log('************************************');
-            // console.log('oldValue', oldValue)
-            // console.log('newValue', newValue)
             component.states[stateIndex] = newValue
             rerender(component)
         }

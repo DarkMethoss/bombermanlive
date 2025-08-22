@@ -97,7 +97,7 @@ export const App = withState(function App(component) {
     //* game over page states : 
     const [isWon, setIsWon] = useState(null)
     const handleWebsocket = () => {
-        const socket = new WebSocket('ws://localhost:8080');
+        const socket = new WebSocket('ws://10.1.5.5:8080');
         socket.onopen = () => {
             console.log('Connected to websocket server');
             setWs(socket);
@@ -119,27 +119,27 @@ export const App = withState(function App(component) {
                     setPlayers(data.players)
                     setSeconds(data.seconds)
                     setLobbyState(data.state)
-                    break;
+                    break
 
                 case "startGame":
                     setPage("startGame")
                     setMap(data.map)
                     setPlayers(data.players)
-                    setBricks(data.bricks)
-                    break;
+                    if (bricks.length !== data.bricks.length) setBricks(data.bricks)
+                    break
 
                 case "gameUpdates":
                     setPlayers(data.players)
-                    // setBricks(data.bricks)
-                    break;
+                    setBricks(data.bricks)
+                    break
 
                 case "gameOver":
                     setPage("gameOver")
                     setIsWon(data.isWon)
-                    break;
+                    break
 
                 default:
-                    break;
+                    break
             }
         };
 
