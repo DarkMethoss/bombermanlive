@@ -18,30 +18,24 @@ function App() {
   const [map, setMap] = useState()
 
   //* Player states 
-  const [movements, setMovements] = useState(new Set())
   const [speedStat, setSpeedStat] = useState(1)
   const [bombStat, setBombStat] = useState(1)
   const [flameStat, setFlameStat] = useState(1)
-  const movementsRef = useRef(movements)
-
-
-  useEffect(() => {
-    movementsRef.current = movements
-    console.log(movements)
-  }, [movements])
+  const movementsRef = useRef(new Set())
+  const bombPlacedRef = useRef(false)
 
   useEffect(() => {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key)) setMovements(prev => new Set(prev).add(key))
+      if (key === " ") bombPlacedRef.current = true
+      if (keys.includes(key)) movementsRef.current.add(key)
     }
 
     let removeMovement = (e) => {
       let key = e.key
-      let copy = new Set(movements)
-      copy.delete(key)
-      setMovements(copy)
+      movementsRef.current.delete(key)
+      // if (key === " ") bombPlacedRef.current = false
     }
 
     if (page === "startGame") {
@@ -73,9 +67,7 @@ function App() {
     if (page !== "startGame") return
 
     function gameLoop(timeStamp) {
-
       if (!ws) return;
-
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
 
@@ -83,15 +75,17 @@ function App() {
       let playerMovements = [...movementsRef.current.values()]
       if (playerMovements.length > 0) {
         message.data.playerMovements = playerMovements
+        message.data.deltaTime = deltaTime
       }
-      message.data.deltaTime = deltaTime
+      message.data.placedBomb = bombPlacedRef.current
       wsRef.current?.send(JSON.stringify(message))
+      bombPlacedRef.current = false
       requestAnimationFrame(gameLoop)
     }
     gameLoop(0)
   }, [page])
 
-  //* waitingLobby page states:
+  //* waitingLobby page states :
   const [seconds, setSeconds] = useState(null)
   const [lobbyState, setLobbyState] = useState(null)
 
@@ -104,8 +98,7 @@ function App() {
       setWs(socket);
     };
 
-
-
+    //* handle messages send from server
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const data = message.data
@@ -113,6 +106,7 @@ function App() {
         case "nameEntry":
           setNameError(data.error)
           break;
+
         case "waitingLobby":
           if (page !== "waitingLobby") {
             setPage("waitingLobby")
@@ -132,6 +126,7 @@ function App() {
         case "gameUpdates":
           setPlayers(data.players)
           setBricks(data.bricks)
+          setBombs(data.bombs)
           break;
 
         case "gameOver":
