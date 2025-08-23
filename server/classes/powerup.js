@@ -3,19 +3,22 @@
 
 
 
-class powerUp {
-    constructor(game, icon, type) {
+export class powerUp {
+    constructor(game, type, position) {
         this.game = game
-        this.icon = icon
+        // this.icon = icon    // to be got from the type of the speed 
         this.type = type
         this.active = false   // tcollectat  
         this.onwer = null
+        this.position = position
 
     }
 
 
     //  here we need to associate the player and the the powerUp
     //  the logic of how each one will be handled by the player
+
+    // when there is a collision we can tie the player to the powerUp
     applyTo(player) {
         this.active = true
         this.onwer = player
@@ -46,6 +49,13 @@ class powerUp {
 
         }
 
+    }
+
+    toJSON() {
+        return {
+            type: this.type,
+            position: this.position
+        };
     }
 
 

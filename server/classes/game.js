@@ -7,7 +7,7 @@ export default class Game {
         this.players = this.room.players
         this.initialBoard = null
         this.bricks = []
-        this.powerUps = []
+        this.powerUps = new Map()
         this.bombs = []
         this.flames = []
         this.map = new GameMap(this, 15)

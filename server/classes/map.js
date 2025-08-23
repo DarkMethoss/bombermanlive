@@ -1,3 +1,6 @@
+import { powerUp } from "./powerup.js"
+
+
 export default class GameMap {
     constructor(game, size) {
         this.game = game
@@ -45,11 +48,27 @@ export default class GameMap {
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
             powerUpKeys.forEach((element, index) => {
-                this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
+                //  now 3awtani khassni nrdha map 
+                this.game.powerUps.set(JSON.stringify(this.game.bricks[powerUpsIndices[index]]),
+                    new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]])
+                )
+                //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))
+                //this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
             })
         }
+
+
+        console.log("power Ups", this.game.powerUps)
     }
 
+
+
+    // SO now we know the position of the the powerUp 
+
+    HoldsPowerUp(position) {
+        return this.game.powerUps.has(JSON.stringify(position))
+
+    }
 
 
 
