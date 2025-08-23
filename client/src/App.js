@@ -25,6 +25,7 @@ export const App = withState(function App(component) {
     const [bombStat, setBombStat] = useState(1)
     const [flameStat, setFlameStat] = useState(1)
     const movementsRef = useRef(new Set())
+    const bombPlacedRef = useRef(false)
 
 
     useEffect(() => {
@@ -32,6 +33,7 @@ export const App = withState(function App(component) {
             let key = e.key
             let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
             if (keys.includes(key)) movementsRef.current.add(key)
+            if (key === " ") bombPlacedRef.current = true
         }
 
         let removeMovement = (e) => {
@@ -68,23 +70,26 @@ export const App = withState(function App(component) {
     const lastTimeRef = useRef(0)
 
     useEffect(() => {
-
         if (page !== "startGame") return
 
         function gameLoop(timeStamp) {
-
             if (!ws) return;
-
             let deltaTime = timeStamp - lastTimeRef.current
             lastTimeRef.current = timeStamp
 
             let message = { type: "getGameUpdates", data: {} }
+
             let playerMovements = [...movementsRef.current.values()]
             if (playerMovements.length > 0) {
                 message.data.playerMovements = playerMovements
+                message.data.deltaTime = deltaTime
             }
-            message.data.deltaTime = deltaTime
+
+            message.data.placedBomb = bombPlacedRef.current
+
             wsRef.current?.send(JSON.stringify(message))
+            bombPlacedRef.current = false
+
             requestAnimationFrame(gameLoop)
         }
         gameLoop(0)
@@ -125,12 +130,14 @@ export const App = withState(function App(component) {
                     setPage("startGame")
                     setMap(data.map)
                     setPlayers(data.players)
-                    if (bricks.length !== data.bricks.length) setBricks(data.bricks)
+                     setBricks(data.bricks)
                     break
 
                 case "gameUpdates":
                     setPlayers(data.players)
-                    setBricks(data.bricks)
+                    if (bricks.length !== data.bricks.length) setBricks(data.bricks)
+                    if (bombs.length !== data.bombs.length) setBombs(data.bombs)
+                    if (flames.length !== data.flames.length) setFlames(data.flames)
                     break
 
                 case "gameOver":

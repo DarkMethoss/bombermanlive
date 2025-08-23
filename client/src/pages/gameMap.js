@@ -104,7 +104,6 @@ export default function GameMap({
                                 className: 'brick',
                                 style: `transform: translate(${brick.x}px, ${brick.y}px)`
                             },
-                            children: [],
                         }
                     }),
 
@@ -116,9 +115,32 @@ export default function GameMap({
                                 className: 'player',
                                 style: `transform: translate(${player.x}px, ${player.y}px);  background: ${player.color}`
                             },
-                            children: [],
                         }
                     }),
+
+                    ...bombs?.map((bomb, index) => {
+                        return {
+                            tag: 'div',
+                            key: `bomb-${index}`,
+                            attrs: {
+                                className: 'bomb',
+                                style: `transform: translate(${bomb.x}px, ${bomb.y}px);`
+                            },
+                            children: ['💣']
+                        }
+                    }),
+
+                    ...flames?.map((flame, index) => {
+                          return {
+                            tag: 'div',
+                            key: `flame-${index}`,
+                            attrs: {
+                                className: 'flame',
+                                style: `transform: translate(${flame.x}px, ${flame.y}px);`
+                            },
+                            children: ['🔥']
+                        }
+                    })
                 ]
             }
         ]
