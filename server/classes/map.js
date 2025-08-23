@@ -42,7 +42,9 @@ export default class GameMap {
                     ((row == 2 || row == this.size - 3) && (col == 1 || col == this.size - 2))
                 ) continue
                 if (this.board[row][col] == 0) {
-                    this.game.bricks.push({ x: col * 750 / 15, y: row * 750 / 15 })
+                    let mapIndex = `${col}-${row}`
+                    let mapValue = { x: col * 750 / 15, y: row * 750 / 15 }
+                    this.game.bricks.set(mapIndex, mapValue)
                     this.board[row][col] = 2
                 }
             }
@@ -52,17 +54,21 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         let powerUpKeys = ['speed', 'bomb', 'range']
-        let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
-        console.log("powerUpKeyIndex", powerUpKeyIndex);
+        
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
-            powerUpKeys.forEach((element, index) => {
+            console.log("powerUpsIndices", powerUpsIndices);
+            powerUpsIndices.forEach((element) => {
+                //  generate u salaam
+                console.log("eleemnt", element);
+                let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
+                console.log("powerUpKeyIndex", powerUpKeyIndex);
                 // see what are the cells 
-                let positionXY = this.game.bricks[powerUpsIndices[index]]
+                let positionXY = this.game.bricks[element]
                 console.log("HNAAAAAA", this.getCell(positionXY.x, positionXY.y))
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(JSON.stringify(positionXY),
-                    new powerUp(this.game, element, positionXY)
+                    new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY)
                 )
                 //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))
                 //this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
@@ -87,7 +93,15 @@ export default class GameMap {
     isWalkable(x, y) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return cellValue != 1
+        return ![1, 2, 3].includes(cellValue)
+    }
+
+    isFlameBlocked(col, row) { // check wall by grid
+        return [1, 2].includes(this.getCellValue(col, row))
+    }
+
+    isBricks(col, row) {
+        return this.getCellValue(col, row) == 2
     }
 
     getCellValue(col, row) {
@@ -112,12 +126,13 @@ export default class GameMap {
     }
 
     // for later to make it generic for everyithing 
+    // 
     #getThreeUniqueIndices(arr) {
         const indices = new Set()
-        const maxIndex = arr.length - 1
+        const maxIndex = arr.size - 1
         //   where to gena
-        let proportionPowerUps = Math.round(arr.length * 0.3)
-        console.log("proportionPowerUps", proportionPowerUps);
+
+        let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
             indices.add(randomIndex)

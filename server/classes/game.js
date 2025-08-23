@@ -7,8 +7,8 @@ export default class Game {
         this.room = room
         this.players = this.room.players
         this.initialBoard = null
-        this.bricks = []
         this.powerUps = new Map()
+        this.bricks = new Map()
         this.bombs = new Map()
         this.flames = new Map()
         this.map = new GameMap(this, 15)
@@ -24,13 +24,14 @@ export default class Game {
     }
 
     get gameData() {
-        let bombs = [...this.bombs.values()].map(bomb => bomb.position)
-        // if (bombs.length > 0) console.log("Boooooombs ====> ", bombs)
+        let flames = [...this.flames.values()].map(flames=> flames[0].position)
+        if (flames.length > 0) console.log(flames)
         return {
             players: [...this.players.values()].map(player => player.playerData),
-            bricks: this.bricks,
+            bricks: [...this.bricks.values()],
             powerUps: this.powerUps,
-            bombs: [...this.bombs.values()].map(bomb => bomb.position)
+            bombs: [...this.bombs.values()].map(bomb => bomb.position),
+            flames: [...this.flames.values()].map(flames=> flames[0].position)
         }
     }
 

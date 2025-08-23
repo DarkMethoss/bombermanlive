@@ -171,7 +171,11 @@ body {
   height: 100%;
 }
 
-.brick, .player, .powerUp, .flame, .bomb {
+.brick,
+.player,
+.powerUp,
+.flame,
+.bomb {
   position: absolute;
   top: 0;
   left: 0;
@@ -181,19 +185,22 @@ body {
 
 .powerup {
   /* display: none; */
-  animation: test 0.5s infinite ;
+  animation: test 0.5s infinite;
 }
-.bomb {
-  display: flex ;
+
+.bomb,
+.flame {
+  display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 32px;
 }
 
 @keyframes test {
-  0%{
+  0% {
     transform: translateY(0px);
   }
+
   100% {
     transform: translateY(-2px);
   }
@@ -201,12 +208,12 @@ body {
 
 .player {
   will-change: auto;
-  width : 40px ;
-  height: 40px ;
+  width: 40px;
+  height: 40px;
   will-change: transform;
 }
 
-.empty-space{
+.empty-space {
   background-color: #333;
 }
 
@@ -220,14 +227,8 @@ body {
   /* transform: translate(); */
 }
 
-.powerUp {
+.powerUp {}
 
-}
+.bomb {}
 
-.bomb {
-  
-}
-
-.flame {
-
-}
+.flame {}
