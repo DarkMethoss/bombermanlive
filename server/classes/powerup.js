@@ -1,0 +1,5 @@
+class powerUp {
+    constructor(parameters) {
+        
+    }
+}
