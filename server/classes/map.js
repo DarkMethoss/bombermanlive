@@ -54,7 +54,7 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         let powerUpKeys = ['speed', 'bomb', 'range']
-        
+
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
             console.log("powerUpsIndices", powerUpsIndices);
@@ -63,9 +63,7 @@ export default class GameMap {
                 console.log("eleemnt", element);
                 let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
                 console.log("powerUpKeyIndex", powerUpKeyIndex);
-                // see what are the cells
-                console.log("bricks", this.game.bricks);
-                let positionXY =Array.from(this.game.bricks)[element]
+                let positionXY = Array.from(this.game.bricks)[element]
                 console.log("positoon", positionXY);
                 console.log("HNAAAAAA", this.getCell(positionXY[1].x, positionXY[1].y))
                 //  now 3awtani khassni nrdha map 
@@ -85,8 +83,8 @@ export default class GameMap {
 
     HoldsPowerUp(col, row) {
         //return this.game.powerUps.has(JSON.stringify({ col: col, row: row }))
-        console.log("verif", this.game.powerUpsHardCoded.has(JSON.stringify({ col: col, row: row })), col, row, JSON.stringify({ col: col, row: row }));
-        return this.game.powerUpsHardCoded.has(JSON.stringify({ col: col, row: row }))
+        console.log("verif", `${col}-${row}`, this.game.powerUpsHardCoded.has(`${col}-${row}`, JSON.stringify({ col: col, row: row })));
+        return this.game.powerUpsHardCoded.has(`${col}-${row}`)
     }
 
 
@@ -95,7 +93,8 @@ export default class GameMap {
     isWalkable(x, y) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return ![1, 2, 3].includes(cellValue)
+        //return ![1, 2, 3].includes(cellValue)
+        return cellValue != 1
     }
 
     isFlameBlocked(col, row) { // check wall by grid

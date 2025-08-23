@@ -14,7 +14,6 @@ export default class Bomb {
         this.startDetonationCountDown()
         this.affectedBricks = []
         this.flamesPosition = [{x:this.x, y:this.y}]
-        console.log("new Bomb placed ", this.x , this.y)
     }
 
     get position(){
@@ -83,7 +82,6 @@ export default class Bomb {
             const flame = new Flame(this.game, obj)
             this.game.flames.has(mapIndex)? this.game.flames.get(mapIndex).push(flame) : this.game.flames.set(mapIndex, [flame]);
         })
-        console.log(this.game.flames)
         clearTimeout(this.detonationTimeOut)
     }
 }

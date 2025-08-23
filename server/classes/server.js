@@ -32,7 +32,6 @@ export default class Server {
                     this.handlePlayer(ws, data.name, playerId)
                     break
                 case "getGameUpdates":
-                   // console.log("data", data);
                     this.handleGamesUpdates(playerId, data)
                     break
                 default:

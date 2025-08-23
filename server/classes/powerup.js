@@ -13,26 +13,25 @@ export class powerUp {
         this.position = position
 
     }
-
-
     //  here we need to associate the player and the the powerUp
     //  the logic of how each one will be handled by the player
-
     // when there is a collision we can tie the player to the powerUp
     applyTo(player) {
         this.active = true
         this.owner = player
     }
-
-
+   //  this is too basic
     update(player) {
         switch (this.type) {
             case 'speed':
                 player.speed += 1
+                // need to remove it too
                 break;
             case 'bomb':
+                player.bomb += 1
                 break
             case 'range':
+                player.flame += 1
                 break
         }
 
@@ -41,8 +40,9 @@ export class powerUp {
 
 
     // hna we need to remove the powerUp from the game
-
+    // if a one is used we need to decrement ( wttf 3la task )
     remove() {
+
         let exists = this.game.powerUps.indexOf(this)
         if (exists != -1) {
             this.game.powerUps.splice(exists, 1)
@@ -50,7 +50,7 @@ export class powerUp {
         }
 
     }
-
+     
     toJSON() {
         return {
             type: this.type,
@@ -62,11 +62,3 @@ export class powerUp {
 
 }
 
-
-//  may be we won't be needing to create it 
-// class BombPowerUp extends powerUp {
-//     constructor(game, icon, duration) {
-//         super(game, icon, duration)
-
-//     }
-// }
