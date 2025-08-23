@@ -9,7 +9,7 @@ export class powerUp {
         // this.icon = icon    // to be got from the type of the speed 
         this.type = type
         this.active = false   // tcollectat  
-        this.onwer = null
+        this.owner = null
         this.position = position
 
     }
@@ -21,14 +21,14 @@ export class powerUp {
     // when there is a collision we can tie the player to the powerUp
     applyTo(player) {
         this.active = true
-        this.onwer = player
+        this.owner = player
     }
 
 
     update(player) {
         switch (this.type) {
             case 'speed':
-                player.playerData.speed = 2
+                player.speed += 1
                 break;
             case 'bomb':
                 break

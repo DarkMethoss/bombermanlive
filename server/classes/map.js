@@ -1,3 +1,10 @@
+// 0: empty space
+// 1: Wall
+// 2: Brick
+// 3: bomb
+// 4: flame
+// 5: powerup
+
 import { powerUp } from "./powerup.js"
 
 
@@ -7,7 +14,7 @@ export default class GameMap {
         this.width = 750
         this.height = 750
         this.size = size
-        this.proportion = 0.7
+        this.proportionBricks = 0.7
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
         this.generatePowerUps()
@@ -28,8 +35,8 @@ export default class GameMap {
         this.generateWalls()
         let emptyElements = this.#FindEmptyElementsBoard()
         for (let row = 0; row < this.size; row++) {
-            let randomized = Math.round(emptyElements[row].length * this.proportion)
-            let indices = new Set(Array.from(Array(randomized), () => Math.floor(Math.random() * (this.size - 1))))
+            let randomized = Math.round(emptyElements[row].length * this.proportionBricks)
+            let indices = new Set(Array.from(Array(randomized), () => Math.floor(Math.random() * (this.size - 1))).sort((a, b) => a - b))
             for (let col of [...indices.values()]) {
                 if (((row == 1 || row == this.size - 2) && (col == 1 || col == 2 || col == this.size - 2 || col == this.size - 3)) ||
                     ((row == 2 || row == this.size - 3) && (col == 1 || col == this.size - 2))
@@ -45,29 +52,33 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         let powerUpKeys = ['speed', 'bomb', 'range']
+        let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
+        console.log("powerUpKeyIndex", powerUpKeyIndex);
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
             powerUpKeys.forEach((element, index) => {
+                // see what are the cells 
+                let positionXY = this.game.bricks[powerUpsIndices[index]]
+                console.log("HNAAAAAA", this.getCell(positionXY.x, positionXY.y))
                 //  now 3awtani khassni nrdha map 
-                this.game.powerUps.set(JSON.stringify(this.game.bricks[powerUpsIndices[index]]),
-                    new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]])
+                this.game.powerUps.set(JSON.stringify(positionXY),
+                    new powerUp(this.game, element, positionXY)
                 )
                 //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))
                 //this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
             })
         }
 
-
-        console.log("power Ups", this.game.powerUps)
     }
 
 
 
     // SO now we know the position of the the powerUp 
 
-    HoldsPowerUp(position) {
-        return this.game.powerUps.has(JSON.stringify(position))
-
+    HoldsPowerUp(col, row) {
+        //return this.game.powerUps.has(JSON.stringify({ col: col, row: row }))
+        console.log("verif", this.game.powerUpsHardCoded.has(JSON.stringify({ col: col, row: row })), col, row, JSON.stringify({ col: col, row: row }));
+        return this.game.powerUpsHardCoded.has(JSON.stringify({ col: col, row: row }))
     }
 
 
@@ -77,6 +88,10 @@ export default class GameMap {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
         return cellValue != 1
+    }
+
+    getCellValue(col, row) {
+        return this.board[row][col]
     }
 
     getCell(x, y) {
@@ -100,8 +115,10 @@ export default class GameMap {
     #getThreeUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.length - 1
-
-        while (indices.size < 3) {
+        //   where to gena
+        let proportionPowerUps = Math.round(arr.length * 0.3)
+        console.log("proportionPowerUps", proportionPowerUps);
+        while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
             indices.add(randomIndex)
         }
