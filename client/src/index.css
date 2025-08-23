@@ -170,7 +170,11 @@ body {
   height: 100%;
 }
 
-.brick, .player, .powerUp, .flame, .bomb {
+.brick,
+.player,
+.powerUp,
+.flame,
+.bomb {
   position: absolute;
   top: 0;
   left: 0;
@@ -179,25 +183,36 @@ body {
 }
 
 .powerup {
-  animation: test 0.5s infinite ;
+  /* display: none; */
+  animation: test 0.5s infinite;
+}
+
+.bomb,
+.flame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
 }
 
 @keyframes test {
-  0%{
+  0% {
     transform: translateY(0px);
   }
+
   100% {
     transform: translateY(-2px);
   }
 }
 
 .player {
-  width : 40px ;
-  height: 40px ;
+  will-change: auto;
+  width: 40px;
+  height: 40px;
   will-change: transform;
 }
 
-.empty-space{
+.empty-space {
   background-color: #333;
 }
 
@@ -211,14 +226,4 @@ body {
   /* transform: translate(); */
 }
 
-/* .powerUp {
-
-}
-
-.bomb {
-  
-}
-
-.flame {
-
-} */
+.powerUp {}

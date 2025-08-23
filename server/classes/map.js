@@ -1,3 +1,10 @@
+// 0: empty space
+// 1: Wall
+// 2: Brick
+// 3: bomb
+// 4: flame
+// 5: powerup
+
 export default class GameMap {
     constructor(game, size) {
         this.game = game
@@ -31,28 +38,41 @@ export default class GameMap {
                     ((row == 2 || row == this.size - 3) && (col == 1 || col == this.size - 2))
                 ) continue
                 if (this.board[row][col] == 0) {
-                    this.game.bricks.push({ x: col * 750 / 15, y: row * 750 / 15 })
+                    let mapIndex = `${col}-${row}`
+                    let mapValue = { x: col * 750 / 15, y: row * 750 / 15 }
+                    this.game.bricks.set(mapIndex, mapValue)
                     this.board[row][col] = 2
                 }
             }
         }
-        console.log(`size:${this.game.bricks.length}`,this.game.bricks)
     }
 
-    isWalkable(x,y){
-        const {col,row} = this.getCell(x, y)
+    isWalkable(x, y) { // check wall by pixelPosition
+        const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return cellValue != 1
+        return ![1,2,3].includes(cellValue)
     }
 
-    getCell(x,y) {
+    isFlameBlocked(col, row) { // check wall by grid
+        return [1,2].includes(this.getCellValue(col, row))
+    }
+
+    isBricks(col, row) {
+        return this.getCellValue(col, row) == 2
+    }
+
+    getCellValue(col, row) {
+        return this.board[row][col]
+    }
+
+    getCell(x, y) {
         let col = Math.floor(x / (this.width / this.size))
         let row = Math.floor(y / (this.height / this.size))
-        if (row >= this.size) row = this.size -1
+        if (row >= this.size) row = this.size - 1
         if (row < 0) row = 0
-        if (col >= this.size) col = this.size -1
+        if (col >= this.size) col = this.size - 1
         if (col < 0) col = 0
-        return {col, row}
+        return { col, row }
     }
 
     #FindEmptyElementsBoard() {

@@ -6,14 +6,30 @@ export default class Game {
         this.room = room
         this.players = this.room.players
         this.initialBoard = null
-        this.bricks = []
+        this.bricks = new Map()
         this.powerUps = []
-        this.bombs = []
-        this.flames = []
+        this.bombs = new Map()
+        this.flames = new Map()
         this.map = new GameMap(this, 15)
         this.initPlayerPositions()
     }
-    // 14 x 10
+
+    get gameMap() {
+        return this.initialBoard
+    }
+
+    get gameData() {
+        let flames = [...this.flames.values()].map(flames=> flames[0].position)
+        if (flames.length > 0) console.log(flames)
+        return {
+            players: [...this.players.values()].map(player => player.playerData),
+            bricks: [...this.bricks.values()],
+            powerUps: this.powerUps,
+            bombs: [...this.bombs.values()].map(bomb => bomb.position),
+            flames: [...this.flames.values()].map(flames=> flames[0].position)
+        }
+    }
+
     initPlayerPositions() {
         const size = this.map.size
         const startPositions = [{ x: 1, y: 1 }, { x: size - 2, y: size - 2 }, { x: 1, y: size - 2 }, { x: size - 2, y: 1 }]
@@ -30,29 +46,24 @@ export default class Game {
 
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
-
-        if (!playerMovements) return
         let player = this.room.players.get(playerId)
-
-        // todo: update player position
         if (playerMovements) player.update(deltaTime, playerMovements)
-
-        // todo: update game bombs
-        if (placedBomb) this.bombs.append(new Bomb(this, playerId, player.x, player.y))
-
+        if (placedBomb) {
+            console.log("bomb placed", placedBomb)
+            this.handlePlacedBomb(player)
+        }
         // todo: update game map
     }
 
-    get gameMap() {
-        return this.initialBoard
-    }
-
-    get gameData() {
-        return {
-            players: [...this.players.values()].map(player => player.playerData),
-            bricks: this.bricks,
-            powerUps: this.powerUps,
-            bombs: this.bombs
+    handlePlacedBomb(player) {
+        let x = player.x + player.width / 2
+        let y = player.y + player.height / 2
+        let { col, row } = this.map.getCell(x, y)
+        let cellValue = this.map.getCellValue(col, row)
+        let canPlaceBomb = player.bombsPlaced < player.bomb && cellValue != 3
+        if (canPlaceBomb) {
+            this.bombs.set(`${col}-${row}`, new Bomb(this, player, col, row))
+            player.bombsPlaced++
         }
     }
 
