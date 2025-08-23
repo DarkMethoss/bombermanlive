@@ -63,11 +63,13 @@ export default class GameMap {
                 console.log("eleemnt", element);
                 let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
                 console.log("powerUpKeyIndex", powerUpKeyIndex);
-                // see what are the cells 
-                let positionXY = this.game.bricks[element]
-                console.log("HNAAAAAA", this.getCell(positionXY.x, positionXY.y))
+                // see what are the cells
+                console.log("bricks", this.game.bricks);
+                let positionXY =Array.from(this.game.bricks)[element]
+                console.log("positoon", positionXY);
+                console.log("HNAAAAAA", this.getCell(positionXY[1].x, positionXY[1].y))
                 //  now 3awtani khassni nrdha map 
-                this.game.powerUps.set(JSON.stringify(positionXY),
+                this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY)
                 )
                 //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))

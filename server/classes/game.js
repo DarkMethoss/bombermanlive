@@ -13,9 +13,9 @@ export default class Game {
         this.flames = new Map()
         this.map = new GameMap(this, 15)
         this.powerUpsHardCoded = new Map()
-        this.powerUpsHardCoded.set(JSON.stringify(this.map.getCell(this.bricks[0].x, this.bricks[0].y)), new powerUp(this, 'speed', this.map.getCell(this.bricks[0].x, this.bricks[0].y)))
+        let firstBrick = Array.from(this.bricks)[0]
+        this.powerUpsHardCoded.set(firstBrick[0], new powerUp(this, 'speed', this.map.getCell(firstBrick[1].x, firstBrick[1].y)))
         this.initPlayerPositions()
-        console.log("HHHHHHHHHHH", this.map.getCell(this.bricks[0].x, this.bricks[0].y), this.bricks[0]);
         console.log("HARD CODED SHIT AGAIN!!", this.powerUpsHardCoded);
     }
 
