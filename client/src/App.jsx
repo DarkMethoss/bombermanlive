@@ -127,6 +127,7 @@ function App() {
           setPlayers(data.players)
           setBricks(data.bricks)
           setBombs(data.bombs)
+          setFlames(data.flames)
           break;
 
         case "gameOver":

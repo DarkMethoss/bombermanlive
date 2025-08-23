@@ -6,6 +6,14 @@ export default class Flame {
         this.flamesCounter()
     }
 
+    get position(){
+        let scale = this.game.map.width / this.game.map.size 
+        return {
+            x : this.x * scale,
+            y : this.y * scale
+        }
+    }
+
     flamesCounter() {
         this.game.map.board[this.y][this.x] = 4
 
@@ -23,6 +31,6 @@ export default class Flame {
             }
 
             console.log("game flames inside timeout", this.game.flames.get(key))
-        }, 5000)
+        }, 1000)
     }
 }

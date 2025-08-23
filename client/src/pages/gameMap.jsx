@@ -31,7 +31,6 @@ export default function GameMap({
             </div>
             <div className="game-map-container">
                 <Map map={map} />
-                {/* todo: place game elements  */}
                 {
                     bricks?.map((brick, index) => <div key={index} className="brick"
                         style={{ transform: `translate(${brick.x}px, ${brick.y}px)` }}></div>)
@@ -41,8 +40,12 @@ export default function GameMap({
                         style={{ transform: `translate(${player.x}px, ${player.y}px)`, background: `${player.color}` }}></div>)
                 }
                 {
-                    bombs?.map((bomb, index)=><div key={index} className="bomb"
-                    style={{ transform: `translate(${bomb.x}px, ${bomb.y}px)` }}>💣</div>)
+                    bombs?.map((bomb, index) => <div key={index} className="bomb"
+                        style={{ transform: `translate(${bomb.x}px, ${bomb.y}px)` }}>💣</div>)
+                }
+                {
+                    flames?.map((flame, index) => <div key={index} className="flame"
+                        style={{ transform: `translate(${flame.x}px, ${flame.y}px)` }}>🔥</div>)
                 }
             </div>
         </section>

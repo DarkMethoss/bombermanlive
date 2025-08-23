@@ -45,7 +45,6 @@ export default class GameMap {
                 }
             }
         }
-        console.log(`size:${this.game.bricks.length}`, this.game.bricks)
     }
 
     isWalkable(x, y) { // check wall by pixelPosition
@@ -55,7 +54,7 @@ export default class GameMap {
     }
 
     isFlameBlocked(col, row) { // check wall by grid
-        return ![1,2].includes(this.getCellValue(col, row))
+        return [1,2].includes(this.getCellValue(col, row))
     }
 
     isBricks(col, row) {
