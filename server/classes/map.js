@@ -1,3 +1,10 @@
+// 0: empty space
+// 1: Wall
+// 2: Brick
+// 3: bomb
+// 4: flame
+// 5: powerup
+
 export default class GameMap {
     constructor(game, size) {
         this.game = game
@@ -43,6 +50,10 @@ export default class GameMap {
         const {col,row} = this.getCell(x, y)
         let cellValue = this.board[row][col]
         return cellValue != 1
+    }
+
+    getCellValue(col,row) {
+        return this.board[row][col]
     }
 
     getCell(x,y) {

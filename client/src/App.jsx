@@ -28,14 +28,14 @@ function App() {
     let addMovement = (e) => {
       let key = e.key
       let keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
-      if (keys.includes(key))  movementsRef.current.add(key)
       if (key === " ") bombPlacedRef.current = true
+      if (keys.includes(key)) movementsRef.current.add(key)
     }
 
     let removeMovement = (e) => {
-      let key = e.key 
+      let key = e.key
       movementsRef.current.delete(key)
-      if (key === " ") bombPlacedRef.current = false
+      // if (key === " ") bombPlacedRef.current = false
     }
 
     if (page === "startGame") {
@@ -67,9 +67,7 @@ function App() {
     if (page !== "startGame") return
 
     function gameLoop(timeStamp) {
-
       if (!ws) return;
-
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
 
@@ -77,14 +75,11 @@ function App() {
       let playerMovements = [...movementsRef.current.values()]
       if (playerMovements.length > 0) {
         message.data.playerMovements = playerMovements
+        message.data.deltaTime = deltaTime
       }
-      if (bombPlacedRef.current){
-        message.data.placedBomb
-        bombPlacedRef.current = false
-      } 
-
-      message.data.deltaTime = deltaTime
+      message.data.placedBomb = bombPlacedRef.current
       wsRef.current?.send(JSON.stringify(message))
+      bombPlacedRef.current = false
       requestAnimationFrame(gameLoop)
     }
     gameLoop(0)
@@ -131,6 +126,7 @@ function App() {
         case "gameUpdates":
           setPlayers(data.players)
           setBricks(data.bricks)
+          setBombs(data.bombs)
           break;
 
         case "gameOver":

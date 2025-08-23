@@ -40,6 +40,10 @@ export default function GameMap({
                     players?.map((player, index) => <div key={index} className="player"
                         style={{ transform: `translate(${player.x}px, ${player.y}px)`, background: `${player.color}` }}></div>)
                 }
+                {
+                    bombs?.map((bomb, index)=><div key={index} className="bomb"
+                    style={{ transform: `translate(${bomb.x}px, ${bomb.y}px)` }}>💣</div>)
+                }
             </div>
         </section>
     )

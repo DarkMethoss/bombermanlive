@@ -9,6 +9,7 @@ export class Player {
         this.width = 40
         this.height = 40
         this.unity = 0.1
+        this.bombsPlaced = 0
         this.bomb = 1
         this.speed = 1
         this.flame = 1

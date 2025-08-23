@@ -183,6 +183,12 @@ body {
   /* display: none; */
   animation: test 0.5s infinite ;
 }
+.bomb {
+  display: flex ;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
 
 @keyframes test {
   0%{
