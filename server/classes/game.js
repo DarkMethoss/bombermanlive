@@ -11,7 +11,7 @@ export default class Game {
         this.bombs = []
         this.flames = new Map()
         this.map = new GameMap(this, 15)
-        this.bombTest = new Bomb(this, "3333333333", 51, 51)
+        this.bombTest = new Bomb(this, "playerId", 51, 51)
         this.initPlayerPositions()
     }
     // 14 x 10
