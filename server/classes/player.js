@@ -57,9 +57,7 @@ export class Player {
             let data = this.game.powerUpsHardCoded.get(`${col}-${row}`);
             data.applyTo(this)
             let { speed, id } = data.owner
-            console.log("the player who got the speed", speed, id);
             data.update(this)
-            console.log("the speeed after", speed);
         }
     
        

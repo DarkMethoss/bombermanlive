@@ -11,6 +11,7 @@ export class powerUp {
         this.active = false   // tcollectat  
         this.owner = null
         this.position = position
+        this.hidden = true
 
     }
     //  here we need to associate the player and the the powerUp
@@ -20,7 +21,7 @@ export class powerUp {
         this.active = true
         this.owner = player
     }
-   //  this is too basic
+    //  this is too basic
     update(player) {
         switch (this.type) {
             case 'speed':
@@ -48,10 +49,17 @@ export class powerUp {
 
         let exists = this.game.powerUpsHardCoded.get(this.id)
         if (exists) {
+            // see if it has an impact 
+            this.hidden = true
             this.game.powerUpsHardCoded.delete(this.id)
         }
     }
-     
+
+
+
+    changeVisilbility() {
+        this.hidden = false
+    }
 
 }
 

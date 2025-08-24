@@ -23,8 +23,22 @@ export default class Game {
     }
 
     get gameData() {
-        let flames = [...this.flames.values()].map(flames => flames[0].position)
-        if (flames.length > 0) console.log(flames)
+        // filter those who have the 0 and then replace them with 5
+
+        for (let value of this.bricks.values()) {
+            let { col, row } = this.map.getCell(value.position.x, value.position.y)
+            console.log("positionColRow", col, row);
+            if (this.map.HoldsPowerUp(col, row) && this.map.board[col][row] == 0) {
+                this.map.board[col][row] = 5
+                console.log('hhhhhhhh');
+            }
+
+            console.log("value", value.position, value.hidden);
+        }
+
+        // if (flames.length > 0) {
+        //     console.log("hnaa", flames);
+        // }
         return {
             players: [...this.players.values()].map(player => player.playerData),
             bricks: [...this.bricks.values()],
@@ -61,8 +75,9 @@ export default class Game {
             this.handlePlacedBomb(player)
         }
         // todo: update game map  // why ?? 
-        
-      
+
+
+
 
     }
 

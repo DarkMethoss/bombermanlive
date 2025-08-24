@@ -54,26 +54,24 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         let powerUpKeys = ['speed', 'bomb', 'range']
-
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
-                let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
+                let powerUpKeyIndex = Math.floor(Math.random()*powerUpKeys.length)
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
-                //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))
-                //this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
+              
             })
         }
 
 
 
 
-        console.log("the power Ups generated", this.game.powerUps);
+        // console.log("the power Ups generated", this.game.powerUps);
 
     }
 
@@ -82,8 +80,7 @@ export default class GameMap {
     // SO now we know the position of the the powerUp 
 
     HoldsPowerUp(col, row) {
-        //return this.game.powerUps.has(JSON.stringify({ col: col, row: row }))
-        return this.game.powerUpsHardCoded.has(`${col}-${row}`)
+        return this.game.powerUps.has(`${col}-${row}`)
     }
 
 
