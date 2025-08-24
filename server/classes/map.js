@@ -61,9 +61,11 @@ export default class GameMap {
                 let powerUpKeyIndex = Math.floor(Math.random()*powerUpKeys.length)
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
+                console.log("position xy", positionXY[1]);
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
+                
               
             })
         }

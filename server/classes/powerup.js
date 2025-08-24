@@ -47,11 +47,11 @@ export class powerUp {
     // if a one is used we need to decrement ( wttf 3la task )
     remove() {
 
-        let exists = this.game.powerUpsHardCoded.get(this.id)
+        let exists = this.game.powerUps.get(this.id)
         if (exists) {
             // see if it has an impact 
             this.hidden = true
-            this.game.powerUpsHardCoded.delete(this.id)
+            this.game.powerUps.delete(this.id)
         }
     }
 
@@ -59,6 +59,14 @@ export class powerUp {
 
     changeVisilbility() {
         this.hidden = false
+    }
+
+    toJSON() {
+        // Return a new object with only the desired properties for JSON serialization
+        return {
+            type: this.type,
+            position: this.position
+        };
     }
 
 }

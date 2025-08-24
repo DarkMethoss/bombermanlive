@@ -15,6 +15,7 @@ export default class Game {
         this.powerUpsHardCoded = new Map()
         let firstBrick = Array.from(this.bricks)[0]
         this.powerUpsHardCoded.set(firstBrick[0], new powerUp(this, 'speed', this.map.getCell(firstBrick[1].x, firstBrick[1].y), firstBrick[0]))
+        this.affectedBricks = []
         this.initPlayerPositions()
     }
 
@@ -25,15 +26,12 @@ export default class Game {
     get gameData() {
         // filter those who have the 0 and then replace them with 5
 
-        for (let value of this.bricks.values()) {
-            let { col, row } = this.map.getCell(value.position.x, value.position.y)
-            console.log("positionColRow", col, row);
-            if (this.map.HoldsPowerUp(col, row) && this.map.board[col][row] == 0) {
-                this.map.board[col][row] = 5
-                console.log('hhhhhhhh');
+        for (let value of this.affectedBricks.values()) {
+            let { col, row } = this.map.getCell(value.x, value.y)
+            if (this.map.HoldsPowerUp(col, row)) {
+                console.log("salaaaam");
+                this.map.board[row][col] = 5
             }
-
-            console.log("value", value.position, value.hidden);
         }
 
         // if (flames.length > 0) {
@@ -42,7 +40,7 @@ export default class Game {
         return {
             players: [...this.players.values()].map(player => player.playerData),
             bricks: [...this.bricks.values()],
-            powerUps: this.powerUps,
+            powerUps: [...this.powerUps.values()],
             bombs: [...this.bombs.values()].map(bomb => bomb.position),
             flames: [...this.flames.values()].map(flames => flames[0].position)
         }
@@ -65,9 +63,10 @@ export default class Game {
 
 
 
-
+    // here goes the update of each player bu7duuu
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
+        console.log("the daataa", data);
         let player = this.room.players.get(playerId)
         if (playerMovements) player.update(deltaTime, playerMovements)
         if (placedBomb) {
@@ -75,8 +74,8 @@ export default class Game {
             this.handlePlacedBomb(player)
         }
         // todo: update game map  // why ?? 
-
-
+        let { speed, flame, bomb } = player
+        console.log("player Data", speed, bomb , flame);
 
 
     }

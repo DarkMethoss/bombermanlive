@@ -50,15 +50,22 @@ export class Player {
 
 
 
-        //  let's see if we can test or see if there is a collision between a player and a the power UP 
+         //let's see if we can test or see if there is a collision between a player and a the power UP 
         let { col, row } = this.game.map.getCell(this.x, this.y)
         // access the place of the hardcoded shit 
         if (this.game.map.HoldsPowerUp(col, row)) {
-            let data = this.game.powerUpsHardCoded.get(`${col}-${row}`);
+            let data = this.game.powerUps.get(`${col}-${row}`);
             data.applyTo(this)
             let { speed, id } = data.owner
+            console.log("speed", speed);
             data.update(this)
         }
+
+
+
+
+
+        
     
        
     }

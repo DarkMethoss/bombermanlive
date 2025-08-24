@@ -14,8 +14,12 @@ export default function GameMap({
     speedStat,
     bombStat,
     flameStat,
+
+
 }) {
-    // console.log(players)
+    console.log("map", map);
+    console.log("speedstat", speedStat, "bombstat", bombStat, "flameStat", flameStat);
+    // console.log("powerUps", powerUps)
     return (
         <section className="page game-page">
             <div className="game-stats">
@@ -48,7 +52,27 @@ export default function GameMap({
                     flames?.map((flame, index) => <div key={index} className="flame"
                         style={{ transform: `translate(${flame.x}px, ${flame.y}px)` }}>🔥</div>)
                 }
-                
+
+                {
+                    powerUps?.map((powerUp, index) => {
+                        if (powerUp.type === 'speed') {
+                            return (
+                                <div key={index} className="powerUp"
+                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}>⚡</div>
+                            );
+                        } else if (powerUp.type === 'range') {
+                            return (
+                                <div key={index} className="powerUp"
+                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}>🔥</div>
+                            );
+                        } else {
+                            return (
+                                <div key={index} className="powerUp"
+                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}>💣</div>
+                            );
+                        }
+                    })
+                }
 
 
 
