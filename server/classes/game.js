@@ -19,8 +19,6 @@ export default class Game {
     }
 
     get gameData() {
-        let flames = [...this.flames.values()].map(flames=> flames[0].position)
-        if (flames.length > 0) console.log(flames)
         return {
             players: [...this.players.values()].map(player => player.playerData),
             bricks: [...this.bricks.values()],
@@ -49,7 +47,6 @@ export default class Game {
         let player = this.room.players.get(playerId)
         if (playerMovements) player.update(deltaTime, playerMovements)
         if (placedBomb) {
-            console.log("bomb placed", placedBomb)
             this.handlePlacedBomb(player)
         }
         // todo: update game map

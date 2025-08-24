@@ -30,7 +30,6 @@ export default class Flame {
                 this.game.map.board[this.y][this.x] = 0
             }
 
-            console.log("game flames inside timeout", this.game.flames.get(key))
         }, 1000)
     }
 }

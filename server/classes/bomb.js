@@ -15,7 +15,6 @@ export default class Bomb {
         this.affectedBricks = []
         this.flamesPosition = [{x:this.x, y:this.y}]
 
-        console.log("new Bomb placed ", this.x , this.y)
     }
 
     get position(){
@@ -27,7 +26,6 @@ export default class Bomb {
     }
 
     startDetonationCountDown(){
-        console.log("inside the start countdown value: ", this.game.map.board[this.y][this.x])
         this.game.map.board[this.y][this.x] = 3
         this.detonationTimeOut = setTimeout(() => {
             this.game.bombs.delete(`${this.x}-${this.y}`)
@@ -40,9 +38,8 @@ export default class Bomb {
     // todo: handle the bomb flames
     handleExplosion() {
         let flameRange = this.player.flame
-        console.log("flame range: ", flameRange)
 
-        for (let i = this.x - 1; i >= this.x - flameRange; i--) { // 3 is range example
+        for (let i = this.x - 1; i >= this.x - flameRange; i--) {
             if (this.game.map.isFlameBlocked(i, this.y)) {
                 if (this.game.map.isBricks(i, this.y)) {
                     this.affectedBricks.push({x: i, y: this.y})
@@ -51,7 +48,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({x: i, y: this.y})
         }
-        for (let i = this.x + 1; i <= this.x + flameRange; i++) { // 3 is range example
+        for (let i = this.x + 1; i <= this.x + flameRange; i++) {
             if (this.game.map.isFlameBlocked(i, this.y)) {
                 if (this.game.map.isBricks(i, this.y)) {
                     this.affectedBricks.push({x: i, y: this.y})
@@ -60,7 +57,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({x: i, y: this.y})
         }
-        for (let i = this.y - 1; i >= this.y - flameRange; i--) { // 3 is range example
+        for (let i = this.y - 1; i >= this.y - flameRange; i--) {
             if (this.game.map.isFlameBlocked(this.x, i)) {
                 if (this.game.map.isBricks(this.x, i)) {
                     this.affectedBricks.push({x: this.x, y: i})
@@ -69,7 +66,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({x: this.x, y: i})
         }
-        for (let i = this.y + 1; i <= this.y + flameRange; i++) { // 3 is range example
+        for (let i = this.y + 1; i <= this.y + flameRange; i++) {
             if (this.game.map.isFlameBlocked(this.x, i)) {
                 if (this.game.map.isBricks(this.x, i)) {
                     this.affectedBricks.push({x: this.x, y: i})
@@ -84,7 +81,6 @@ export default class Bomb {
             const flame = new Flame(this.game, obj)
             this.game.flames.has(mapIndex)? this.game.flames.get(mapIndex).push(flame) : this.game.flames.set(mapIndex, [flame]);
         })
-        console.log(this.game.flames)
         clearTimeout(this.detonationTimeOut)
     }
 }

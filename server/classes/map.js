@@ -50,11 +50,18 @@ export default class GameMap {
     isWalkable(x, y) { // check wall by pixelPosition
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return ![1,2,3].includes(cellValue)
+        return ![1, 2, 3].includes(cellValue)
+    }
+
+    canGetOut(x, y) {
+        const { col, row } = this.getCell(x, y)
+        console.log("=====> ", col, row)
+        let cellValue = this.board[row][col]
+        return ![1, 2].includes(cellValue)
     }
 
     isFlameBlocked(col, row) { // check wall by grid
-        return [1,2].includes(this.getCellValue(col, row))
+        return [1, 2].includes(this.getCellValue(col, row))
     }
 
     isBricks(col, row) {
