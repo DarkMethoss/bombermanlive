@@ -55,7 +55,6 @@ export default class GameMap {
 
     canGetOut(x, y) {
         const { col, row } = this.getCell(x, y)
-        console.log("=====> ", col, row)
         let cellValue = this.board[row][col]
         return ![1, 2].includes(cellValue)
     }

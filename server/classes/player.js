@@ -11,7 +11,7 @@ export class Player {
         this.unity = 0.1
         this.bombsPlaced = 0
         this.bomb = 1
-        this.speed = 3
+        this.speed = 1
         this.flame = 1
         this.color = ""
         this.game = null
@@ -57,11 +57,6 @@ export class Player {
                 isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
                 canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
             }
-
-            // if (isOnBomb) {
-            //     this.x = x
-            //     this.y = y
-            // } else 
 
             if ((isOnBomb && canGetOut) || isWalkable) {
                 this.x = x
