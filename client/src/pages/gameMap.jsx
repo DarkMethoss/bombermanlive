@@ -1,5 +1,17 @@
 import { powerUp } from "../../../server/classes/powerup";
 import Map from "../components/map";
+import redImg from '../assets/red.png';
+import blueImg from '../assets/blue.png';
+import greenImg from '../assets/green.png';
+import yellowImg from '../assets/yellow.png';
+
+
+const colorMap = {
+    red: redImg,
+    blue: blueImg,
+    green: greenImg,
+    yellow: yellowImg
+};
 
 export default function GameMap({
     // game map state
@@ -16,8 +28,7 @@ export default function GameMap({
 
 
 }) {
-    console.log("map", map);
-    console.log("speedstat", speedStat, "bombstat", bombStat, "flameStat", flameStat);
+    
     // console.log("powerUps", powerUps)
     return (
         <section className="page game-page">
@@ -41,7 +52,7 @@ export default function GameMap({
                 }
                 {
                     players?.map((player, index) => <div key={index} className="player"
-                        style={{ transform: `translate(${player.x}px, ${player.y}px)`, background: `${player.color}` }}></div>)
+                        style={{ transform: `translate(${player.x}px, ${player.y}px)`, backgroundImage: `url(${colorMap[player.color]})` }}></div>)
                 }
                 {
                     bombs?.map((bomb, index) => <div key={index} className="bomb"

@@ -50,7 +50,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({ x: i, y: this.y })
         }
-        for (let i = this.x + 1; i <= this.x + flameRange; i++) { // 3 is range example
+        for (let i = this.x + 1; i <= this.x + flameRange; i++) {
             if (this.game.map.isFlameBlocked(i, this.y)) {
                 if (this.game.map.isBricks(i, this.y)) {
                     this.game.bricks.delete(`${i}-${this.y}`)
@@ -63,7 +63,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({ x: i, y: this.y })
         }
-        for (let i = this.y - 1; i >= this.y - flameRange; i--) { // 3 is range example
+        for (let i = this.y - 1; i >= this.y - flameRange; i--) {
             if (this.game.map.isFlameBlocked(this.x, i)) {
                 if (this.game.map.isBricks(this.x, i)) {
                     this.game.bricks.delete(`${this.x}-${i}`)
@@ -75,7 +75,7 @@ export default class Bomb {
             }
             this.flamesPosition.push({ x: this.x, y: i })
         }
-        for (let i = this.y + 1; i <= this.y + flameRange; i++) { // 3 is range example
+        for (let i = this.y + 1; i <= this.y + flameRange; i++) {
             if (this.game.map.isFlameBlocked(this.x, i)) {
                 if (this.game.map.isBricks(this.x, i)) {
                     // what about delete them from the map direclty 

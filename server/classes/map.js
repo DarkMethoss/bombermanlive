@@ -92,7 +92,12 @@ export default class GameMap {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
         return ![1, 2, 3].includes(cellValue)
-        //return cellValue != 1
+    }
+
+    canGetOut(x, y) {
+        const { col, row } = this.getCell(x, y)
+        let cellValue = this.board[row][col]
+        return ![1, 2].includes(cellValue)
     }
 
     isFlameBlocked(col, row) { // check wall by grid

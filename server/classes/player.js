@@ -26,25 +26,40 @@ export class Player {
 
     update(deltaTime, playerMovements) {
         playerMovements.forEach(movement => {
+            let x = this.x
+            let y = this.y
+            let playerCenterX = x + this.width / 2
+            let playerCenterY = y + this.height / 2
+            let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
+            let cellValue = this.game.map.getCellValue(col, row)
+            let isOnBomb = cellValue === 3
+            let isWalkable
+            let canGetOut
+
             if (movement === "ArrowRight") {
-                let x = this.x + deltaTime * this.speed * this.unity
-                let isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
-                if (isWalkable) this.x = x
+                x = this.x + deltaTime * this.speed * this.unity
+                isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
+                canGetOut = this.game.map.canGetOut(x + this.width, this.y) && this.game.map.canGetOut(x + this.width, this.y + this.height)
             }
             if (movement === "ArrowLeft") {
-                let x = this.x - deltaTime * this.speed * this.unity
-                let isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
-                if (isWalkable) this.x = x
+                x = this.x - deltaTime * this.speed * this.unity
+                isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
+                canGetOut = this.game.map.canGetOut(x, this.y) && this.game.map.canGetOut(x, this.y + this.height)
             }
             if (movement === "ArrowUp") {
-                let y = this.y - deltaTime * this.speed * this.unity
-                let isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
-                if (isWalkable) this.y = y
+                y = this.y - deltaTime * this.speed * this.unity
+                isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
+                canGetOut = this.game.map.canGetOut(this.x, y) && this.game.map.canGetOut(this.x + this.width, y)
             }
             if (movement === "ArrowDown") {
-                let y = this.y + deltaTime * this.speed * this.unity
-                let isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
-                if (isWalkable) this.y = y
+                y = this.y + deltaTime * this.speed * this.unity
+                isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
+                canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
+            }
+
+            if ((isOnBomb && canGetOut) || isWalkable) {
+                this.x = x
+                this.y = y
             }
         });
 
