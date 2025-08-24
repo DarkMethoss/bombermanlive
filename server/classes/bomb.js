@@ -26,7 +26,6 @@ export default class Bomb {
     }
 
     startDetonationCountDown() {
-        console.log("inside the start countdown value: ", this.game.map.board[this.y][this.x])
         this.game.map.board[this.y][this.x] = 3
         this.detonationTimeOut = setTimeout(() => {
             this.game.bombs.delete(`${this.x}-${this.y}`)

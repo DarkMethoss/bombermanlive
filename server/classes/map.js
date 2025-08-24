@@ -63,12 +63,17 @@ export default class GameMap {
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
-                    new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY)
+                    new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
                 //this.game.powerUps.push(new powerUp(this.game, element, this.game.bricks[powerUpsIndices[index]]))
                 //this.game.powerUps.push({ type: element, position: this.game.bricks[powerUpsIndices[index]] })
             })
         }
+
+
+
+
+        console.log("the power Ups generated", this.game.powerUps);
 
     }
 

@@ -60,7 +60,8 @@ export default class Game {
             // console.log("bomb placed", placedBomb)
             this.handlePlacedBomb(player)
         }
-        // todo: update game map
+        // todo: update game map  // why ?? 
+        
       
 
     }

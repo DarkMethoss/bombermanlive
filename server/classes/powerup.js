@@ -7,7 +7,6 @@ export class powerUp {
     constructor(game, type, position, id) {
         this.id = id
         this.game = game
-        // this.icon = icon    // to be got from the type of the speed 
         this.type = type
         this.active = false   // tcollectat  
         this.owner = null
@@ -50,19 +49,9 @@ export class powerUp {
         let exists = this.game.powerUpsHardCoded.get(this.id)
         if (exists) {
             this.game.powerUpsHardCoded.delete(this.id)
-
         }
-
     }
      
-    toJSON() {
-        return {
-            type: this.type,
-            position: this.position
-        };
-    }
-
-
 
 }
 
