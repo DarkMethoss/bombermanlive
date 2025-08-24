@@ -14,9 +14,8 @@ export default class Game {
         this.map = new GameMap(this, 15)
         this.powerUpsHardCoded = new Map()
         let firstBrick = Array.from(this.bricks)[0]
-        this.powerUpsHardCoded.set(firstBrick[0], new powerUp(this, 'speed', this.map.getCell(firstBrick[1].x, firstBrick[1].y)))
+        this.powerUpsHardCoded.set(firstBrick[0], new powerUp(this, 'speed', this.map.getCell(firstBrick[1].x, firstBrick[1].y), firstBrick[0]))
         this.initPlayerPositions()
-        console.log("HARD CODED SHIT AGAIN!!", this.powerUpsHardCoded);
     }
 
     get gameMap() {
@@ -24,14 +23,14 @@ export default class Game {
     }
 
     get gameData() {
-        let flames = [...this.flames.values()].map(flames=> flames[0].position)
+        let flames = [...this.flames.values()].map(flames => flames[0].position)
         if (flames.length > 0) console.log(flames)
         return {
             players: [...this.players.values()].map(player => player.playerData),
             bricks: [...this.bricks.values()],
             powerUps: this.powerUps,
             bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            flames: [...this.flames.values()].map(flames=> flames[0].position)
+            flames: [...this.flames.values()].map(flames => flames[0].position)
         }
     }
 
@@ -62,6 +61,8 @@ export default class Game {
             this.handlePlacedBomb(player)
         }
         // todo: update game map
+      
+
     }
 
     handlePlacedBomb(player) {
@@ -71,7 +72,7 @@ export default class Game {
         let cellValue = this.map.getCellValue(col, row)
         let canPlaceBomb = player.bombsPlaced < player.bomb && cellValue != 3
         if (canPlaceBomb) {
-            this.bombs.set(`${col}-${row}`, new Bomb(this, player, col, row))
+            this.bombs.set(`${col}-${row}`, new Bomb(this, player, col, row, this.map))
             player.bombsPlaced++
         }
     }

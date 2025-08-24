@@ -4,7 +4,8 @@
 
 
 export class powerUp {
-    constructor(game, type, position) {
+    constructor(game, type, position, id) {
+        this.id = id
         this.game = game
         // this.icon = icon    // to be got from the type of the speed 
         this.type = type
@@ -25,13 +26,16 @@ export class powerUp {
         switch (this.type) {
             case 'speed':
                 player.speed += 1
+                this.remove()
                 // need to remove it too
                 break;
             case 'bomb':
                 player.bomb += 1
-                break
+                this.remove()
+                break;
             case 'range':
                 player.flame += 1
+                this.remove()
                 break
         }
 
@@ -43,9 +47,9 @@ export class powerUp {
     // if a one is used we need to decrement ( wttf 3la task )
     remove() {
 
-        let exists = this.game.powerUps.indexOf(this)
-        if (exists != -1) {
-            this.game.powerUps.splice(exists, 1)
+        let exists = this.game.powerUpsHardCoded.get(this.id)
+        if (exists) {
+            this.game.powerUpsHardCoded.delete(this.id)
 
         }
 

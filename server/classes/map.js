@@ -57,15 +57,10 @@ export default class GameMap {
 
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
-            console.log("powerUpsIndices", powerUpsIndices);
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
-                console.log("eleemnt", element);
                 let powerUpKeyIndex = Math.floor(Math.random(powerUpKeys.length))
-                console.log("powerUpKeyIndex", powerUpKeyIndex);
                 let positionXY = Array.from(this.game.bricks)[element]
-                console.log("positoon", positionXY);
-                console.log("HNAAAAAA", this.getCell(positionXY[1].x, positionXY[1].y))
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY)
@@ -83,7 +78,6 @@ export default class GameMap {
 
     HoldsPowerUp(col, row) {
         //return this.game.powerUps.has(JSON.stringify({ col: col, row: row }))
-        console.log("verif", `${col}-${row}`, this.game.powerUpsHardCoded.has(`${col}-${row}`, JSON.stringify({ col: col, row: row })));
         return this.game.powerUpsHardCoded.has(`${col}-${row}`)
     }
 
@@ -93,8 +87,8 @@ export default class GameMap {
     isWalkable(x, y) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        //return ![1, 2, 3].includes(cellValue)
-        return cellValue != 1
+        return ![1, 2, 3].includes(cellValue)
+        //return cellValue != 1
     }
 
     isFlameBlocked(col, row) { // check wall by grid
@@ -131,8 +125,6 @@ export default class GameMap {
     #getThreeUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        //   where to gena
-
         let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))

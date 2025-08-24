@@ -1,3 +1,4 @@
+import { powerUp } from "../../../server/classes/powerup";
 import Map from "../components/map";
 
 export default function GameMap({
@@ -47,6 +48,11 @@ export default function GameMap({
                     flames?.map((flame, index) => <div key={index} className="flame"
                         style={{ transform: `translate(${flame.x}px, ${flame.y}px)` }}>🔥</div>)
                 }
+                
+
+
+
+
             </div>
         </section>
     )
