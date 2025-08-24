@@ -9,7 +9,6 @@ export default function GameMap({
     bombs,
     powerUps,
     flames,
-
     // player stats states
     speedStat,
     bombStat,

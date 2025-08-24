@@ -12,9 +12,6 @@ export default class Game {
         this.bombs = new Map()
         this.flames = new Map()
         this.map = new GameMap(this, 15)
-        this.powerUpsHardCoded = new Map()
-        let firstBrick = Array.from(this.bricks)[0]
-        this.powerUpsHardCoded.set(firstBrick[0], new powerUp(this, 'speed', this.map.getCell(firstBrick[1].x, firstBrick[1].y), firstBrick[0]))
         this.affectedBricks = []
         this.initPlayerPositions()
     }

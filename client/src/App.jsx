@@ -132,7 +132,11 @@ function App() {
           setFlames(data.flames)
           setPowerUps(data.powerUps)
           break;
-
+        case  "stats":
+          setBombStat(data.bomb)
+          setFlameStat(data.flame)
+          setSpeedStat(data.speed)
+          break; 
         case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)

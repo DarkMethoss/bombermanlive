@@ -121,8 +121,9 @@ export default class Room {
                 }
                 break;
             case "gameUpdates":
+
                 message.data = this.game.gameData
-                // console.log("data that is sent", this.gameData);
+                console.log("data that is sent", this.game.gameData);
                 break;
             default:
                 break;
