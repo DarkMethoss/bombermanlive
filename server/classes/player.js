@@ -15,6 +15,7 @@ export class Player {
         this.flame = 1
         this.color = ""
         this.game = null
+        this.initialPosition = null
     }
 
     isWon() {
@@ -61,7 +62,9 @@ export class Player {
             if ((isOnBomb && canGetOut) || isWalkable) {
                 this.x = x
                 this.y = y
+                this.handlePlayerCollisionWithFlames({x, y}, this.game.flames)
             }
+
         });
     }
 
@@ -74,6 +77,20 @@ export class Player {
             speed: this.speed,
             flame: this.flame,
             color: this.color
+        }
+    }
+
+    handlePlayerCollisionWithFlames(playerPosition, flames) {
+        // check if player position == flame position
+        let up = this.game.map.getCell(playerPosition.x, playerPosition.y)
+        let down = this.game.map.getCell(playerPosition.x + this.width, playerPosition.y + this.height)
+
+        if (flames.has(`${up.col}-${up.row}`) || flames.has(`${down.col}-${down.row}`)) {
+            this.hearts--
+            this.x = this.initialPosition.x
+            this.y = this.initialPosition.y
+            console.log("player pp", this.hearts, this.x, this.y)
+
         }
     }
 }

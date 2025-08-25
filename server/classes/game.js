@@ -39,6 +39,7 @@ export default class Game {
             player.y = y * 50 + 5
             player.color = color
             player.game = this
+            player.initialPosition = {x: player.x, y: player.y}
         })
     }
 
@@ -49,6 +50,7 @@ export default class Game {
         if (placedBomb) {
             this.handlePlacedBomb(player)
         }
+        
         // todo: update game map
     }
 

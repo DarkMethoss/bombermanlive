@@ -81,6 +81,7 @@ export default class Bomb {
             const flame = new Flame(this.game, obj)
             this.game.flames.has(mapIndex)? this.game.flames.get(mapIndex).push(flame) : this.game.flames.set(mapIndex, [flame]);
         })
+
         clearTimeout(this.detonationTimeOut)
     }
 }

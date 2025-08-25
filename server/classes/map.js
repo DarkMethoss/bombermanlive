@@ -59,7 +59,7 @@ export default class GameMap {
         return ![1, 2].includes(cellValue)
     }
 
-    isFlameBlocked(col, row) { // check wall by grid
+    isFlameBlocked(col, row) { // check blocks iteam by grid
         return [1, 2].includes(this.getCellValue(col, row))
     }
 
