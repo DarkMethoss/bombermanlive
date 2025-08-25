@@ -3,7 +3,7 @@ export default class Flame {
         this.x = position.x;
         this.y = position.y;
         this.game = game;
-        this.flamesCounter()
+        this.flamesCounter();
     }
 
     get position(){
@@ -17,6 +17,8 @@ export default class Flame {
     flamesCounter() {
         this.game.map.board[this.y][this.x] = 4
 
+        this.handleFlamesCollisionWithPlayer([...this.game.players.values()])
+
         setTimeout(() => {
             let key = `${this.x}-${this.y}`;
             let values = this.game.flames.get(key)
@@ -29,7 +31,12 @@ export default class Flame {
                 this.game.flames.delete(key)
                 this.game.map.board[this.y][this.x] = 0
             }
+        }, 500)
+    }
 
-        }, 1000)
+    handleFlamesCollisionWithPlayer(players) {
+        players.forEach(player => {
+            
+        })
     }
 }
