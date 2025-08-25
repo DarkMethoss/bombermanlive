@@ -72,13 +72,13 @@ export default function GameMap({
                             );
                         } else if (powerUp.type === 'range') {
                             return (
-                                <div key={index} className="powerUp"
-                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}>🔥</div>
+                                <div key={index} className="powerUp flameUp"
+                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}></div>
                             );
                         } else {
                             return (
-                                <div key={index} className="powerUp"
-                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}>💣</div>
+                                <div key={index} className="powerUp bombUp"
+                                    style={{ transform: `translate(${powerUp.position.x}px, ${powerUp.position.y}px)` }}></div>
                             );
                         }
                     })

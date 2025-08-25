@@ -238,8 +238,22 @@ body {
 
 }
 
-.powerUp {}
+.powerUp {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: 1px 1px 4px inset #333;
+}
 
-.bomb {}
+.bombUp {
+  background-image: url(./assets/malware\ \(1\).png);
+}
 
-.flame {}
+.flameUp {
+  background-image: url(./assets/fire.png);
+}
+
+
+.speedUp {
+  background-image: url(./assets/brick.jpeg);
+}
