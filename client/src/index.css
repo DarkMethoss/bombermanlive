@@ -189,6 +189,7 @@ body {
 }
 
 .bomb,
+.powerUp,
 .flame {
   display: flex;
   justify-content: center;

@@ -7,7 +7,7 @@ export default function Chat() {
 
     const handleMessage = (e) => {
         e.preventDefault()
-        console.log("message hna", message)
+        // console.log("message hna", message)
         if (message.trim()) {
             setMessages(prev => [...prev, { message, sender: "DarkMethoss" }])
         }

@@ -43,7 +43,7 @@ export default class Bomb {
                 if (this.game.map.isBricks(i, this.y)) {
                     this.game.bricks.delete(`${i}-${this.y}`)
                     this.map.board[this.y][i] = 0
-                    this.game.affectedBricks.push({ x: i, y: this.y })
+                    this.game.affectedBricks.push({ col: i, row: this.y })
                     this.flamesPosition.push({ x: i, y: this.y })
                 }
                 break
@@ -56,7 +56,7 @@ export default class Bomb {
                     this.game.bricks.delete(`${i}-${this.y}`)
                     this.map.board[this.y][i] = 0
                     // this.affectedBricks.set(`${this.y}-${i}`, {})
-                    this.game.affectedBricks.push({ x: i, y: this.y })
+                    this.game.affectedBricks.push({ col: i, row: this.y })
                     this.flamesPosition.push({ x: i, y: this.y })
                 }
                 break
@@ -68,7 +68,7 @@ export default class Bomb {
                 if (this.game.map.isBricks(this.x, i)) {
                     this.game.bricks.delete(`${this.x}-${i}`)
                     this.map.board[i][this.x] = 0
-                    this.game.affectedBricks.push({ x: this.x, y: i })
+                    this.game.affectedBricks.push({ col: this.x, row: i })
                    this.flamesPosition.push({ x: this.x, y: i })
                 }
                 break
@@ -81,7 +81,7 @@ export default class Bomb {
                     // what about delete them from the map direclty 
                     this.game.bricks.delete(`${this.x}-${i}`)
                     this.map.board[i][this.x] = 0
-                    this.game.affectedBricks.push({ x: this.x, y: i })
+                    this.game.affectedBricks.push({ col: this.x, row: i })
                     this.flamesPosition.push({ x: this.x, y: i })
                 }
                 break

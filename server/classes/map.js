@@ -14,7 +14,7 @@ export default class GameMap {
         this.width = 750
         this.height = 750
         this.size = size
-        this.proportionBricks = 0.7
+        this.proportionBricks = 0.8
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
         this.generatePowerUps()
@@ -55,13 +55,12 @@ export default class GameMap {
     generatePowerUps() {
         let powerUpKeys = ['speed', 'bomb', 'range']
         if (this.game.bricks.length != 0) {
-            let powerUpsIndices = this.#getThreeUniqueIndices(this.game.bricks)
+            let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
                 let powerUpKeyIndex = Math.floor(Math.random()*powerUpKeys.length)
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
-                console.log("position xy", positionXY[1]);
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
@@ -131,10 +130,10 @@ export default class GameMap {
 
     // for later to make it generic for everyithing 
     // 
-    #getThreeUniqueIndices(arr) {
+    #getUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
+        let proportionPowerUps = Math.round(maxIndex * 0.2 * this.game.players.size)
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
             indices.add(randomIndex)
