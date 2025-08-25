@@ -33,6 +33,20 @@ body {
   height: 100%;
 }
 
+.flex {
+  display: flex;
+  align-items: end;
+}
+
+.gap-1 {
+  font-size: 24px;
+  gap: 6px;
+}
+
+.gap-2 {
+  gap: 18px;
+}
+
 /* wait lobby components */
 
 .waiting-lobby {

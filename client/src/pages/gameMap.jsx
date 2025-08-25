@@ -20,21 +20,34 @@ export default function GameMap({
     bombs,
     powerUps,
     flames,
+    playerName,
 
     // player stats states
     speedStat,
     bombStat,
     flameStat,
 }) {
-    // console.log(players)
     return (
         <section className="page game-page">
             <div className="game-stats">
-                <div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+                    <div className="flex gap-1">
+                        {
+                            Array.from({ length: players.filter((player) => player.name === playerName)[0].hearts })
+                                .map((item, index) => 
+                                    <div key={index}>❤️</div>
+                                )
+                        }
+                    </div>
+                    {
+                        players.filter((player) => player.name === playerName)
+                            .map(player =>
+                                <div key={player.name} className="player"
+                                    style={{ backgroundImage: `url(${colorMap[player.color]})`, position: "unset" }}></div>
+                            )
+                    }
+
+
+
                 <div className="game-powerups-container">
                     <div className="powerup">💣<span>x{bombStat}</span></div>
                     <div className="powerup">⚡<span>x{speedStat}</span></div>

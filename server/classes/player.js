@@ -11,6 +11,7 @@ export class Player {
         this.height = 40
         this.unity = 0.08
         this.bombsPlaced = 0
+        this.userName = null
         this.bomb = 3
         this.speed = 1
         this.flame = 1
@@ -104,7 +105,8 @@ export class Player {
             bomb: this.bomb,
             speed: this.speed,
             flame: this.flame,
-            color: this.color
+            color: this.color,
+            name: this.userName
         }
     }
 

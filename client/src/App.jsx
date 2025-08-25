@@ -7,9 +7,9 @@ import GameOver from './pages/gameOver'
 function App() {
   const [page, setPage] = useState("nameEntry")
   const [messages, setMessages] = useState([])
-  
+
   const [ws, setWs] = useState(null)
-  const wsRef = useRef(null)
+  const wsRef = useRef(ws)
 
   //* Game Map States
   const [bricks, setBricks] = useState()
@@ -47,7 +47,7 @@ function App() {
     if (page === "startGame") {
       document.addEventListener("keydown", addMovement)
       document.addEventListener("keyup", removeMovement)
-      window.addEventListener("blur",clearMovement)
+      window.addEventListener("blur", clearMovement)
     } else {
       document.removeEventListener("keydown", addMovement)
       document.removeEventListener("keyup", removeMovement)
@@ -77,7 +77,7 @@ function App() {
       if (!ws) return;
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
-      
+
       let message = { type: "getGameUpdates", data: {} }
       let playerMovements = [...movementsRef.current.values()]
       if (playerMovements.length > 0) {
@@ -98,8 +98,15 @@ function App() {
 
   //* game over page states : 
   const [isWon, setIsWon] = useState(null)
+
+  useEffect(() => {
+    if (page === "gameOver" && !isWon) {
+      console.log("Game over: ", isWon)
+      ws.close()
+    }
+  }, [isWon])
+
   const handleWebsocket = () => {
-    console.log("asdfasdfasdf",location.hostname);
     const socket = new WebSocket(`ws://${location.hostname}:8080`);
     socket.onopen = () => {
       console.log('Connected to websocket server');
@@ -145,7 +152,7 @@ function App() {
 
         case "chat":
           console.log(data)
-          setMessages(prev=> [...prev, data])
+          setMessages(prev => [...prev, data])
           break;
         default:
           break;
@@ -197,6 +204,7 @@ function App() {
       speedStat={speedStat}
       bombStat={bombStat}
       flameStat={flameStat}
+      playerName={playerName}
     />
   )
 

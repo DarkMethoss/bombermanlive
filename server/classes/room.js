@@ -124,7 +124,6 @@ export default class Room {
                 break;
             case "chat":
                 message.data = options
-                console.log(message)
             default:
                 break;
         }

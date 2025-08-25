@@ -17,7 +17,7 @@ export default class Flame {
     flamesCounter() {
         this.game.map.board[this.y][this.x] = 4
 
-        this.handleFlamesCollisionWithPlayer([...this.game.players.values()])
+        // this.handleFlamesCollisionWithPlayer([...this.game.players.values()])
 
         setTimeout(() => {
             let key = `${this.x}-${this.y}`;
@@ -34,9 +34,9 @@ export default class Flame {
         }, 500)
     }
 
-    handleFlamesCollisionWithPlayer(players) {
-        players.forEach(player => {
+    // handleFlamesCollisionWithPlayer(players) {
+    //     players.forEach(player => {
             
-        })
-    }
+    //     })
+    // }
 }
