@@ -1,21 +1,23 @@
+import { throttle } from "../utils/utils.js"
+
 export class Player {
     constructor(wss, ws, id) {
         this.id = id
         this.ws = ws
-        // this.wss = wss
         this.hearts = 3
         this.x = null
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.1
+        this.unity = 0.08
         this.bombsPlaced = 0
-        this.bomb = 1
+        this.bomb = 3
         this.speed = 1
         this.flame = 1
         this.color = ""
         this.game = null
         this.initialPosition = null
+        this.isRespawned = false
     }
 
     isWon() {
@@ -24,9 +26,16 @@ export class Player {
     }
 
     isLost() {
+        let message = { type: "gameOver", data: { isWon: false } }
+        this.ws.send(JSON.stringify(message))
     }
 
     update(deltaTime, playerMovements) {
+        this.handlePlayerCollisionWithFlames()
+        if (playerMovements) this.handlePlayerMovements(deltaTime, playerMovements)
+    }
+
+    handlePlayerMovements(deltaTime, playerMovements) {
         playerMovements.forEach(movement => {
             let x = this.x
             let y = this.y
@@ -62,10 +71,29 @@ export class Player {
             if ((isOnBomb && canGetOut) || isWalkable) {
                 this.x = x
                 this.y = y
-                this.handlePlayerCollisionWithFlames({x, y}, this.game.flames)
             }
 
         });
+    }
+
+    handlePlayerCollisionWithFlames() {
+        let up = this.game.map.getCell(this.x, this.y)
+        let down = this.game.map.getCell(this.x + this.width, this.y + this.height)
+
+        if (this.game.flames.has(`${up.col}-${up.row}`) || this.game.flames.has(`${down.col}-${down.row}`)) {
+            if (this.hearts > 0 && !this.isRespawned) {
+                this.hearts--
+                this.x = this.initialPosition.x
+                this.y = this.initialPosition.y
+                this.isRespawned = true
+                setTimeout(() => {
+                    this.isRespawned = false
+                }, 1000)
+                console.log(`Player: ${this.id}`, this.hearts, up, down)
+                return
+            }
+            if (this.hearts <= 0) this.isLost()
+        }
     }
 
     get playerData() {
@@ -80,17 +108,6 @@ export class Player {
         }
     }
 
-    handlePlayerCollisionWithFlames(playerPosition, flames) {
-        // check if player position == flame position
-        let up = this.game.map.getCell(playerPosition.x, playerPosition.y)
-        let down = this.game.map.getCell(playerPosition.x + this.width, playerPosition.y + this.height)
 
-        if (flames.has(`${up.col}-${up.row}`) || flames.has(`${down.col}-${down.row}`)) {
-            this.hearts--
-            this.x = this.initialPosition.x
-            this.y = this.initialPosition.y
-            console.log("player pp", this.hearts, this.x, this.y)
 
-        }
-    }
 }

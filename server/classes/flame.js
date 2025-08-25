@@ -31,21 +31,12 @@ export default class Flame {
                 this.game.flames.delete(key)
                 this.game.map.board[this.y][this.x] = 0
             }
-        }, 1000)
+        }, 500)
     }
 
     handleFlamesCollisionWithPlayer(players) {
         players.forEach(player => {
-            let up = this.game.map.getCell(player.x, player.y)
-            let down = this.game.map.getCell(player.x + player.width, player.y + player.height)
-            const check = (grid) => this.x == grid.col && this.y == grid.row
-
-            if (check(up) || check(down)) {
-                player.hearts--
-                player.x = player.initialPosition.x
-                player.y = player.initialPosition.y
-                console.log("player ff", player)
-            }
+            
         })
     }
 }
