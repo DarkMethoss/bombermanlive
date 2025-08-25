@@ -121,11 +121,9 @@ function App() {
           setMap(data.map)
           setPlayers(data.players)
           setBricks(data.bricks)
-          setPowerUps(data.powerUps)
           break;
 
         case "gameUpdates":
-          console.log("data.players", data.players);
           setPlayers(data.players)
           setBricks(data.bricks)
           setBombs(data.bombs)

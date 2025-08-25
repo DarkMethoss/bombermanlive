@@ -13,7 +13,6 @@ export default class Bomb {
         this.detonationTimeOut = null
         this.isExploded = false
         this.startDetonationCountDown()
-        this.affectedBricks = []
         this.flamesPosition = [{ x: this.x, y: this.y }]
     }
 
@@ -55,7 +54,6 @@ export default class Bomb {
                 if (this.game.map.isBricks(i, this.y)) {
                     this.game.bricks.delete(`${i}-${this.y}`)
                     this.map.board[this.y][i] = 0
-                    // this.affectedBricks.set(`${this.y}-${i}`, {})
                     this.game.affectedBricks.push({ col: i, row: this.y })
                     this.flamesPosition.push({ x: i, y: this.y })
                 }
@@ -98,11 +96,5 @@ export default class Bomb {
         clearTimeout(this.detonationTimeOut)
     
     }
-
-
-
-
-    
-
     
 }

@@ -11,8 +11,6 @@ export class powerUp {
         this.active = false   // tcollectat  
         this.owner = null
         this.position = position
-        this.hidden = true
-
     }
     //  here we need to associate the player and the the powerUp
     //  the logic of how each one will be handled by the player
@@ -27,7 +25,6 @@ export class powerUp {
             case 'speed':
                 player.speed += 1
                 this.remove()
-                // need to remove it too
                 break;
             case 'bomb':
                 player.bomb += 1
@@ -42,6 +39,8 @@ export class powerUp {
 
     }
 
+   
+
 
     // hna we need to remove the powerUp from the game
     // if a one is used we need to decrement ( wttf 3la task )
@@ -49,16 +48,8 @@ export class powerUp {
 
         let exists = this.game.powerUps.get(this.id)
         if (exists) {
-            // see if it has an impact 
-            this.hidden = true
             this.game.powerUps.delete(this.id)
         }
-    }
-
-
-
-    changeVisilbility() {
-        this.hidden = false
     }
 
     toJSON() {

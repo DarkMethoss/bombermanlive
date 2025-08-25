@@ -53,38 +53,28 @@ export default class GameMap {
 
     // we need 
     generatePowerUps() {
-        let powerUpKeys = ['speed', 'bomb', 'range']
+        let powerUpKeys = ['speed','speed','bomb', 'bomb', 'bomb', 'bomb', 'range', 'range', 'range', 'range']
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
-                let powerUpKeyIndex = Math.floor(Math.random()*powerUpKeys.length)
+                let powerUpKeyIndex = Math.floor(Math.random() * powerUpKeys.length)
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
-                
-              
+
+
             })
         }
 
-
-
-
-        // console.log("the power Ups generated", this.game.powerUps);
-
     }
 
-
-
-    // SO now we know the position of the the powerUp 
 
     HoldsPowerUp(col, row) {
         return this.game.powerUps.has(`${col}-${row}`)
     }
-
-
 
 
     isWalkable(x, y) {
@@ -133,7 +123,8 @@ export default class GameMap {
     #getUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        let proportionPowerUps = Math.round(maxIndex * 0.2 * this.game.players.size)
+        let proportionPowerUps = Math.round(maxIndex * 0.07 * this.game.players.size)
+        console.log("proportion", proportionPowerUps);
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
             indices.add(randomIndex)

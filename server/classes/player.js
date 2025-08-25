@@ -63,28 +63,29 @@ export class Player {
             }
         });
 
-        // toooodoooooo : refactoring hadshi mzyaan before last version
-        // make the powerUps appear after the explosion !! 
+        this.handlePowerUpCollision()
 
-        //let's see if we can test or see if there is a collision between a player and a the power UP 
-        let { col, row } = this.game.map.getCell(this.x, this.y)
-        // access the place of the hardcoded shit 
+    }
+
+
+    //  here we'll be handling the player must collide with the player at least at the center 
+
+    handlePowerUpCollision() {
+        // see if the center of the player is there !!
+        let playerCenterX = this.x + this.width / 2
+        let playerCenterY = this.y + this.height / 2
+
+        let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
-            let data = this.game.powerUps.get(`${col}-${row}`);
-            data.applyTo(this)
-            data.update(this)
+            let powerUp = this.game.powerUps.get(`${col}-${row}`);
+            powerUp.applyTo(this)
+            powerUp.update(this)
             let message = { type: "stats", data: { speed: this.speed, bomb: this.bomb, flame: this.flame } }
             this.ws.send(JSON.stringify(message))
         }
 
-
-
-
-
-
-
-
     }
+
 
     get playerData() {
         return {
