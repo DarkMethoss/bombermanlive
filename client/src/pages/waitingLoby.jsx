@@ -1,7 +1,7 @@
 
 import Chat from "../components/chat"
 
-export default function WaitingLobby({ ws, players, seconds,lobbyState  }) {
+export default function WaitingLobby({ ws, players, seconds,lobbyState, playerName, messages, }) {
     return (
         <section className={"waiting-lobby page"}>
             <div className="count-down-container">
@@ -14,7 +14,7 @@ export default function WaitingLobby({ ws, players, seconds,lobbyState  }) {
                     players.map(name => <div className="player-item" key={name}>{name}</div>)
                 }
             </div>
-            <Chat />
+            <Chat ws={ws} playerName={playerName} messages={messages} />
         </section>
     )
 }

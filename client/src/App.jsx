@@ -6,6 +6,8 @@ import GameOver from './pages/gameOver'
 
 function App() {
   const [page, setPage] = useState("nameEntry")
+  const [messages, setMessages] = useState([])
+  
   const [ws, setWs] = useState(null)
   const wsRef = useRef(null)
 
@@ -38,9 +40,14 @@ function App() {
       // if (key === " ") bombPlacedRef.current = false
     }
 
+    let clearMovement = (e) => {
+      movementsRef.current.clear()
+    }
+
     if (page === "startGame") {
       document.addEventListener("keydown", addMovement)
       document.addEventListener("keyup", removeMovement)
+      window.addEventListener("blur",clearMovement)
     } else {
       document.removeEventListener("keydown", addMovement)
       document.removeEventListener("keyup", removeMovement)
@@ -70,7 +77,7 @@ function App() {
       if (!ws) return;
       let deltaTime = timeStamp - lastTimeRef.current
       lastTimeRef.current = timeStamp
-
+      
       let message = { type: "getGameUpdates", data: {} }
       let playerMovements = [...movementsRef.current.values()]
       if (playerMovements.length > 0) {
@@ -92,7 +99,8 @@ function App() {
   //* game over page states : 
   const [isWon, setIsWon] = useState(null)
   const handleWebsocket = () => {
-    const socket = new WebSocket('ws://localhost:8080');
+    console.log("asdfasdfasdf",location.hostname);
+    const socket = new WebSocket(`ws://${location.hostname}:8080`);
     socket.onopen = () => {
       console.log('Connected to websocket server');
       setWs(socket);
@@ -135,6 +143,10 @@ function App() {
           setIsWon(data.isWon)
           break;
 
+        case "chat":
+          console.log(data)
+          setMessages(prev=> [...prev, data])
+          break;
         default:
           break;
       }
@@ -168,6 +180,9 @@ function App() {
       players={players}
       seconds={seconds}
       lobbyState={lobbyState}
+      messages={messages}
+      setMessages={messages}
+      playerName={playerName}
     />
   )
 

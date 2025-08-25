@@ -71,6 +71,11 @@ body {
   flex-direction: column;
   gap: .5rem;
 }
+.my-message {
+  background-color: white !important;
+  color: black;
+  align-self: flex-end ;
+}
 
 .players-container {
   max-width: 500px;
