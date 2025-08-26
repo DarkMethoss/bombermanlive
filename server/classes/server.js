@@ -1,7 +1,7 @@
 import { generateId } from "../utils/utils.js"
 import { Player } from "./player.js"
 import Room from "./room.js"
-import GameMap  from "./map.js";
+import GameMap from "./map.js";
 
 //* Server class : handles websocket game server
 //* - handle players ( remove and add to rooms )
@@ -34,11 +34,20 @@ export default class Server {
                 case "getGameUpdates":
                     this.handleGamesUpdates(playerId, data)
                     break
+                case "chat":
+                    this.handleChat(playerId, data)
                 default:
                     break
             }
         })
     }
+
+    handleChat(playerId, data) {
+        let room = this.getPlayerRoom(playerId)
+        if (!room) return
+        room.brodcast("chat", data)
+    }
+
 
     handlePlayer(ws, playerName, playerId) {
         let emptyRooms = [...this.rooms.values()].filter(room => room.isEmpty() && !room.isClosed)
@@ -81,12 +90,12 @@ export default class Server {
         let { roomId } = playerData
 
         let room = this.rooms.get(roomId)
-        return room 
+        return room
     }
 
-    handleGamesUpdates(playreId, data){
+    handleGamesUpdates(playreId, data) {
         let room = this.getPlayerRoom(playreId)
-        
+
         if (room) {
             room.game.update(playreId, data)
         }
