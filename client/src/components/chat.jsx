@@ -1,15 +1,13 @@
 import { useState } from "react"
 
-export default function Chat() {
-
-    const [messages, setMessages] = useState([])
+export default function Chat({ ws, playerName, messages }) {
     const [message, setMessage] = useState("")
 
     const handleMessage = (e) => {
         e.preventDefault()
-        // console.log("message hna", message)
         if (message.trim()) {
-            setMessages(prev => [...prev, { message, sender: "DarkMethoss" }])
+            let payload = { type: "chat", data: { sender: playerName, content: message } }
+            ws.send(JSON.stringify(payload))
         }
         setMessage("")
     }
@@ -20,7 +18,7 @@ export default function Chat() {
             <div className="chat-window">
                 {
                     messages.length > 0
-                        ? messages.map((message, index) => <MessageBubble {...message} key={index} />)
+                        ? messages.map((message, index) => <MessageBubble message={message} key={index} playerName={playerName} />)
                         : "type something and start chating"
                 }
             </div>
@@ -32,9 +30,9 @@ export default function Chat() {
     )
 }
 
-function MessageBubble({ sender, message }) {
-    return <div className="message-bubble">
-        <span>{sender}</span>
-        <p>{message}</p>
+function MessageBubble({ playerName, message }) {
+    return <div className={`message-bubble ${playerName === message.sender ? "my-message" : ""}`} >
+        <span>{message.sender}</span>
+        <p>{message.content}</p>
     </div>
 }

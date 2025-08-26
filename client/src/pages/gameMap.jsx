@@ -17,10 +17,12 @@ export default function GameMap({
     // game map state
     map,
     players,
-    bricks,
-    bombs,
-    powerUps,
-    flames,
+    // bricks,
+    // bombs,
+    // powerUps,
+    // flames,
+    playerName,
+
     // player stats states
     speedStat,
     bombStat,
@@ -28,16 +30,27 @@ export default function GameMap({
 
 
 }) {
-    
-    // console.log("powerUps", powerUps)
     return (
         <section className="page game-page">
             <div className="game-stats">
-                <div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+                    <div className="flex gap-1">
+                        {
+                            Array.from({ length: players.filter((player) => player.name === playerName)[0].hearts })
+                                .map((item, index) => 
+                                    <div key={index}>❤️</div>
+                                )
+                        }
+                    </div>
+                    {
+                        players.filter((player) => player.name === playerName)
+                            .map(player =>
+                                <div key={player.name} className="player"
+                                    style={{ backgroundImage: `url(${colorMap[player.color]})`, position: "unset" }}></div>
+                            )
+                    }
+
+
+
                 <div className="game-powerups-container">
                     <div className="powerup">💣<span>x{bombStat}</span></div>
                     <div className="powerup">⚡<span>x{speedStat}</span></div>
@@ -46,15 +59,15 @@ export default function GameMap({
             </div>
             <div className="game-map-container">
                 <Map map={map} />
-                {
+                {/* {
                     bricks?.map((brick, index) => <div key={index} className="brick"
                         style={{ transform: `translate(${brick.x}px, ${brick.y}px)` }}></div>)
-                }
+                } */}
                 {
                     players?.map((player, index) => <div key={index} className="player"
                         style={{ transform: `translate(${player.x}px, ${player.y}px)`, backgroundImage: `url(${colorMap[player.color]})` }}></div>)
                 }
-                {
+                {/* {
                     bombs?.map((bomb, index) => <div key={index} className="bomb"
                         style={{ transform: `translate(${bomb.x}px, ${bomb.y}px)` }}>💣</div>)
                 }
@@ -82,7 +95,7 @@ export default function GameMap({
                             );
                         }
                     })
-                }
+                } */}
 
 
 

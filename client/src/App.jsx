@@ -6,8 +6,10 @@ import GameOver from './pages/gameOver'
 
 function App() {
   const [page, setPage] = useState("nameEntry")
+  const [messages, setMessages] = useState([])
+
   const [ws, setWs] = useState(null)
-  const wsRef = useRef(null)
+  const wsRef = useRef(ws)
 
   //* Game Map States
   const [bricks, setBricks] = useState()
@@ -38,9 +40,14 @@ function App() {
       // if (key === " ") bombPlacedRef.current = false
     }
 
+    let clearMovement = (e) => {
+      movementsRef.current.clear()
+    }
+
     if (page === "startGame") {
       document.addEventListener("keydown", addMovement)
       document.addEventListener("keyup", removeMovement)
+      window.addEventListener("blur", clearMovement)
     } else {
       document.removeEventListener("keydown", addMovement)
       document.removeEventListener("keyup", removeMovement)
@@ -91,8 +98,16 @@ function App() {
 
   //* game over page states : 
   const [isWon, setIsWon] = useState(null)
+
+  useEffect(() => {
+    if (page === "gameOver" && !isWon) {
+      console.log("Game over: ", isWon)
+      ws.close()
+    }
+  }, [isWon])
+
   const handleWebsocket = () => {
-    const socket = new WebSocket('ws://localhost:8080');
+    const socket = new WebSocket(`ws://${location.hostname}:8080`);
     socket.onopen = () => {
       console.log('Connected to websocket server');
       setWs(socket);
@@ -125,21 +140,26 @@ function App() {
 
         case "gameUpdates":
           setPlayers(data.players)
-          setBricks(data.bricks)
-          setBombs(data.bombs)
-          setFlames(data.flames)
-          setPowerUps(data.powerUps)
+          setMap(data.map)
+          // setBricks(data.bricks)
+          // setBombs(data.bombs)
+          // setFlames(data.flames)
+          // setPowerUps(data.powerUps)
           break;
-        case  "stats":
-          setBombStat(data.bomb)
-          setFlameStat(data.flame)
-          setSpeedStat(data.speed)
-          break; 
+        // case  "stats":
+        //   setBombStat(data.bomb)
+        //   setFlameStat(data.flame)
+        //   setSpeedStat(data.speed)
+        //   break; 
         case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)
           break;
 
+        case "chat":
+          console.log(data)
+          setMessages(prev => [...prev, data])
+          break;
         default:
           break;
       }
@@ -173,6 +193,9 @@ function App() {
       players={players}
       seconds={seconds}
       lobbyState={lobbyState}
+      messages={messages}
+      setMessages={messages}
+      playerName={playerName}
     />
   )
 
@@ -187,6 +210,7 @@ function App() {
       speedStat={speedStat}
       bombStat={bombStat}
       flameStat={flameStat}
+      playerName={playerName}
     />
   )
 

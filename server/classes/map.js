@@ -4,6 +4,9 @@
 // 3: bomb
 // 4: flame
 // 5: powerup
+// 51 speed
+// 52 bomb
+// 53 flame 
 
 import { powerUp } from "./powerup.js"
 
@@ -28,7 +31,7 @@ export default class GameMap {
                 }
             }
         }
-        this.game.initialBoard = JSON.parse(JSON.stringify(this.board))
+        //this.game.initialBoard = JSON.parse(JSON.stringify(this.board))
     }
 
     generateBricks() {
@@ -89,7 +92,7 @@ export default class GameMap {
         return ![1, 2].includes(cellValue)
     }
 
-    isFlameBlocked(col, row) { // check wall by grid
+    isFlameBlocked(col, row) { // check blocks iteam by grid
         return [1, 2].includes(this.getCellValue(col, row))
     }
 

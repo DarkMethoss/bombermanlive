@@ -6,7 +6,6 @@ export default class Game {
     constructor(room) {
         this.room = room
         this.players = this.room.players
-        this.initialBoard = null
         this.powerUps = new Map()
         this.bricks = new Map()
         this.bombs = new Map()
@@ -27,10 +26,11 @@ export default class Game {
 
         return {
             players: [...this.players.values()].map(player => player.playerData),
-            bricks: [...this.bricks.values()],
-            powerUps: this.PowerUpsTosend(),
-            bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            flames: [...this.flames.values()].map(flames => flames[0].position)
+            // bricks: [...this.bricks.values()],
+            // powerUps: this.PowerUpsTosend(),
+            // bombs: [...this.bombs.values()].map(bomb => bomb.position),
+            // flames: [...this.flames.values()].map(flames => flames[0].position)
+            map: this.map.board
         }
     }
 
@@ -62,6 +62,7 @@ export default class Game {
             player.y = y * 50 + 5
             player.color = color
             player.game = this
+            player.initialPosition = { x: player.x, y: player.y }
         })
     }
 
@@ -72,12 +73,11 @@ export default class Game {
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
         let player = this.room.players.get(playerId)
-        if (playerMovements) player.update(deltaTime, playerMovements)
-        if (placedBomb) {
-            this.handlePlacedBomb(player)
-        }
-
+        player.update(deltaTime, playerMovements)
+        if (placedBomb) this.handlePlacedBomb(player)
     }
+
+
 
     handlePlacedBomb(player) {
         let x = player.x + player.width / 2

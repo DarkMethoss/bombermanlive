@@ -26,7 +26,6 @@ export default class Room {
         this.players.set(playerId, newPlayer)
         newPlayer.userName = playerName
         newPlayer.roomId = this.id
-        this.waitingCounter = 5
         let pCnt = this.players.size
         if (pCnt === 4) {
             this.startGameStartCountDown()
@@ -54,6 +53,7 @@ export default class Room {
         if (pCnt == 1) {
             this.isClosed = false
             this.waitingCounter = 5
+
             this.stopWaitingCountdown()
         }
         this.brodcast("waitingLobby")
@@ -115,14 +115,13 @@ export default class Room {
                 message.data = { players, seconds, state }
                 break;
             case "startGame":
-                message.data = {
-                    map: this.game.gameMap,
-                    ...this.game.gameData
-                }
+                message.data = this.game.gameData
                 break;
             case "gameUpdates":
                 message.data = this.game.gameData
                 break;
+            case "chat":
+                message.data = options
             default:
                 break;
         }
