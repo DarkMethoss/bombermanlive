@@ -9,7 +9,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.08
+        this.unity = 0.1
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 3
@@ -49,22 +49,22 @@ export class Player {
             let canGetOut
 
             if (movement === "ArrowRight") {
-                x = this.x + deltaTime * this.speed * this.unity
+                x = this.x + deltaTime * this.speed * this.unity * 0.5
                 isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
                 canGetOut = this.game.map.canGetOut(x + this.width, this.y) && this.game.map.canGetOut(x + this.width, this.y + this.height)
             }
             if (movement === "ArrowLeft") {
-                x = this.x - deltaTime * this.speed * this.unity
+                x = this.x - deltaTime * this.speed * this.unity * 0.5
                 isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
                 canGetOut = this.game.map.canGetOut(x, this.y) && this.game.map.canGetOut(x, this.y + this.height)
             }
             if (movement === "ArrowUp") {
-                y = this.y - deltaTime * this.speed * this.unity
+                y = this.y - deltaTime * this.speed * this.unity * 0.5
                 isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
                 canGetOut = this.game.map.canGetOut(this.x, y) && this.game.map.canGetOut(this.x + this.width, y)
             }
             if (movement === "ArrowDown") {
-                y = this.y + deltaTime * this.speed * this.unity
+                y = this.y + deltaTime * this.speed * this.unity * 0.5
                 isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
                 canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
             }
@@ -75,7 +75,30 @@ export class Player {
             }
 
         });
+
+        // this.handlePowerUpCollision()
+
     }
+
+
+    //  here we'll be handling the player must collide with the player at least at the center 
+
+    handlePowerUpCollision() {
+        // see if the center of the player is there !!
+        let playerCenterX = this.x + this.width / 2
+        let playerCenterY = this.y + this.height / 2
+
+        let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
+        if (this.game.map.HoldsPowerUp(col, row)) {
+            let powerUp = this.game.powerUps.get(`${col}-${row}`);
+            powerUp.applyTo(this)
+            powerUp.update(this)
+            let message = { type: "stats", data: { speed: this.speed, bomb: this.bomb, flame: this.flame } }
+            this.ws.send(JSON.stringify(message))
+        }
+
+    }
+
 
     handlePlayerCollisionWithFlames() {
         let up = this.game.map.getCell(this.x, this.y)
@@ -90,8 +113,6 @@ export class Player {
                 setTimeout(() => {
                     this.isRespawned = false
                 }, 1000)
-                console.log(`Player: ${this.id}`, this.hearts, up, down)
-                return
             }
             if (this.hearts <= 0) this.isLost()
         }

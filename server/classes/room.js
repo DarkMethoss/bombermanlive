@@ -6,7 +6,7 @@ export default class Room {
         this.id = id
         this.gameServer = server
         this.players = new Map()
-        this.waitingCounter = 50
+        this.waitingCounter = 5
         this.gameStartCounter = 1
         this.isClosed = false
         this.countDownInterval = null
@@ -52,7 +52,8 @@ export default class Room {
 
         if (pCnt == 1) {
             this.isClosed = false
-            this.waitingCounter = 50
+            this.waitingCounter = 5
+
             this.stopWaitingCountdown()
         }
         this.brodcast("waitingLobby")
@@ -74,7 +75,7 @@ export default class Room {
     }
 
     stopWaitingCountdown() {
-        this.waitingCounter = 50
+        this.waitingCounter = 5
         if (this.countDownInterval) {
             clearInterval(this.countDownInterval)
             this.countDownInterval = null
@@ -114,10 +115,7 @@ export default class Room {
                 message.data = { players, seconds, state }
                 break;
             case "startGame":
-                message.data = {
-                    map : this.game.gameMap,
-                    ...this.game.gameData
-                }
+                message.data = this.game.gameData
                 break;
             case "gameUpdates":
                 message.data = this.game.gameData
