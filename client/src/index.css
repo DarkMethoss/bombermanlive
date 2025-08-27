@@ -32,6 +32,20 @@ body {
   height: 100%;
 }
 
+.flex {
+  display: flex;
+  align-items: end;
+}
+
+.gap-1 {
+  font-size: 24px;
+  gap: 6px;
+}
+
+.gap-2 {
+  gap: 18px;
+}
+
 /* wait lobby components */
 
 .waiting-lobby {
@@ -69,6 +83,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: .5rem;
+}
+.my-message {
+  background-color: white !important;
+  color: black;
+  align-self: flex-end ;
 }
 
 .players-container {
@@ -210,6 +229,9 @@ body {
   width: 40px;
   height: 40px;
   will-change: transform;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .empty-space {
@@ -217,13 +239,20 @@ body {
 }
 
 .wall {
-  background-color: #fff;
+  background-image: url(./assets/wall.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .brick {
   background-color: #ff0;
-  box-shadow: 1px 1px 10px inset #333;
-  /* transform: translate(); */
+  background-image: url(./assets/brick.jpeg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: 1px 1px 4px inset #333;
+
 }
 
 .powerUp {}

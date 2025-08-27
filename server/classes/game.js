@@ -19,14 +19,12 @@ export default class Game {
     }
 
     get gameData() {
-        let flames = [...this.flames.values()].map(flames=> flames[0].position)
-        if (flames.length > 0) console.log(flames)
         return {
             players: [...this.players.values()].map(player => player.playerData),
             bricks: [...this.bricks.values()],
             powerUps: this.powerUps,
             bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            flames: [...this.flames.values()].map(flames=> flames[0].position)
+            flames: [...this.flames.values()].map(flames => flames[0].position)
         }
     }
 
@@ -41,19 +39,18 @@ export default class Game {
             player.y = y * 50 + 5
             player.color = color
             player.game = this
+            player.initialPosition = { x: player.x, y: player.y }
         })
     }
 
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
         let player = this.room.players.get(playerId)
-        if (playerMovements) player.update(deltaTime, playerMovements)
-        if (placedBomb) {
-            console.log("bomb placed", placedBomb)
-            this.handlePlacedBomb(player)
-        }
-        // todo: update game map
+        player.update(deltaTime, playerMovements)
+        if (placedBomb) this.handlePlacedBomb(player)
     }
+
+   
 
     handlePlacedBomb(player) {
         let x = player.x + player.width / 2
