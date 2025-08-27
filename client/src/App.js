@@ -116,7 +116,7 @@ export const App = withState(function App(component) {
     }, [isWon])
 
     const handleWebsocket = () => {
-        const socket = new WebSocket('ws://10.1.5.5:8080')
+        const socket = new WebSocket(`ws://${location.hostname}:8080`)
         socket.onopen = () => {
             console.log('Connected to websocket server')
             setWs(socket)
