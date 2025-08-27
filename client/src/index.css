@@ -233,6 +233,18 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+.player-red {
+  background-image: url(../src/assets/red.png);
+}
+.player-green {
+  background-image: url(../src/assets/green.png);
+}
+.player-blue {
+  background-image: url(../src/assets/blue.png);
+}
+.player-yellow {
+  background-image: url(../src/assets/yellow.png);
+}
 
 .empty-space {
   background-color: #333;

@@ -1,5 +1,12 @@
 import Map from "../components/map.js";
 
+const colorMap = {
+    red: '../assets/red.png',
+    blue: '../assets/blue.png',
+    green: '../assets/green.png',
+    yellow: '../assets/yellow.png'
+};
+
 export default function GameMap({
     // game map state
     map,
@@ -8,14 +15,11 @@ export default function GameMap({
     bombs,
     powerUps,
     flames,
-
-    // player stats states
     speedStat,
     bombStat,
     flameStat,
-
+    playerName,
 }) {
-
     return {
         tag: 'section',
         key: 'gameMap-component-section',
@@ -27,16 +31,21 @@ export default function GameMap({
                 attrs: { className: 'game-stats' },
                 children: [
                     {
-                        tag: 'span',
-                        key: 'gameMap-component-span',
-                        attrs: {},
-                        children: ['00:00']
-                    },
-                    {
-                        tag: 'span',
-                        key: 'gameMap-component-span1',
-                        attrs: {},
-                        children: ['♥️♥️♥️']
+                        tag: 'div',
+                        key: 'gameMap-component-div10',
+                        attrs: { className: 'flex gap-1' },
+                        children: Array.from({ length: players.filter((player) => player.name === playerName)[0].hearts }, () => players.filter((player) => player.name === playerName)[0])
+                            .map((player, index) => {
+                                return {
+                                    tag: 'div',
+                                    key: `gameMap-component-${index}`,
+                                    attrs: {
+                                        className: `player player-${player.color}`,
+                                        style: `position: unset;`,
+                                    },
+                                }
+                            },
+                            )
                     },
                     {
                         tag: 'div',
@@ -112,8 +121,8 @@ export default function GameMap({
                             tag: 'div',
                             key: `player-${index}`,
                             attrs: {
-                                className: 'player',
-                                style: `transform: translate(${player.x}px, ${player.y}px);  background: ${player.color}`
+                                className: `player player-${player.color}`,
+                                style: `transform: translate(${player.x}px, ${player.y}px);`
                             },
                         }
                     }),
@@ -131,7 +140,7 @@ export default function GameMap({
                     }),
 
                     ...flames?.map((flame, index) => {
-                          return {
+                        return {
                             tag: 'div',
                             key: `flame-${index}`,
                             attrs: {

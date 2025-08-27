@@ -1,17 +1,18 @@
 import { generateId, useState } from '../../framework/index.js'
 
-export default function Chat() {
+export default function Chat({ ws, playerName, messages }) {
 
-    const [messages, setMessages] = useState([])
     const [message, setMessage] = useState("")
 
-    function handleMessage(e) {
+      const handleMessage = (e) => {
         e.preventDefault()
         if (message.trim()) {
-            setMessages([...messages, { id: generateId(), message, sender: "DarkMethoss" }])
+            let payload = { type: "chat", data: { sender: playerName, content: message } }
+            ws.send(JSON.stringify(payload))
         }
         setMessage("")
     }
+
 
     return {
         tag: 'div',
@@ -30,9 +31,9 @@ export default function Chat() {
                 attrs: { className: 'chat-window' },
                 children: [
                     messages.length > 0
-                        ? messages.map((message) => MessageBubble(message))
+                        ? messages.map((message, index) => MessageBubble({message, index, playerName}))
                         : "type something and start chating"
-                ]
+                ] 
             },
             {
                 tag: 'form',
@@ -59,23 +60,21 @@ export default function Chat() {
     }
 }
 
-function MessageBubble({ id, sender, message }) {
+function MessageBubble({ playerName, index, message }) {
     return {
         tag: 'div',
-        key: id,
-        attrs: { className: 'message-bubble' },
+        key: `message-${index}`,
+        attrs: { className: `message-bubble ${playerName === message.sender ? "my-message" : ""}` },
         children: [
             {
                 tag: 'span',
                 key: `span${id}`,
-                attrs: {},
-                children: [sender],
+                children: [message.sender],
             },
             {
                 tag: 'p',
                 key: `p${id}`,
-                attrs: {},
-                children: [message]
+                children: [message.content]
             }
         ]
     }

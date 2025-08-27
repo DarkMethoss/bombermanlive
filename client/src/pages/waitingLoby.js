@@ -1,7 +1,7 @@
 
 import Chat from "../components/chat.js"
 
-export default function WaitingLobby({ players, seconds, lobbyState }) {
+export default function WaitingLobby({ ws, players, seconds, lobbyState, messages, playerName }) {
 
     return {
         tag: 'section',
@@ -33,13 +33,13 @@ export default function WaitingLobby({ players, seconds, lobbyState }) {
                 children: players.map(name => {
                     return {
                         tag: 'div',
-                        key: name,
+                        key: `player-${name}`,
                         attrs: { className: 'player-item' },
                         children: [name]
                     }
                 })
             },
-            Chat()
+            Chat({ws, playerName, messages})
         ]
     }
 }

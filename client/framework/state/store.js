@@ -14,11 +14,11 @@ export function useState(initialValue) {
     }
 
     const setState = (newValue) => {
-        const oldValue = component.states[stateIndex]
-        if (!deepEqual(oldValue, newValue)) {
-            component.states[stateIndex] = newValue
-            rerender(component)
-        }
+        // const oldValue = component.states[stateIndex]
+        // if (!deepEqual(oldValue, newValue)) {
+        component.states[stateIndex] = newValue
+        rerender(component)
+        // }
 
     }
 

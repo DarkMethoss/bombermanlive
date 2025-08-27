@@ -9,6 +9,8 @@ export let appComponent
 export const App = withState(function App(component) {
     appComponent = component
     const [page, setPage] = useState("nameEntry")
+    const [messages, setMessages] = useState([])
+
     const [ws, setWs] = useState(null)
     const wsRef = useRef(null)
 
@@ -41,10 +43,14 @@ export const App = withState(function App(component) {
             movementsRef.current.delete(key)
         }
 
-        if (page === "startGame") {
+        let clearMovement = (e) => {
+            movementsRef.current.clear()
+        }
 
+        if (page === "startGame") {
             document.addEventListener("keydown", addMovement)
             document.addEventListener("keyup", removeMovement)
+            window.addEventListener("blur", clearMovement)
         } else {
             document.removeEventListener("keydown", addMovement)
             document.removeEventListener("keyup", removeMovement)
@@ -101,14 +107,20 @@ export const App = withState(function App(component) {
 
     //* game over page states : 
     const [isWon, setIsWon] = useState(null)
+
+    useEffect(() => {
+        if (page === "gameOver" && !isWon) {
+            console.log("Game over: ", isWon)
+            ws.close()
+        }
+    }, [isWon])
+
     const handleWebsocket = () => {
-        const socket = new WebSocket('ws://10.1.5.5:8080');
+        const socket = new WebSocket('ws://10.1.5.5:8080')
         socket.onopen = () => {
-            console.log('Connected to websocket server');
-            setWs(socket);
-        };
-
-
+            console.log('Connected to websocket server')
+            setWs(socket)
+        }
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data);
@@ -127,23 +139,28 @@ export const App = withState(function App(component) {
                     break
 
                 case "startGame":
-                    setPage("startGame")
                     setMap(data.map)
                     setPlayers(data.players)
-                     setBricks(data.bricks)
+                    setBricks(data.bricks)
+                    setPage("startGame")
                     break
 
                 case "gameUpdates":
+                    // console.log(data.players)
                     setPlayers(data.players)
-                    if (bricks.length !== data.bricks.length) setBricks(data.bricks)
-                    if (bombs.length !== data.bombs.length) setBombs(data.bombs)
-                    if (flames.length !== data.flames.length) setFlames(data.flames)
+                    setBricks(data.bricks)
+                    setBombs(data.bombs)
+                    setFlames(data.flames)
                     break
 
                 case "gameOver":
                     setPage("gameOver")
                     setIsWon(data.isWon)
                     break
+
+                case "chat":
+                    setMessages([...messages, data])
+                    break;
 
                 default:
                     break
@@ -173,7 +190,14 @@ export const App = withState(function App(component) {
     }
 
     if (page === "waitingLobby") {
-        return createElement(WaitingLobby({ players, seconds, lobbyState }))
+        return createElement(WaitingLobby({
+            ws,
+            players,
+            seconds,
+            lobbyState,
+            messages,
+            playerName
+        }))
     }
 
     if (page === "startGame") {
@@ -187,6 +211,7 @@ export const App = withState(function App(component) {
             speedStat,
             bombStat,
             flameStat,
+            playerName
         }))
     }
 
