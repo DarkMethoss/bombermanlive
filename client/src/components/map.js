@@ -11,9 +11,43 @@ export default function Map({ map }) {
             children: row.map((col, colIndex) => ({
                 tag: 'div',
                 key: `div2${colIndex}`,
-                attrs: { className: col === 0 ? "empty-space" : "wall" },
-                children: [],
+                attrs: { className: ui[col].className },
+                children: [ui[col].content],
             }))
         }))
     }
+}
+const ui = {
+    0: {
+        className: "empty-space",
+        content: ""
+    },
+    1: {
+        className: "wall",
+        content: ""
+    },
+    2: {
+        className: "brick",
+        content: ""
+    },
+    3: {
+        className: "bomb",
+        content: "💣"
+    },
+    4: {
+        className: "flame",
+        content: "🔥"
+    },
+    51: {
+        className: "powerUp speedUp ",
+        content: "⚡"
+    },
+    52: {
+        className: "powerUp bombUp",
+        content: ""
+    },
+    53: {
+        className: "powerUp flameUp",
+        content: ""
+    },
 }

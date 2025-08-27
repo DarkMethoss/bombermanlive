@@ -1,25 +1,6 @@
 import Map from "../components/map.js";
 
-const colorMap = {
-    red: '../assets/red.png',
-    blue: '../assets/blue.png',
-    green: '../assets/green.png',
-    yellow: '../assets/yellow.png'
-};
-
-export default function GameMap({
-    // game map state
-    map,
-    players,
-    bricks,
-    bombs,
-    powerUps,
-    flames,
-    speedStat,
-    bombStat,
-    flameStat,
-    playerName,
-}) {
+export default function GameMap({ map, players, player }) {
     return {
         tag: 'section',
         key: 'gameMap-component-section',
@@ -34,7 +15,7 @@ export default function GameMap({
                         tag: 'div',
                         key: 'gameMap-component-div10',
                         attrs: { className: 'flex gap-1' },
-                        children: Array.from({ length: players.filter((player) => player.name === playerName)[0].hearts }, () => players.filter((player) => player.name === playerName)[0])
+                        children: Array.from({ length: player.hearts }, () => player)
                             .map((player, index) => {
                                 return {
                                     tag: 'div',
@@ -62,7 +43,7 @@ export default function GameMap({
                                         tag: 'span',
                                         key: 'gameMap-component-span2',
                                         attrs: {},
-                                        children: [`x${bombStat}`]
+                                        children: [`x${player.bomb}`]
                                     }
                                 ]
                             },
@@ -76,7 +57,7 @@ export default function GameMap({
                                         tag: 'span',
                                         key: 'gameMap-component-span3',
                                         attrs: {},
-                                        children: [`x${speedStat}`]
+                                        children: [`x${player.speed}`]
                                     }
                                 ]
                             },
@@ -90,7 +71,7 @@ export default function GameMap({
                                         tag: 'span',
                                         key: 'gameMap-component-span4',
                                         attrs: {},
-                                        children: [`x${flameStat}`]
+                                        children: [`x${player.flame}`]
                                     }
                                 ]
                             },
@@ -104,18 +85,6 @@ export default function GameMap({
                 attrs: { className: 'game-map-container' },
                 children: [
                     Map({ map }),
-
-                    ...bricks?.map((brick, index) => {
-                        return {
-                            tag: 'div',
-                            key: `brick-${index}`,
-                            attrs: {
-                                className: 'brick',
-                                style: `transform: translate(${brick.x}px, ${brick.y}px)`
-                            },
-                        }
-                    }),
-
                     ...players?.map((player, index) => {
                         return {
                             tag: 'div',
@@ -126,37 +95,8 @@ export default function GameMap({
                             },
                         }
                     }),
-
-                    ...bombs?.map((bomb, index) => {
-                        return {
-                            tag: 'div',
-                            key: `bomb-${index}`,
-                            attrs: {
-                                className: 'bomb',
-                                style: `transform: translate(${bomb.x}px, ${bomb.y}px);`
-                            },
-                            children: ['💣']
-                        }
-                    }),
-
-                    ...flames?.map((flame, index) => {
-                        return {
-                            tag: 'div',
-                            key: `flame-${index}`,
-                            attrs: {
-                                className: 'flame',
-                                style: `transform: translate(${flame.x}px, ${flame.y}px);`
-                            },
-                            children: ['🔥']
-                        }
-                    })
                 ]
             }
         ]
     }
-}
-
-const gameStats = {
-    display: "flex",
-    justifyContent: "space-between",
 }

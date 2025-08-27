@@ -15,17 +15,11 @@ export const App = withState(function App(component) {
     const wsRef = useRef(null)
 
     //* Game Map States
-    const [bricks, setBricks] = useState([])
-    const [bombs, setBombs] = useState([])
-    const [powerUps, setPowerUps] = useState([])
-    const [flames, setFlames] = useState([])
     const [players, setPlayers] = useState([])
+    const [player, setPlayer] = useState({})
     const [map, setMap] = useState([])
 
     //* Player states 
-    const [speedStat, setSpeedStat] = useState(1)
-    const [bombStat, setBombStat] = useState(1)
-    const [flameStat, setFlameStat] = useState(1)
     const movementsRef = useRef(new Set())
     const bombPlacedRef = useRef(false)
 
@@ -134,6 +128,7 @@ export const App = withState(function App(component) {
                         setPage("waitingLobby")
                     }
                     setPlayers(data.players)
+                    setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setSeconds(data.seconds)
                     setLobbyState(data.state)
                     break
@@ -141,16 +136,13 @@ export const App = withState(function App(component) {
                 case "startGame":
                     setMap(data.map)
                     setPlayers(data.players)
-                    setBricks(data.bricks)
+                    setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setPage("startGame")
                     break
 
                 case "gameUpdates":
-                    // console.log(data.players)
                     setPlayers(data.players)
-                    setBricks(data.bricks)
-                    setBombs(data.bombs)
-                    setFlames(data.flames)
+                    setMap(data.map)
                     break
 
                 case "gameOver":
@@ -204,14 +196,7 @@ export const App = withState(function App(component) {
         return createElement(GameMap({
             map,
             players,
-            bricks,
-            bombs,
-            powerUps,
-            flames,
-            speedStat,
-            bombStat,
-            flameStat,
-            playerName
+            player
         }))
     }
 
