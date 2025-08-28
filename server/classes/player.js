@@ -9,10 +9,10 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.1
+        this.unity = 0.07
         this.bombsPlaced = 0
         this.userName = null
-        this.bomb = 3
+        this.bomb = 1
         this.speed = 1
         this.flame = 1
         this.color = ""
@@ -49,35 +49,32 @@ export class Player {
             let canGetOut
 
             if (movement === "ArrowRight") {
-                x = this.x + deltaTime * this.speed * this.unity * 0.5
+                x = this.x + deltaTime * this.speed * this.unity
                 isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
                 canGetOut = this.game.map.canGetOut(x + this.width, this.y) && this.game.map.canGetOut(x + this.width, this.y + this.height)
             }
             if (movement === "ArrowLeft") {
-                x = this.x - deltaTime * this.speed * this.unity * 0.5
+                x = this.x - deltaTime * this.speed * this.unity
                 isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
                 canGetOut = this.game.map.canGetOut(x, this.y) && this.game.map.canGetOut(x, this.y + this.height)
             }
             if (movement === "ArrowUp") {
-                y = this.y - deltaTime * this.speed * this.unity * 0.5
+                y = this.y - deltaTime * this.speed * this.unity
                 isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
                 canGetOut = this.game.map.canGetOut(this.x, y) && this.game.map.canGetOut(this.x + this.width, y)
             }
             if (movement === "ArrowDown") {
-                y = this.y + deltaTime * this.speed * this.unity * 0.5
+                y = this.y + deltaTime * this.speed * this.unity
                 isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
                 canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
             }
-
             if ((isOnBomb && canGetOut) || isWalkable) {
                 this.x = x
                 this.y = y
             }
-
         });
 
         // this.handlePowerUpCollision()
-
     }
 
 
@@ -96,7 +93,6 @@ export class Player {
             let message = { type: "stats", data: { speed: this.speed, bomb: this.bomb, flame: this.flame } }
             this.ws.send(JSON.stringify(message))
         }
-
     }
 
 
@@ -130,7 +126,4 @@ export class Player {
             name: this.userName
         }
     }
-
-
-
 }

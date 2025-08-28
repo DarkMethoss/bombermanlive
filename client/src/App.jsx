@@ -12,17 +12,11 @@ function App() {
   const wsRef = useRef(ws)
 
   //* Game Map States
-  const [bricks, setBricks] = useState()
-  const [bombs, setBombs] = useState()
-  const [powerUps, setPowerUps] = useState()
-  const [flames, setFlames] = useState()
-  const [players, setPlayers] = useState()
-  const [map, setMap] = useState()
+  const [players, setPlayers] = useState([])
+  const [player, setPlayer] = useState({})
+  const [map, setMap] = useState([])
 
   //* Player states 
-  const [speedStat, setSpeedStat] = useState(1)
-  const [bombStat, setBombStat] = useState(1)
-  const [flameStat, setFlameStat] = useState(1)
   const movementsRef = useRef(new Set())
   const bombPlacedRef = useRef(false)
 
@@ -135,31 +129,25 @@ function App() {
           setPage("startGame")
           setMap(data.map)
           setPlayers(data.players)
-          setBricks(data.bricks)
+          setPlayer(data.players.filter(player=> player.name === playerName))
           break;
 
         case "gameUpdates":
           setPlayers(data.players)
+          setPlayer(data.players.filter(player=> player.name === playerName))
+          console.log(data.players.filter(player=> player.name === playerName))
           setMap(data.map)
-          // setBricks(data.bricks)
-          // setBombs(data.bombs)
-          // setFlames(data.flames)
-          // setPowerUps(data.powerUps)
           break;
-        // case  "stats":
-        //   setBombStat(data.bomb)
-        //   setFlameStat(data.flame)
-        //   setSpeedStat(data.speed)
-        //   break; 
+
         case "gameOver":
           setPage("gameOver")
           setIsWon(data.isWon)
           break;
 
         case "chat":
-          console.log(data)
           setMessages(prev => [...prev, data])
           break;
+
         default:
           break;
       }
@@ -168,7 +156,6 @@ function App() {
     socket.onclose = () => {
       console.log('Disconnected from websocket server');
       setWs(null)
-      setPage("nameEntry")
     };
 
     socket.onerror = (err) => {
@@ -203,14 +190,7 @@ function App() {
     <GameMap
       map={map}
       players={players}
-      bricks={bricks}
-      bombs={bombs}
-      powerUps={powerUps}
-      flames={flames}
-      speedStat={speedStat}
-      bombStat={bombStat}
-      flameStat={flameStat}
-      playerName={playerName}
+      player={player}
     />
   )
 
