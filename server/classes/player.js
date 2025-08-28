@@ -13,12 +13,14 @@ export class Player {
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1
+        this.bomb = 1
         this.speed = 1
         this.flame = 1
         this.color = ""
         this.game = null
         this.initialPosition = null
         this.isRespawned = false
+        this.maxSpeedpowerUps = 4
     }
 
     isWon() {
@@ -90,8 +92,8 @@ export class Player {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
             powerUp.applyTo(this)
             powerUp.update(this)
-            let message = { type: "stats", data: { speed: this.speed, bomb: this.bomb, flame: this.flame } }
-            this.ws.send(JSON.stringify(message))
+            let {speed , bomb , flame}= powerUp.owner
+            console.log("speed", speed, flame, bomb);
         }
     }
 

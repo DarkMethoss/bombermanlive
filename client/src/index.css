@@ -1,4 +1,3 @@
-/* client/src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
 * {
@@ -20,9 +19,6 @@ body,
 }
 
 body {
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
   background-color: #242424;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: rgba(255, 255, 255, 0.87);
@@ -168,7 +164,6 @@ body {
   font-size: 1.2rem;
 
   span {
-    /* display: none; */
     font-size: 1rem;
     text-decoration: wavy;
   }
@@ -185,7 +180,6 @@ body {
   display: grid;
   grid-template-columns: repeat(15, 1fr);
   grid-template-rows: repeat(15, 1fr);
-  /* gap: 1px; */
   width: 100%;
   height: 100%;
 }
@@ -201,7 +195,6 @@ body {
 }
 
 .powerup {
-  /* display: none; */
   animation: test 0.5s infinite;
 }
 
@@ -235,6 +228,18 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+.player-red {
+  background-image: url(../src/assets/red.png);
+}
+.player-green {
+  background-image: url(../src/assets/green.png);
+}
+.player-blue {
+  background-image: url(../src/assets/blue.png);
+}
+.player-yellow {
+  background-image: url(../src/assets/yellow.png);
 }
 
 .empty-space {

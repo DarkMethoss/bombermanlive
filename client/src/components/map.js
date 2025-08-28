@@ -1,27 +1,22 @@
 export default function Map({ map }) {
-    return (
-        <div className="game-map">
-            {map.map((row, rowIndex) => (
-                <div className="map-row" key={rowIndex} style={{ display: "contents" }}>
-                    {row.map((col, colIndex) => (
-                        <div className={ui[col].className} key={colIndex}>{ui[col].content}</div>
-                    ))}
-                </div>
-            ))}
-        </div>
-    )
+
+    return {
+        tag: 'div',
+        key: 'map-component-div',
+        attrs: { className: 'game-map' },
+        children: map.map((row, rowIndex) => ({
+            tag: 'div',
+            key: `div1${rowIndex}`,
+            attrs: { className: 'map-row', style: 'display: contents' },
+            children: row.map((col, colIndex) => ({
+                tag: 'div',
+                key: `div2${colIndex}`,
+                attrs: { className: ui[col].className },
+                children: [ui[col].content],
+            }))
+        }))
+    }
 }
-
-// 0: empty space
-// 1: Wall
-// 2: Brick
-// 3: bomb
-// 4: flame
-// 5: powerup
-// 51 speed
-// 52 bomb
-// 53 flame 
-
 const ui = {
     0: {
         className: "empty-space",
