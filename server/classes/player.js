@@ -20,6 +20,8 @@ export class Player {
         this.initialPosition = null
         this.isRespawned = false
         this.maxSpeedpowerUps = 4
+        this.maxLivesUp = 2
+        this.livesUp = 0
     }
 
     isWon() {
@@ -83,7 +85,7 @@ export class Player {
 
 
     //  here we'll be handling the player must collide with the player at least at the center 
-
+    // here we need to see if the player mazal madepassash l max dyal 
     handlePowerUpCollision() {
         // see if the center of the player is there !!
         let playerCenterX = this.x + this.width / 2
@@ -92,10 +94,18 @@ export class Player {
         let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
+            if (powerUp.type == 'speed' && this.speed >= this.maxSpeedpowerUps) {
+                return
+            }
+            if (powerUp.type == 'life' && this.livesUp >= this.maxLivesUp) {
+                return
+            }
+
             powerUp.applyTo(this)
             powerUp.update(this)
-            let {speed , bomb , flame}= powerUp.owner
-            console.log("speed", speed, flame, bomb);
+            console.log("this.owner", this.owner);
+            // let { speed, bomb, flame } = this.owner
+            // console.log("speed", speed, flame, bomb);
         }
 
     }
