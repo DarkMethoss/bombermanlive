@@ -19,9 +19,6 @@ body,
 }
 
 body {
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
   background-color: #242424;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: rgba(255, 255, 255, 0.87);
@@ -167,7 +164,6 @@ body {
   font-size: 1.2rem;
 
   span {
-    /* display: none; */
     font-size: 1rem;
     text-decoration: wavy;
   }
@@ -184,7 +180,6 @@ body {
   display: grid;
   grid-template-columns: repeat(15, 1fr);
   grid-template-rows: repeat(15, 1fr);
-  /* gap: 1px; */
   width: 100%;
   height: 100%;
 }
@@ -200,7 +195,6 @@ body {
 }
 
 .powerup {
-  /* display: none; */
   animation: test 0.5s infinite;
 }
 
