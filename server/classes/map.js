@@ -56,7 +56,7 @@ export default class GameMap {
 
     // we need 
     generatePowerUps() {
-        let powerUpKeys = ['speed','speed','bomb', 'bomb', 'bomb', 'bomb', 'range', 'range', 'range', 'range']
+        let powerUpKeys = ['speed', 'speed', 'bomb', 'bomb', 'bomb', 'bomb', 'flame', 'flame', 'flame', 'flame']
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
@@ -126,7 +126,7 @@ export default class GameMap {
     #getUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        let proportionPowerUps = Math.round(maxIndex * 0.07 * this.game.players.size)
+        let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
         console.log("proportion", proportionPowerUps);
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))

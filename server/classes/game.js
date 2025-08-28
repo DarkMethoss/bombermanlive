@@ -21,9 +21,9 @@ export default class Game {
 
     get gameData() {
         // filter those who have the 0 and then replace them with 5
-
-
-
+    
+        this.PowerUpsTosend()
+        
         return {
             players: [...this.players.values()].map(player => player.playerData),
             // bricks: [...this.bricks.values()],
@@ -36,17 +36,25 @@ export default class Game {
 
 
     PowerUpsTosend() {
-        let powerUpsTosend = []
-
         for (let value of [...this.affectedBricks.values()]) {
             let { col, row } = value
             if (this.map.HoldsPowerUp(col, row)) {
-                powerUpsTosend.push(this.powerUps.get(`${col}-${row}`))
+                const powerUp = this.powerUps.get(`${col}-${row}`)
+                switch (powerUp.type) {
+                    case 'bomb':
+                        this.map.board[row][col] = 52
+                        break;
+                    case 'speed':
+                        this.map.board[row][col] = 51
+                        break;
+                    case 'flame':
+                        this.map.board[row][col] = 53
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-
-        return powerUpsTosend
-
     }
 
 
