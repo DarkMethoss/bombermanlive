@@ -1,16 +1,17 @@
 import Bomb from "./bomb.js"
 import GameMap from "./map.js"
+import { powerUp } from "./powerup.js"
 
 export default class Game {
     constructor(room) {
         this.room = room
         this.players = this.room.players
-        this.initialBoard = null
+        this.powerUps = new Map()
         this.bricks = new Map()
-        this.powerUps = []
         this.bombs = new Map()
         this.flames = new Map()
         this.map = new GameMap(this, 15)
+        this.affectedBricks = []
         this.initPlayerPositions()
     }
 
@@ -19,14 +20,44 @@ export default class Game {
     }
 
     get gameData() {
+        // filter those who have the 0 and then replace them with 5
+    
+        this.PowerUpsTosend()
+        
         return {
             players: [...this.players.values()].map(player => player.playerData),
-            bricks: [...this.bricks.values()],
-            powerUps: this.powerUps,
-            bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            flames: [...this.flames.values()].map(flames => flames[0].position)
+            // bricks: [...this.bricks.values()],
+            // powerUps: this.PowerUpsTosend(),
+            // bombs: [...this.bombs.values()].map(bomb => bomb.position),
+            // flames: [...this.flames.values()].map(flames => flames[0].position)
+            map: this.map.board
         }
     }
+
+
+    PowerUpsTosend() {
+        for (let value of [...this.affectedBricks.values()]) {
+            let { col, row } = value
+            if (this.map.HoldsPowerUp(col, row)) {
+                const powerUp = this.powerUps.get(`${col}-${row}`)
+                switch (powerUp.type) {
+                    case 'bomb':
+                        this.map.board[row][col] = 52
+                        break;
+                    case 'speed':
+                        this.map.board[row][col] = 51
+                        break;
+                    case 'flame':
+                        this.map.board[row][col] = 53
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+
 
     initPlayerPositions() {
         const size = this.map.size
@@ -43,6 +74,10 @@ export default class Game {
         })
     }
 
+
+
+
+    // here goes the update of each player bu7duuu
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
         let player = this.room.players.get(playerId)
@@ -50,7 +85,7 @@ export default class Game {
         if (placedBomb) this.handlePlacedBomb(player)
     }
 
-   
+
 
     handlePlacedBomb(player) {
         let x = player.x + player.width / 2
@@ -59,7 +94,7 @@ export default class Game {
         let cellValue = this.map.getCellValue(col, row)
         let canPlaceBomb = player.bombsPlaced < player.bomb && cellValue != 3
         if (canPlaceBomb) {
-            this.bombs.set(`${col}-${row}`, new Bomb(this, player, col, row))
+            this.bombs.set(`${col}-${row}`, new Bomb(this, player, col, row, this.map))
             player.bombsPlaced++
         }
     }

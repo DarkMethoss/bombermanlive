@@ -95,7 +95,6 @@ export default class Server {
 
     handleGamesUpdates(playreId, data) {
         let room = this.getPlayerRoom(playreId)
-
         if (room) {
             room.game.update(playreId, data)
         }
