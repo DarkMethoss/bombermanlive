@@ -142,6 +142,7 @@ export const App = withState(function App(component) {
 
                 case "gameUpdates":
                     setPlayers(data.players)
+                    setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setMap(data.map)
                     break
 
