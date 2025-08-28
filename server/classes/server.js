@@ -43,7 +43,6 @@ export default class Server {
     }
 
     handleChat(playerId, data) {
-        console.log('data', data)
         let room = this.getPlayerRoom(playerId)
         if (!room) return
         room.brodcast("chat", data)
@@ -78,6 +77,7 @@ export default class Server {
         if (room) {
             room.removePlayer(playerId)
             if (room.players.size === 0) {
+                console.log("delete empty room")
                 this.rooms.delete(room.id)
             }
         }
@@ -97,7 +97,7 @@ export default class Server {
     handleGamesUpdates(playreId, data) {
         let room = this.getPlayerRoom(playreId)
         if (room) {
-            room.game.update(playreId, data)
+            room.game?.update(playreId, data)
         }
         room.brodcast("gameUpdates")
     }

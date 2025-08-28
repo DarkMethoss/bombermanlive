@@ -2,11 +2,9 @@ import { createElement } from "../../framework/index.js"
 
 export default function Chat({ ws, playerName, messages, message, setMessage }) {
     const handleMessage = (e) => {
-        console.log('message', message)
         e.preventDefault()
         if (message.trim()) {
             let payload = { type: "chat", data: { sender: playerName, content: message } }
-            console.log('/////////////////', payload);
             ws.send(JSON.stringify(payload))
         }
         setMessage("")

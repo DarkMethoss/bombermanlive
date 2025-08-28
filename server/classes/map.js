@@ -127,7 +127,6 @@ export default class GameMap {
         const indices = new Set()
         const maxIndex = arr.size - 1
         let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
-        console.log("proportion", proportionPowerUps);
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
             indices.add(randomIndex)

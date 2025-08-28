@@ -95,7 +95,6 @@ export class Player {
             powerUp.applyTo(this)
             powerUp.update(this)
             let {speed , bomb , flame}= powerUp.owner
-            console.log("speed", speed, flame, bomb);
         }
 
     }

@@ -28,6 +28,14 @@ export default function WaitingLobby({ ws, players, seconds, lobbyState, message
             },
             {
                 tag: 'div',
+                key: 'waitingLobby-component-div10',
+                attrs: { className: 'playerCounter' },
+                children: [
+                   `${players.length}/4`
+                ]
+            },
+            {
+                tag: 'div',
                 key: 'waitingLobby-component-div1',
                 attrs: { className: 'players-container' },
                 children: players.map(name => {

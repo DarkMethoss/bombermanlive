@@ -24,7 +24,6 @@ export const App = withState(function App(component) {
     const movementsRef = useRef(new Set())
     const bombPlacedRef = useRef(false)
 
-
     useEffect(() => {
         let addMovement = (e) => {
             let key = e.key
@@ -74,7 +73,7 @@ export const App = withState(function App(component) {
         if (page !== "startGame") return
 
         function gameLoop(timeStamp) {
-            if (!ws) return;
+            if (!wsRef) return;
             let deltaTime = timeStamp - lastTimeRef.current
             lastTimeRef.current = timeStamp
 
@@ -148,13 +147,13 @@ export const App = withState(function App(component) {
                     break
 
                 case "gameOver":
-                    setPage("gameOver")
                     setIsWon(data.isWon)
+                    setPage("gameOver")
+                    console.log("game over: ", data.isWon)
                     break
 
                 case "chat":
                     setMessages(prevMessages => [...prevMessages, data])
-                    console.log("all messages: ", [...messages, data])
                     break;
 
                 default:
@@ -205,7 +204,7 @@ export const App = withState(function App(component) {
         }))
     }
 
-    if (page === "gameOver") return createElement(GameOver({ isWon }))
+    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError }))
 })
 
 export default App
