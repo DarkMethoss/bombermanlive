@@ -10,6 +10,7 @@ export const App = withState(function App(component) {
     appComponent = component
     const [page, setPage] = useState("nameEntry")
     const [messages, setMessages] = useState([])
+    const [message, setMessage] = useState("")
 
     const [ws, setWs] = useState(null)
     const wsRef = useRef(null)
@@ -142,6 +143,7 @@ export const App = withState(function App(component) {
 
                 case "gameUpdates":
                     setPlayers(data.players)
+                    setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setMap(data.map)
                     break
 
@@ -151,7 +153,8 @@ export const App = withState(function App(component) {
                     break
 
                 case "chat":
-                    setMessages([...messages, data])
+                    setMessages(prevMessages => [...prevMessages, data])
+                    console.log("all messages: ", [...messages, data])
                     break;
 
                 default:
@@ -188,7 +191,9 @@ export const App = withState(function App(component) {
             seconds,
             lobbyState,
             messages,
-            playerName
+            playerName,
+            message,
+            setMessage
         }))
     }
 

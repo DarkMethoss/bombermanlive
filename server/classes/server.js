@@ -43,6 +43,7 @@ export default class Server {
     }
 
     handleChat(playerId, data) {
+        console.log('data', data)
         let room = this.getPlayerRoom(playerId)
         if (!room) return
         room.brodcast("chat", data)

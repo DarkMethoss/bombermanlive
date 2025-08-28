@@ -14,13 +14,17 @@ export function useState(initialValue) {
     }
 
     const setState = (newValue) => {
-        // const oldValue = component.states[stateIndex]
-        // if (!deepEqual(oldValue, newValue)) {
-        component.states[stateIndex] = newValue
-        rerender(component)
-        // }
+        const prevValue = component.states[stateIndex]
 
+        const valueToStore =
+            typeof newValue === "function"
+                ? newValue(prevValue)
+                : newValue
+
+        component.states[stateIndex] = valueToStore
+        rerender(component)
     }
+
 
     return [component.states[stateIndex], setState]
 }
