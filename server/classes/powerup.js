@@ -61,7 +61,7 @@ export class powerUp {
         // Return a new object with only the desired properties for JSON serialization
         return {
             type: this.type,
-            position: this.position
+            // position: this.position
         };
     }
 

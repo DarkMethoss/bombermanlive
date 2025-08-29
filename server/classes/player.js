@@ -97,10 +97,10 @@ export class Player {
             if (powerUp.type == 'speed' && this.speed >= this.game.maxSpeedpowerUps) {
                 return
             }
-            if (powerUp.type == 'life' && this.livesUp >= this.game.maxLivesUp) {
+            if (powerUp.type == 'life' && this.livesUp >= this.game.map.maxLivesUp) {
                 return
             }
-            if (powerUp.type == 'pass-bomb' && this.passBombs >= this.game.maxPassBomb) {
+            if (powerUp.type == 'pass-bomb' && this.passBombs >= this.game.map.maxPassBomb) {
                 return
             }
             powerUp.applyTo(this)
