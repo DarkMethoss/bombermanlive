@@ -1,7 +1,8 @@
 export default class Flame {
-    constructor(game, position) {
+    constructor(game, position, lastCellValue) {
         this.x = position.x;
         this.y = position.y;
+        this.lastCellValue = lastCellValue;
         this.game = game;
         this.flamesCounter();
     }
@@ -15,9 +16,11 @@ export default class Flame {
     }
 
     flamesCounter() {
-        this.game.map.board[this.y][this.x] = 4
-
-        // this.handleFlamesCollisionWithPlayer([...this.game.players.values()])
+        this.game.map.board[this.y][this.x] = 4;
+        
+        [...this.game.players.values()].forEach((player) => {
+            player.handlePlayerCollisionWithFlames()
+        })
 
         setTimeout(() => {
             let key = `${this.x}-${this.y}`;
@@ -29,14 +32,8 @@ export default class Flame {
             } else {
                 // should remove flame from the map 4 => 0
                 this.game.flames.delete(key)
-                this.game.map.board[this.y][this.x] = 0
+                this.game.map.board[this.y][this.x] = this.lastCellValue
             }
         }, 500)
     }
-
-    // handleFlamesCollisionWithPlayer(players) {
-    //     players.forEach(player => {
-            
-    //     })
-    // }
 }
