@@ -1,4 +1,6 @@
-export default function GameOver({ ws, isWon, setPage, setPlayerName, setNameError }) {
+export default function GameOver({ ws, isWon, setPage, setPlayerName, setNameError,setPlayers }) {
+    console.log("game over inside page : ", isWon)
+
     return {
         tag: 'div',
         key: 'gameOver-component-div',
@@ -12,9 +14,9 @@ export default function GameOver({ ws, isWon, setPage, setPlayerName, setNameErr
                 attrs: {
                     className: 'gameOverButton',
                     onclick: () => {
-                        if (ws) ws.close()
                         setPage('nameEntry')
                         setPlayerName('')
+                        setPlayers([])
                         setNameError('')
                     }
                 },

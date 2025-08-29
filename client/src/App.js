@@ -131,40 +131,42 @@ export const App = withState(function App(component) {
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setSeconds(data.seconds)
                     setLobbyState(data.state)
-                    break
+                    break;
 
                 case "startGame":
                     setMap(data.map)
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setPage("startGame")
-                    break
+                    break;
 
                 case "gameUpdates":
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setMap(data.map)
-                    break
+                    break;
 
                 case "gameOver":
-                    setIsWon(data.isWon)
+
                     setPage("gameOver")
+                    setIsWon(data.isWon)
                     console.log("game over: ", data.isWon)
-                    break
+                    if (wsRef.current && !data.isWon) wsRef.current.close()
+                    break;
 
                 case "chat":
                     setMessages(prevMessages => [...prevMessages, data])
                     break;
 
                 default:
-                    break
+                    break;
             }
         };
 
         socket.onclose = () => {
             console.log('Disconnected from websocket server');
             setWs(null)
-            setPage("nameEntry")
+            wsRef.current = null
         };
 
         socket.onerror = (err) => {
@@ -204,7 +206,7 @@ export const App = withState(function App(component) {
         }))
     }
 
-    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError }))
+    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError, setPlayers }))
 })
 
 export default App

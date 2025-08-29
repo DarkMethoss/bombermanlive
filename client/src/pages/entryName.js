@@ -70,7 +70,7 @@ export default function EntryName({ playerName, setPlayerName, handleWebsocket, 
           {
             tag: 'input',
             key: 'EntryName-component-input',
-            attrs: { id: 'userName', name: 'userName', type: 'text', value: playerName, onchange: (e) => setPlayerName(e.target.value) },
+            attrs: { id: 'userName', name: 'userName', type: 'text', value: playerName, oninput: (e) => setPlayerName(e.target.value) },
             children: [],
           },
           nameError ? { tag: 'span', key: 'EntryName-component-span', attrs: {className: 'errorName'}, children: [nameError] } : '',
@@ -78,28 +78,4 @@ export default function EntryName({ playerName, setPlayerName, handleWebsocket, 
       }
     ]
   }
-}
-
-const form = {
-  display: "flex",
-  flexDirection: "column",
-  // alignItems: "center",
-  gap: "1rem"
-}
-
-const label = {
-  width: "max-width",
-  fontSize: "1.5rem",
-  letterSpacing: ".5rem"
-}
-
-const input = {
-  padding: "0.5rem 1rem",
-  width: "100%",
-  maxWidth: "250px"
-}
-
-const error = {
-  color: "red",
-  fontWeight: "bold"
 }
