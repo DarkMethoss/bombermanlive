@@ -1,4 +1,3 @@
-
 export class powerUp {
     constructor(game, type, position, id) {
         this.id = id
@@ -39,12 +38,7 @@ export class powerUp {
                 this.remove()
                 break;
         }
-
-
     }
-
-
-
 
     // hna we need to remove the powerUp from the game
     // if a one is used we need to decrement ( wttf 3la task )
@@ -64,6 +58,4 @@ export class powerUp {
             // position: this.position
         };
     }
-
 }
-

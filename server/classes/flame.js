@@ -1,10 +1,11 @@
 export default class Flame {
     constructor(game, position, lastCellValue) {
-        this.x = position.x;
-        this.y = position.y;
-        this.lastCellValue = lastCellValue;
-        this.game = game;
-        this.flamesCounter();
+        this.game = game
+        this.x = position.x
+        this.y = position.y
+        this.lastCellValue = lastCellValue
+        this.flameTimer = null
+        this.flamesCounter()
     }
 
     get position(){
@@ -22,18 +23,19 @@ export default class Flame {
             player.handlePlayerCollisionWithFlames()
         })
 
-        setTimeout(() => {
+        this.flameTimer = setTimeout(() => {
             let key = `${this.x}-${this.y}`;
-            let values = this.game.flames.get(key)
+            let flames = this.game.flames.get(key)
 
-            if (values.length > 1) {
-                // check if contains more than one flame
+            // check if contains more than one flame
+            if (flames.length > 1) {
                 this.game.flames.get(key).pop()
             } else {
-                // should remove flame from the map 4 => 0
                 this.game.flames.delete(key)
                 this.game.map.board[this.y][this.x] = this.lastCellValue
             }
+
+            clearInterval(this.flameTimer)
         }, 500)
     }
 }

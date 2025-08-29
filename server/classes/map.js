@@ -11,7 +11,6 @@
 // 55 pass-bomb
 import { powerUp } from "./powerup.js"
 
-
 export default class GameMap {
     constructor(game, size) {
         this.game = game
@@ -80,17 +79,9 @@ export default class GameMap {
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
-
-
             })
         }
-
-
-
-
     }
-
-
 
     generatePowerUpsBonus() {
         let powerUpBonusKeys = ['life', 'pass-bomb']
@@ -123,17 +114,13 @@ export default class GameMap {
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpBonusKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
-
             })
         }
-
     }
-
 
     HoldsPowerUp(col, row) {
         return this.game.powerUps.has(`${col}-${row}`)
     }
-
 
     isWalkable(x, y, player) {
         const { col, row } = this.getCell(x, y)
@@ -178,7 +165,6 @@ export default class GameMap {
     }
 
     // for later to make it generic for everyithing 
-
     #getUniqueIndices(arr, proportion) {
         const indices = new Set()
         const maxIndex = arr.size - 1
@@ -190,7 +176,6 @@ export default class GameMap {
 
         return [...indices]
     }
-
 
     #shuffle(array) {
         let currentIndex = array.length;

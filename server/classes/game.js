@@ -1,6 +1,5 @@
 import Bomb from "./bomb.js"
 import GameMap from "./map.js"
-import { powerUp } from "./powerup.js"
 
 export default class Game {
     constructor(room) {
@@ -30,7 +29,6 @@ export default class Game {
         }
     }
 
-
     PowerUpsTosend() {
         for (let value of [...this.affectedBricks.values()]) {
             let { col, row } = value
@@ -59,8 +57,6 @@ export default class Game {
         }
     }
 
-
-
     initPlayerPositions() {
         const size = this.map.size
         const startPositions = [{ x: 1, y: 1 }, { x: size - 2, y: size - 2 }, { x: 1, y: size - 2 }, { x: size - 2, y: 1 }]
@@ -76,9 +72,6 @@ export default class Game {
         })
     }
 
-
-
-
     // here goes the update of each player bu7duuu
     update(playerId, data) {
         const { deltaTime, playerMovements, placedBomb } = data
@@ -86,8 +79,6 @@ export default class Game {
         player.update(deltaTime, playerMovements)
         if (placedBomb) this.handlePlacedBomb(player)
     }
-
-
 
     handlePlacedBomb(player) {
         let x = player.x + player.width / 2
@@ -100,5 +91,4 @@ export default class Game {
             player.bombsPlaced++
         }
     }
-
 }

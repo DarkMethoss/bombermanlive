@@ -1,7 +1,6 @@
 import { generateId } from "../utils/utils.js"
 import { Player } from "./player.js"
 import Room from "./room.js"
-import GameMap from "./map.js";
 
 //* Server class : handles websocket game server
 //* - handle players ( remove and add to rooms )
@@ -48,7 +47,6 @@ export default class Server {
         room.brodcast("chat", data)
     }
 
-
     handlePlayer(ws, playerName, playerId) {
         let emptyRooms = [...this.rooms.values()].filter(room => room.isEmpty() && !room.isClosed)
         let newPlayer = new Player(this, ws, playerId)
@@ -68,7 +66,6 @@ export default class Server {
             let message = { type: "nameEntry", data: { error: "userName already exists" } }
             ws.send(JSON.stringify(message))
         }
-
     }
 
     handleDisconnection(playerId) {
@@ -81,7 +78,6 @@ export default class Server {
                 this.rooms.delete(room.id)
             }
         }
-
         this.players.delete(playerId)
     }
 

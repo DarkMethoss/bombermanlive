@@ -76,13 +76,10 @@ export class Player {
                 this.x = x
                 this.y = y
             }
-
         });
 
         this.handlePowerUpCollision()
-
     }
-
 
     //  here we'll be handling the player must collide with the player at least at the center 
     // here we need to see if the player mazal madepassash l max dyal 
@@ -106,9 +103,7 @@ export class Player {
             powerUp.applyTo(this)
             powerUp.update(this)
         }
-
     }
-
 
     handlePlayerCollisionWithFlames() {
         let up = this.game.map.getCell(this.x, this.y)
@@ -140,7 +135,4 @@ export class Player {
             name: this.userName
         }
     }
-
-
-
 }
