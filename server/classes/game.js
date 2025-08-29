@@ -26,10 +26,6 @@ export default class Game {
 
         return {
             players: [...this.players.values()].map(player => player.playerData),
-            // bricks: [...this.bricks.values()],
-            // powerUps: this.PowerUpsTosend(),
-            // bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            // flames: [...this.flames.values()].map(flames => flames[0].position)
             map: this.map.board
         }
     }

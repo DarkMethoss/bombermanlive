@@ -1,14 +1,9 @@
-//  this is the class mère e7m
-// we will have 3 subclasses for each type and the
-
-
 
 export class powerUp {
     constructor(game, type, position, id) {
         this.id = id
         this.game = game
         this.type = type
-        this.active = false   // tcollectat  
         this.owner = null
         this.position = position
     }
@@ -16,7 +11,6 @@ export class powerUp {
     //  the logic of how each one will be handled by the player
     // when there is a collision we can tie the player to the powerUp
     applyTo(player) {
-        this.active = true
         this.owner = player
     }
     //  this is too basic

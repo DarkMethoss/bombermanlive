@@ -17,10 +17,11 @@ export default class GameMap {
         this.width = 750
         this.height = 750
         this.size = size
-        this.proportionBricks = 0.8
+        this.proportionBricks = 1
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.generateBricks()
         this.generatePowerUps()
+        this.generatePowerUpsBonus()
     }
 
     generateWalls() {
@@ -57,14 +58,14 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         // shuflle the array to (more randomness)
-        let powerUpKeys = ['bomb', 'speed', 'life', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
+        let powerUpKeys = ['bomb', 'speed', 'flame', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
                 this.#shuffle(powerUpKeys)
-                console.log("the powerUpskeys", powerUpKeys);
-                let powerUpKeyIndex = Math.floor(Math.random() *(powerUpKeys.length-1))
+
+                let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
@@ -74,6 +75,38 @@ export default class GameMap {
 
             })
         }
+
+    }
+
+
+
+
+    generatePowerUpsBonus() {
+        let powerUpBonusKeys = ['life', 'pass-bomb', 'pass-flame']
+        if (this.game.bricks.length != 0) {
+            let availableBricks = this.game.bricks.entries().filter((value)=> !this.game.powerUps().has(value[0]))
+            let reservedOnes = this.game.bricks.entries().filter((value)=> this.game.powerUps().has(value[0]))
+            console.log("the reserved ones", reservedOnes, reservedOnes.length);
+            console.log("vailable", availableBricks, availableBricks.length);
+            console.log("the whole thing", this.game.bricks.length);
+
+            let powerUpsIndices = this.#getUniqueIndices(availableBricks)
+            powerUpsIndices.forEach((element) => {
+                //  generate u salaam
+                this.#shuffle(powerUpBonusKeys)
+                let powerUpKeyIndex = Math.floor(Math.random() * (powerUpBonusKeys.length - 1))
+                let positionXY = Array.from(this.game.bricks)[element]
+                //  now 3awtani khassni nrdha map 
+                this.game.powerUps.set(positionXY[0],
+                    new powerUp(this.game, powerUpBonusKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
+                )
+
+
+            })
+        }
+
+
+
 
     }
 
@@ -130,9 +163,8 @@ export default class GameMap {
         const indices = new Set()
         const maxIndex = arr.size - 1
         let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
-        console.log("proportion", proportionPowerUps);
         while (indices.size < proportionPowerUps) {
-            const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
+            const randomIndex = Math.floor(Math.random() * (maxIndex - 1))
             indices.add(randomIndex)
         }
 
