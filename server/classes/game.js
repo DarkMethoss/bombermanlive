@@ -49,6 +49,9 @@ export default class Game {
                     case 'life':
                         this.map.board[row][col] = 54
                         break;
+                    case 'pass-bomb':
+                        this.map.board[row][col] = 55
+                        break;
                     default:
                         break;
                 }

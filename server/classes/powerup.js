@@ -33,6 +33,10 @@ export class powerUp {
                 player.hearts += 1
                 this.remove()
                 break;
+            case 'pass-bomb':
+                player.passBomb = true
+                this.remove()
+                break;
         }
 
 

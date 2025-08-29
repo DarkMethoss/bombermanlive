@@ -80,33 +80,29 @@ export default class GameMap {
 
 
 
-
     generatePowerUpsBonus() {
-        let powerUpBonusKeys = ['life', 'pass-bomb', 'pass-flame']
+        let powerUpBonusKeys = ['speed', 'pass-bomb', 'pass-brick']
+        let availableBricksMap = new Map()
         if (this.game.bricks.length != 0) {
-            let availableBricks = this.game.bricks.entries().filter((value)=> !this.game.powerUps().has(value[0]))
-            let reservedOnes = this.game.bricks.entries().filter((value)=> this.game.powerUps().has(value[0]))
-            console.log("the reserved ones", reservedOnes, reservedOnes.length);
-            console.log("vailable", availableBricks, availableBricks.length);
-            console.log("the whole thing", this.game.bricks.length);
 
-            let powerUpsIndices = this.#getUniqueIndices(availableBricks)
+            [...this.game.bricks.entries()].map((value) => {
+                if (!this.game.powerUps.has(value[0])) {
+                    availableBricksMap.set(value[0], value[1])
+                }
+            })
+            let powerUpsIndices = this.#getUniqueIndices(availableBricksMap)
             powerUpsIndices.forEach((element) => {
-                //  generate u salaam
                 this.#shuffle(powerUpBonusKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpBonusKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
-                //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpBonusKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
 
-
             })
         }
 
-
-
+        console.log("powerUps after the bonus add", this.game.powerUps);
 
     }
 
@@ -116,10 +112,11 @@ export default class GameMap {
     }
 
 
-    isWalkable(x, y) {
+    isWalkable(x, y, player) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return ![1, 2, 3].includes(cellValue)
+        if (player.passBomb) return ![1, 2].includes(cellValue)
+        else return ![1, 2, 3].includes(cellValue)
     }
 
     canGetOut(x, y) {
@@ -158,7 +155,7 @@ export default class GameMap {
     }
 
     // for later to make it generic for everyithing 
-    // 
+
     #getUniqueIndices(arr) {
         const indices = new Set()
         const maxIndex = arr.size - 1
