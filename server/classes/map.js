@@ -7,7 +7,8 @@
 // 51 speed
 // 52 bomb
 // 53 flame 
-
+// 54 life 
+// 55 pass-bomb
 import { powerUp } from "./powerup.js"
 
 
@@ -60,11 +61,9 @@ export default class GameMap {
         // shuflle the array to (more randomness)
         let powerUpKeys = ['bomb', 'speed', 'flame', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
         if (this.game.bricks.length != 0) {
-            let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
+            let powerUpsIndices = this.#getUniqueIndices(this.game.bricks, 0.1)
             powerUpsIndices.forEach((element) => {
-                //  generate u salaam
                 this.#shuffle(powerUpKeys)
-
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
@@ -81,16 +80,15 @@ export default class GameMap {
 
 
     generatePowerUpsBonus() {
-        let powerUpBonusKeys = ['speed', 'pass-bomb', 'pass-brick']
+        let powerUpBonusKeys = ['speed', 'pass-bomb']
         let availableBricksMap = new Map()
         if (this.game.bricks.length != 0) {
-
             [...this.game.bricks.entries()].map((value) => {
                 if (!this.game.powerUps.has(value[0])) {
                     availableBricksMap.set(value[0], value[1])
                 }
             })
-            let powerUpsIndices = this.#getUniqueIndices(availableBricksMap)
+            let powerUpsIndices = this.#getUniqueIndices(availableBricksMap, 0.05)
             powerUpsIndices.forEach((element) => {
                 this.#shuffle(powerUpBonusKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpBonusKeys.length - 1))
@@ -101,8 +99,6 @@ export default class GameMap {
 
             })
         }
-
-        console.log("powerUps after the bonus add", this.game.powerUps);
 
     }
 
@@ -156,10 +152,10 @@ export default class GameMap {
 
     // for later to make it generic for everyithing 
 
-    #getUniqueIndices(arr) {
+    #getUniqueIndices(arr, proportion) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
+        let proportionPowerUps = Math.round(maxIndex * proportion * this.game.players.size)
         while (indices.size < proportionPowerUps) {
             const randomIndex = Math.floor(Math.random() * (maxIndex - 1))
             indices.add(randomIndex)
@@ -172,11 +168,8 @@ export default class GameMap {
     #shuffle(array) {
         let currentIndex = array.length;
         while (currentIndex != 0) {
-
             let randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
-
-            // And swap it with the current element.
             [array[currentIndex], array[randomIndex]] = [
                 array[randomIndex], array[currentIndex]];
         }
