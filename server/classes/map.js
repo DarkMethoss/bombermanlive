@@ -62,7 +62,7 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         // shuflle the array to (more randomness)
-        let powerUpKeys = ['speed', 'speed', 'speed', 'speed', 'flame', 'flame', 'flame', 'flame', 'speed', 'speed']
+        let powerUpKeys = ['bomb', 'bomb', 'bomb', 'bomb', 'flame', 'flame', 'flame', 'flame', 'speed', 'speed']
         if (this.game.bricks.length != 0) {
             let countSpeed = 0
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks, 0.1)

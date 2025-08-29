@@ -94,7 +94,7 @@ export class Player {
         let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
-            if (powerUp.type == 'speed' && this.speed >= this.game.maxSpeedpowerUps) {
+            if (powerUp.type == 'speed' && this.speed >= this.game.map.maxSpeedpowerUps) {
                 return
             }
             if (powerUp.type == 'life' && this.livesUp >= this.game.map.maxLivesUp) {
