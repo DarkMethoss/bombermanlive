@@ -7,7 +7,8 @@
 // 51 speed
 // 52 bomb
 // 53 flame 
-
+// 54 life 
+// 55 pass-bomb
 import { powerUp } from "./powerup.js"
 
 
@@ -17,10 +18,14 @@ export default class GameMap {
         this.width = 750
         this.height = 750
         this.size = size
-        this.proportionBricks = 0.8
+        this.proportionBricks = 1
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
+        this.maxSpeedpowerUps = 4
+        this.maxLivesUp = 2
+        this.maxPassBomb = 1
         this.generateBricks()
         this.generatePowerUps()
+        this.generatePowerUpsBonus()
     }
 
     generateWalls() {
@@ -57,19 +62,67 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         // shuflle the array to (more randomness)
-        let powerUpKeys = ['bomb', 'speed', 'life', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
+        let powerUpKeys = ['speed', 'speed', 'speed', 'speed', 'flame', 'flame', 'flame', 'flame', 'speed', 'speed']
         if (this.game.bricks.length != 0) {
-            let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
+            let countSpeed = 0
+            let powerUpsIndices = this.#getUniqueIndices(this.game.bricks, 0.1)
             powerUpsIndices.forEach((element) => {
-                //  generate u salaam
                 this.#shuffle(powerUpKeys)
-                let powerUpKeyIndex = Math.floor(Math.random() *(powerUpKeys.length-1))
+                let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
+                if (powerUpKeys[powerUpKeyIndex] == 'speed') {
+                    if (countSpeed >= (this.game.players.size * this.maxSpeedpowerUps)) {
+                        return;
+                    }
+                    countSpeed += 1
+                }
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
 
+
+            })
+        }
+
+
+
+
+    }
+
+
+
+    generatePowerUpsBonus() {
+        let powerUpBonusKeys = ['life', 'pass-bomb']
+        let availableBricksMap = new Map()
+        if (this.game.bricks.length != 0) {
+            [...this.game.bricks.entries()].map((value) => {
+                if (!this.game.powerUps.has(value[0])) {
+                    availableBricksMap.set(value[0], value[1])
+                }
+            })
+            let powerUpsIndices = this.#getUniqueIndices(availableBricksMap, 0.05)
+            let countLives = 0
+            let countPassBomb = 0
+            powerUpsIndices.forEach((element) => {
+                this.#shuffle(powerUpBonusKeys)
+                let powerUpKeyIndex = Math.floor(Math.random() * (powerUpBonusKeys.length - 1))
+                let positionXY = Array.from(this.game.bricks)[element]
+                if (powerUpBonusKeys[powerUpKeyIndex] == 'life') {
+                    if (countLives >= (this.game.players.size * this.maxLivesUp)) {
+                        return;
+                    }
+                    countLives += 1
+                }
+                if (powerUpBonusKeys[powerUpKeyIndex] == 'pass-bomb') {
+                    if (countPassBomb >= (this.game.players.size * this.maxPassBomb)) {
+                        return;
+                    }
+                    countPassBomb += 1
+                }
+                this.game.powerUps.set(positionXY[0],
+                    new powerUp(this.game, powerUpBonusKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
+                )
 
             })
         }
@@ -82,10 +135,11 @@ export default class GameMap {
     }
 
 
-    isWalkable(x, y) {
+    isWalkable(x, y, player) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        return ![1, 2, 3].includes(cellValue)
+        if (player.passBomb) return ![1, 2].includes(cellValue)
+        else return ![1, 2, 3].includes(cellValue)
     }
 
     canGetOut(x, y) {
@@ -117,20 +171,20 @@ export default class GameMap {
     }
 
     #FindEmptyElementsBoard() {
-        const EmptyELements = this.board.map((row, i) => {
-            return row.filter((column, j) => column == 0)
+        const EmptyELements = this.board.map((row) => {
+            return row.filter((column) => column == 0)
         })
         return EmptyELements
     }
 
     // for later to make it generic for everyithing 
-    // 
-    #getUniqueIndices(arr) {
+
+    #getUniqueIndices(arr, proportion) {
         const indices = new Set()
         const maxIndex = arr.size - 1
-        let proportionPowerUps = Math.round(maxIndex * 0.1 * this.game.players.size)
+        let proportionPowerUps = Math.round(maxIndex * proportion * this.game.players.size)
         while (indices.size < proportionPowerUps) {
-            const randomIndex = Math.floor(Math.random() * (maxIndex + 1))
+            const randomIndex = Math.floor(Math.random() * maxIndex)
             indices.add(randomIndex)
         }
 
@@ -141,11 +195,8 @@ export default class GameMap {
     #shuffle(array) {
         let currentIndex = array.length;
         while (currentIndex != 0) {
-
             let randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
-
-            // And swap it with the current element.
             [array[currentIndex], array[randomIndex]] = [
                 array[randomIndex], array[currentIndex]];
         }

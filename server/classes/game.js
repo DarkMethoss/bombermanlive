@@ -26,10 +26,6 @@ export default class Game {
 
         return {
             players: [...this.players.values()].map(player => player.playerData),
-            // bricks: [...this.bricks.values()],
-            // powerUps: this.PowerUpsTosend(),
-            // bombs: [...this.bombs.values()].map(bomb => bomb.position),
-            // flames: [...this.flames.values()].map(flames => flames[0].position)
             map: this.map.board
         }
     }
@@ -52,6 +48,9 @@ export default class Game {
                         break;
                     case 'life':
                         this.map.board[row][col] = 54
+                        break;
+                    case 'pass-bomb':
+                        this.map.board[row][col] = 55
                         break;
                     default:
                         break;
