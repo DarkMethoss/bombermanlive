@@ -12,6 +12,9 @@ export default class Game {
         this.flames = new Map()
         this.map = new GameMap(this, 15)
         this.affectedBricks = []
+        this.maxSpeedpowerUps = 4
+        this.maxLivesUp = 2
+        this.maxPassBomb = 1
         this.initPlayerPositions()
     }
 

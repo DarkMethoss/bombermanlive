@@ -19,10 +19,9 @@ export class Player {
         this.game = null
         this.initialPosition = null
         this.isRespawned = false
-        this.maxSpeedpowerUps = 4
-        this.maxLivesUp = 2
         this.livesUp = 0
         this.passBomb = false
+        this.passBombs = 0
     }
 
     isWon() {
@@ -95,18 +94,17 @@ export class Player {
         let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
-            if (powerUp.type == 'speed' && this.speed >= this.maxSpeedpowerUps) {
+            if (powerUp.type == 'speed' && this.speed >= this.game.maxSpeedpowerUps) {
                 return
             }
-            if (powerUp.type == 'life' && this.livesUp >= this.maxLivesUp) {
+            if (powerUp.type == 'life' && this.livesUp >= this.game.maxLivesUp) {
                 return
             }
-
+            if (powerUp.type == 'pass-bomb' && this.passBombs >= this.game.maxPassBomb) {
+                return
+            }
             powerUp.applyTo(this)
             powerUp.update(this)
-            console.log("this.owner", this.owner);
-            // let { speed, bomb, flame } = this.owner
-            // console.log("speed", speed, flame, bomb);
         }
 
     }

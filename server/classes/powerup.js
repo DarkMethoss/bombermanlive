@@ -35,6 +35,7 @@ export class powerUp {
                 break;
             case 'pass-bomb':
                 player.passBomb = true
+                player.passBombs += 1
                 this.remove()
                 break;
         }

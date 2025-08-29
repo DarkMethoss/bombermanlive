@@ -59,14 +59,19 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         // shuflle the array to (more randomness)
-        let powerUpKeys = ['bomb', 'speed', 'flame', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
+        let powerUpKeys = ['bomb', 'bomb', 'bomb', 'bomb', 'flame', 'flame', 'flame', 'flame', 'speed', 'speed']
         if (this.game.bricks.length != 0) {
+            let countSpeed = 0
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks, 0.1)
             powerUpsIndices.forEach((element) => {
                 this.#shuffle(powerUpKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
+                if (powerUpKeys[powerUpKeyIndex] == 'speed') {
+                    if (countSpeed >= (this.game.players.size * this.game.maxSpeedpowerUps)) return
+                    countSpeed += 1
+                }
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
@@ -89,10 +94,20 @@ export default class GameMap {
                 }
             })
             let powerUpsIndices = this.#getUniqueIndices(availableBricksMap, 0.05)
+            let countLives = 0
+            let countPassBomb = 0
             powerUpsIndices.forEach((element) => {
                 this.#shuffle(powerUpBonusKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpBonusKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
+                if (powerUpBonusKeys[powerUpKeyIndex] == 'life') {
+                    if (countLives >= (this.game.players.size * this.game.maxLivesUp)) return
+                    countLives += 1
+                }
+                if (powerUpBonusKeys[powerUpKeyIndex] == 'pass-bomb') {
+                    if (countPassBomb >= (this.game.players.size * this.game.maxPassBomb)) return
+                    countPassBomb += 1
+                }
                 this.game.powerUps.set(positionXY[0],
                     new powerUp(this.game, powerUpBonusKeys[powerUpKeyIndex], positionXY[1], positionXY[0])
                 )
@@ -144,8 +159,8 @@ export default class GameMap {
     }
 
     #FindEmptyElementsBoard() {
-        const EmptyELements = this.board.map((row, i) => {
-            return row.filter((column, j) => column == 0)
+        const EmptyELements = this.board.map((row) => {
+            return row.filter((column) => column == 0)
         })
         return EmptyELements
     }
@@ -157,7 +172,7 @@ export default class GameMap {
         const maxIndex = arr.size - 1
         let proportionPowerUps = Math.round(maxIndex * proportion * this.game.players.size)
         while (indices.size < proportionPowerUps) {
-            const randomIndex = Math.floor(Math.random() * (maxIndex - 1))
+            const randomIndex = Math.floor(Math.random() * maxIndex)
             indices.add(randomIndex)
         }
 
