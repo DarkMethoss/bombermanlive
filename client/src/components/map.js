@@ -11,7 +11,7 @@ export default function Map({ map }) {
             children: row.map((col, colIndex) => ({
                 tag: 'div',
                 key: `div2${colIndex}`,
-                attrs: { className: ui[col].className },
+                attrs: { className: ui[col]?.className },
                 children: [ui[col].content],
             }))
         }))

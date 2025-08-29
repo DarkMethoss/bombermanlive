@@ -206,7 +206,7 @@ export const App = withState(function App(component) {
         }))
     }
 
-    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError, setPlayers }))
+    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError, setPlayers, setMessages }))
 })
 
 export default App
