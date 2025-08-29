@@ -333,8 +333,9 @@ body {
 .image1 {
   width: 40px;
   height: 40px;
-  background-image: url(./assets/blue.png);
+  background-image: url(./assets/yellow.png);
   animation: bounce1 5s infinite;
+  background-size: contain;
 }
 
 .image2 {
@@ -342,6 +343,7 @@ body {
   height: 40px;
   background-image: url(./assets/red.png);
   animation: bounce2 5s infinite;
+  background-size: contain;
 }
 
 @keyframes bounce1 {
@@ -353,7 +355,7 @@ body {
 
   50% {
     transform: translateX(570px);
-    background-image: url(./assets/yellow.png);
+    background-image: url(./assets/green.png);
 
   }
 }
@@ -367,7 +369,7 @@ body {
 
   50% {
     transform: translateX(0);
-    background-image: url(./assets/green.png);
+    background-image: url(./assets/blue.png);
   }
 }
 

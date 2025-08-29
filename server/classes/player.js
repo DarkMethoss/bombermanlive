@@ -9,7 +9,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.1
+        this.unity = 0.12
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1

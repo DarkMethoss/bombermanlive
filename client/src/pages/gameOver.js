@@ -12,10 +12,10 @@ export default function GameOver({ ws, isWon, setPage, setPlayerName, setNameErr
                 attrs: {
                     className: 'gameOverButton',
                     onclick: () => {
+                        if (ws) ws.close()
                         setPage('nameEntry')
                         setPlayerName('')
                         setNameError('')
-                        if (ws) ws.close()
                     }
                 },
                 children: ['Play again']
