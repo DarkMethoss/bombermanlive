@@ -39,3 +39,7 @@ export default class Flame {
         }, 500)
     }
 }
+
+
+
+/// timer 20 //// 10
