@@ -60,7 +60,6 @@ export function useEffect(callback, dependencies) {
 }
 
 export function withState(componentFn) {
-    return function wrapper() {
         const component = {
             states: [],
             stateIndex: 0,
@@ -84,7 +83,6 @@ export function withState(componentFn) {
 
         currentComponent = null
         return component
-    }
 }
 
 export function rerender(component) {

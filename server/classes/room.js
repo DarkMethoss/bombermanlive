@@ -6,7 +6,7 @@ export default class Room {
         this.id = id
         this.gameServer = server
         this.players = new Map()
-        this.waitingCounter = 5
+        this.waitingCounter = 20
         this.gameStartCounter = 1
         this.isClosed = false
         this.countDownInterval = null
@@ -52,7 +52,7 @@ export default class Room {
 
         if (pCnt == 1) {
             this.isClosed = false
-            this.waitingCounter = 5
+            this.waitingCounter = 20
 
             this.stopWaitingCountdown()
         }
@@ -75,7 +75,7 @@ export default class Room {
     }
 
     stopWaitingCountdown() {
-        this.waitingCounter = 5
+        this.waitingCounter = 20
         if (this.countDownInterval) {
             clearInterval(this.countDownInterval)
             this.countDownInterval = null
