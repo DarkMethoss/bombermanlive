@@ -63,7 +63,6 @@ export default class GameMap {
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
                 this.#shuffle(powerUpKeys)
-                console.log("the powerUpskeys", powerUpKeys);
                 let powerUpKeyIndex = Math.floor(Math.random() *(powerUpKeys.length-1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
