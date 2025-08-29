@@ -31,7 +31,7 @@ export default class GameMap {
                 }
             }
         }
-        //this.game.initialBoard = JSON.parse(JSON.stringify(this.board))
+
     }
 
     generateBricks() {
@@ -56,12 +56,15 @@ export default class GameMap {
 
     // we need 
     generatePowerUps() {
-        let powerUpKeys = ['speed', 'speed', 'bomb', 'bomb', 'bomb', 'bomb', 'flame', 'flame', 'flame', 'flame']
+        // shuflle the array to (more randomness)
+        let powerUpKeys = ['bomb', 'speed', 'life', 'bomb', 'bomb', 'flame', 'bomb', 'flame', 'speed', 'flame']
         if (this.game.bricks.length != 0) {
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks)
             powerUpsIndices.forEach((element) => {
                 //  generate u salaam
-                let powerUpKeyIndex = Math.floor(Math.random() * powerUpKeys.length)
+                this.#shuffle(powerUpKeys)
+                console.log("the powerUpskeys", powerUpKeys);
+                let powerUpKeyIndex = Math.floor(Math.random() *(powerUpKeys.length-1))
                 let positionXY = Array.from(this.game.bricks)[element]
                 //  now 3awtani khassni nrdha map 
                 this.game.powerUps.set(positionXY[0],
@@ -133,5 +136,19 @@ export default class GameMap {
         }
 
         return [...indices]
+    }
+
+
+    #shuffle(array) {
+        let currentIndex = array.length;
+        while (currentIndex != 0) {
+
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
     }
 }

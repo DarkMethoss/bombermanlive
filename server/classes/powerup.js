@@ -11,7 +11,6 @@ export class powerUp {
         this.active = false   // tcollectat  
         this.owner = null
         this.position = position
-        this.maxSpeed = 4
     }
     //  here we need to associate the player and the the powerUp
     //  the logic of how each one will be handled by the player
@@ -35,6 +34,11 @@ export class powerUp {
                 player.flame += 1
                 this.remove()
                 break
+            case 'life':
+                player.livesUp += 1
+                player.hearts += 1
+                this.remove()
+                break;
         }
 
 

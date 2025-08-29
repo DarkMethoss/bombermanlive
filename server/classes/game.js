@@ -21,9 +21,9 @@ export default class Game {
 
     get gameData() {
         // filter those who have the 0 and then replace them with 5
-    
+
         this.PowerUpsTosend()
-        
+
         return {
             players: [...this.players.values()].map(player => player.playerData),
             // bricks: [...this.bricks.values()],
@@ -49,6 +49,9 @@ export default class Game {
                         break;
                     case 'flame':
                         this.map.board[row][col] = 53
+                        break;
+                    case 'life':
+                        this.map.board[row][col] = 54
                         break;
                     default:
                         break;

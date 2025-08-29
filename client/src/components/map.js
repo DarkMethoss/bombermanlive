@@ -39,7 +39,7 @@ const ui = {
         content: "🔥"
     },
     51: {
-        className: "powerUp speedUp ",
+        className: "powerUp ",
         content: "⚡"
     },
     52: {
@@ -50,4 +50,8 @@ const ui = {
         className: "powerUp flameUp",
         content: ""
     },
+    54: {
+        className: "powerUp",
+        content: "💛"
+    }
 }
