@@ -77,7 +77,7 @@ export default function GameMap({ map, players, player }) {
                             },
                             {
                                 tag: 'div',
-                                key: 'gameMap-component-div4',
+                                key: 'gameMap-component-div5',
                                 attrs: { className: "powerup" },
                                 children: [
                                     '👾',
