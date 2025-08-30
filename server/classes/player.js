@@ -1,4 +1,3 @@
-import { throttle } from "../utils/utils.js"
 
 export class Player {
     constructor(wss, ws, id) {
@@ -9,7 +8,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.15
+        this.unity = 0.2
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1
@@ -22,6 +21,7 @@ export class Player {
         this.livesUp = 0
         this.passBomb = false
         this.passBombs = 0
+        this.isLastStanding = true
     }
 
     isWon() {
@@ -77,7 +77,6 @@ export class Player {
                 this.y = y
             }
         });
-
         this.handlePowerUpCollision()
     }
 
@@ -118,8 +117,30 @@ export class Player {
                 setTimeout(() => {
                     this.isRespawned = false
                 }, 1000)
+
+                if (this.hearts == 0) {
+                    let standPlayers = [...this.game.players.values()].filter((player) => player.isLastStanding)
+
+                    if (standPlayers.length > 1) {
+                        let heartPlayers = standPlayers.filter((player) => player.hearts.length > 0)
+
+                        if (heartPlayers.length > 1) {
+                            this.isLastStanding = false
+                        } else if (heartPlayers.length === 0) {
+                            const luckyPlayer = Math.floor(Math.random() * standPlayers.length)
+                            standPlayers.forEach((player, index) => index == luckyPlayer ? player.isLastStanding : player.isLastStanding = false)
+                        }
+                    }
+                }
             }
-            if (this.hearts <= 0) this.isLost()
+
+            if (this.hearts <= 0) {
+                if  (!this.isLastStanding) {
+                    this.isLost()
+                } else {
+                    this.isWon()
+                }
+            }
         }
     }
 

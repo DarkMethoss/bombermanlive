@@ -105,7 +105,6 @@ export const App = withState(function App(component) {
 
     useEffect(() => {
         if (page === "gameOver" && !isWon) {
-            console.log("Game over: ", isWon)
             ws.close()
         }
     }, [isWon])
@@ -135,7 +134,6 @@ export const App = withState(function App(component) {
                     break;
 
                 case "startGame":
-                    console.log("game start type")
                     setMap(data.map)
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])

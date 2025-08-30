@@ -19,7 +19,6 @@ export default class Server {
         let playerId = generateId("P")
 
         ws.on("close", () => {
-            console.log("Client disconnected")
             this.handleDisconnection(playerId)
         })
 
@@ -30,14 +29,14 @@ export default class Server {
                 switch (type) {
                     case "setName":
                         this.handlePlayer(ws, data.name, playerId)
-                        break
+                        break;
                     case "getGameUpdates":
                         this.handleGamesUpdates(playerId, data)
-                        break
+                        break;
                     case "chat":
                         this.handleChat(playerId, data)
                     default:
-                        break
+                        break;
                 }   
             } catch (error) {
                 console.error(error);
@@ -78,7 +77,6 @@ export default class Server {
         if (room) {
             room.removePlayer(playerId)
             if (room.players.size === 0) {
-                console.log("delete empty room")
                 this.rooms.delete(room.id)
             }
         }

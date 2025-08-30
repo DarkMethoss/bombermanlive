@@ -126,7 +126,7 @@ export default class GameMap {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
         if (player.passBomb) return ![1, 2].includes(cellValue)
-        else return ![1, 2, 3].includes(cellValue)
+        else return ![1, 3].includes(cellValue)
     }
 
     canGetOut(x, y) {
