@@ -38,7 +38,7 @@ export const App = withState(function App(component) {
             movementsRef.current.delete(key)
         }
 
-        let clearMovement = (e) => {
+        let clearMovement = () => {
             movementsRef.current.clear()
         }
 
