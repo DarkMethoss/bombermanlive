@@ -81,10 +81,11 @@ body {
   flex-direction: column;
   gap: .5rem;
 }
+
 .my-message {
   background-color: white !important;
   color: black;
-  align-self: flex-end ;
+  align-self: flex-end;
 }
 
 .players-container {
@@ -189,7 +190,7 @@ body {
 .powerUp,
 .flame,
 .bomb {
-  
+
   width: 50px;
   height: 50px;
 }
@@ -229,15 +230,19 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 .player-red {
   background-image: url(../src/assets/red.png);
 }
+
 .player-green {
   background-image: url(../src/assets/green.png);
 }
+
 .player-blue {
   background-image: url(../src/assets/blue.png);
 }
+
 .player-yellow {
   background-image: url(../src/assets/yellow.png);
 }
@@ -260,7 +265,6 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   box-shadow: 1px 1px 4px inset #333;
-
 }
 
 .powerUp {
@@ -278,4 +282,137 @@ body {
   background-image: url(./assets/fire.png);
 }
 
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 80px;
+  height: 100%;
+  gap: 1rem;
+}
 
+.gameOverButton {
+  padding: 1.5rem 3rem;
+  border-radius: 8px;
+  font-size: 1.5rem;
+}
+
+.playerCounter {
+  margin: auto;
+  width: max-content;
+  font-size: 20px;
+}
+
+.mainDiv {
+  padding: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 48px;
+}
+
+.logo-bomber {
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  font-size: 80px;
+}
+
+.chars {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  /* gap: 16px; */
+}
+
+.image1 {
+  width: 40px;
+  height: 40px;
+  background-image: url(./assets/yellow.png);
+  animation: bounce1 5s infinite;
+  background-size: contain;
+}
+
+.image2 {
+  width: 40px;
+  height: 40px;
+  background-image: url(./assets/red.png);
+  animation: bounce2 5s infinite;
+  background-size: contain;
+}
+
+@keyframes bounce1 {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(570px);
+    background-image: url(./assets/green.png);
+
+  }
+}
+
+@keyframes bounce2 {
+
+  0%,
+  100% {
+    transform: translateX(570px);
+  }
+
+  50% {
+    transform: translateX(0);
+    background-image: url(./assets/blue.png);
+  }
+}
+
+
+.formidable {
+  /* border: 2px solid white; */
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  gap: 16px;
+
+  input {
+    width: 320px;
+    height: 48px;
+    max-width: 320px;
+    border-radius: 16px;
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+}
+
+.counterTime {
+  display: block;
+  animation: time 1s infinite;
+}
+
+@keyframes time {
+
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+
+  50% {
+    transform: scale(1);
+
+  }
+}
+
+.errorName {
+  font-size: 24px;
+  color: red;
+}

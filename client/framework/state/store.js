@@ -1,5 +1,4 @@
 import { reconcile } from "../core/reconcile.js"
-import { deepEqual } from "../utils/deepEqual.js"
 
 let currentComponent = null
 
@@ -14,20 +13,23 @@ export function useState(initialValue) {
     }
 
     const setState = (newValue) => {
-        // const oldValue = component.states[stateIndex]
-        // if (!deepEqual(oldValue, newValue)) {
-        component.states[stateIndex] = newValue
-        rerender(component)
-        // }
+        const prevValue = component.states[stateIndex]
 
+        const valueToStore =
+            typeof newValue === "function"
+                ? newValue(prevValue)
+                : newValue
+
+        component.states[stateIndex] = valueToStore
+        rerender(component)
     }
+
 
     return [component.states[stateIndex], setState]
 }
 
 export function useRef(initialValue) {
     const component = currentComponent
-    if (!component.refs) component.refs = []
     const refIndex = component.refIndex++
 
     if (!component.refs[refIndex]) {
@@ -56,7 +58,6 @@ export function useEffect(callback, dependencies) {
 }
 
 export function withState(componentFn) {
-    return function wrapper() {
         const component = {
             states: [],
             stateIndex: 0,
@@ -80,7 +81,6 @@ export function withState(componentFn) {
 
         currentComponent = null
         return component
-    }
 }
 
 export function rerender(component) {

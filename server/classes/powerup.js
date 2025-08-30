@@ -1,23 +1,15 @@
-//  this is the class mère e7m
-// we will have 3 subclasses for each type and the
-
-
-
 export class powerUp {
     constructor(game, type, position, id) {
         this.id = id
         this.game = game
         this.type = type
-        this.active = false   // tcollectat  
         this.owner = null
         this.position = position
-        this.maxSpeed = 4
     }
     //  here we need to associate the player and the the powerUp
     //  the logic of how each one will be handled by the player
     // when there is a collision we can tie the player to the powerUp
     applyTo(player) {
-        this.active = true
         this.owner = player
     }
     //  this is too basic
@@ -35,13 +27,18 @@ export class powerUp {
                 player.flame += 1
                 this.remove()
                 break
+            case 'life':
+                player.livesUp += 1
+                player.hearts += 1
+                this.remove()
+                break;
+            case 'pass-bomb':
+                player.passBomb = true
+                player.passBombs += 1
+                this.remove()
+                break;
         }
-
-
     }
-
-
-
 
     // hna we need to remove the powerUp from the game
     // if a one is used we need to decrement ( wttf 3la task )
@@ -58,9 +55,7 @@ export class powerUp {
         // Return a new object with only the desired properties for JSON serialization
         return {
             type: this.type,
-            position: this.position
+            // position: this.position
         };
     }
-
 }
-

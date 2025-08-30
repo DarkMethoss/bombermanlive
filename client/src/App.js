@@ -1,4 +1,4 @@
-import { createElement, withState, useEffect, useState, useRef } from '../framework/index.js'
+import { createElement, withState, useEffect, useState, useRef, on, off } from '../framework/index.js'
 import EntryName from './pages/entryName.js'
 import WaitingLobby from './pages/waitingLoby.js'
 import GameMap from './pages/gameMap.js'
@@ -10,9 +10,11 @@ export const App = withState(function App(component) {
     appComponent = component
     const [page, setPage] = useState("nameEntry")
     const [messages, setMessages] = useState([])
+    const [message, setMessage] = useState("")
 
     const [ws, setWs] = useState(null)
     const wsRef = useRef(null)
+    const requestAnimationRef = useRef(null)
 
     //* Game Map States
     const [players, setPlayers] = useState([])
@@ -22,7 +24,6 @@ export const App = withState(function App(component) {
     //* Player states 
     const movementsRef = useRef(new Set())
     const bombPlacedRef = useRef(false)
-
 
     useEffect(() => {
         let addMovement = (e) => {
@@ -37,22 +38,22 @@ export const App = withState(function App(component) {
             movementsRef.current.delete(key)
         }
 
-        let clearMovement = (e) => {
+        let clearMovement = () => {
             movementsRef.current.clear()
         }
 
         if (page === "startGame") {
-            document.addEventListener("keydown", addMovement)
-            document.addEventListener("keyup", removeMovement)
-            window.addEventListener("blur", clearMovement)
+            on("keydown", addMovement)
+            on("keyup", removeMovement)
+            on("blur", clearMovement)
         } else {
-            document.removeEventListener("keydown", addMovement)
-            document.removeEventListener("keyup", removeMovement)
+            off("keydown", addMovement)
+            off("keyup", removeMovement)
         }
 
         return () => {
-            document.removeEventListener("keydown", addMovement)
-            document.removeEventListener("keyup", removeMovement)
+            off("keydown", addMovement)
+            off("keyup", removeMovement)
         }
     }, [page])
 
@@ -73,7 +74,7 @@ export const App = withState(function App(component) {
         if (page !== "startGame") return
 
         function gameLoop(timeStamp) {
-            if (!ws) return;
+            if (!wsRef) return;
             let deltaTime = timeStamp - lastTimeRef.current
             lastTimeRef.current = timeStamp
 
@@ -90,7 +91,7 @@ export const App = withState(function App(component) {
             wsRef.current?.send(JSON.stringify(message))
             bombPlacedRef.current = false
 
-            requestAnimationFrame(gameLoop)
+            requestAnimationRef.current = requestAnimationFrame(gameLoop)
         }
         gameLoop(0)
     }, [page])
@@ -104,7 +105,6 @@ export const App = withState(function App(component) {
 
     useEffect(() => {
         if (page === "gameOver" && !isWon) {
-            console.log("Game over: ", isWon)
             ws.close()
         }
     }, [isWon])
@@ -131,39 +131,42 @@ export const App = withState(function App(component) {
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setSeconds(data.seconds)
                     setLobbyState(data.state)
-                    break
+                    break;
 
                 case "startGame":
                     setMap(data.map)
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setPage("startGame")
-                    break
+                    break;
 
                 case "gameUpdates":
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
                     setMap(data.map)
-                    break
+                    break;
 
                 case "gameOver":
                     setPage("gameOver")
                     setIsWon(data.isWon)
-                    break
+                    if (wsRef.current && !data.isWon) wsRef.current.close()
+                    cancelAnimationFrame(requestAnimationRef.current)
+                    requestAnimationRef.current = null
+                    break;
 
                 case "chat":
-                    setMessages([...messages, data])
+                    setMessages(prevMessages => [...prevMessages, data])
                     break;
 
                 default:
-                    break
+                    break;
             }
         };
 
         socket.onclose = () => {
             console.log('Disconnected from websocket server');
             setWs(null)
-            setPage("nameEntry")
+            wsRef.current = null
         };
 
         socket.onerror = (err) => {
@@ -189,7 +192,9 @@ export const App = withState(function App(component) {
             seconds,
             lobbyState,
             messages,
-            playerName
+            playerName,
+            message,
+            setMessage
         }))
     }
 
@@ -201,7 +206,7 @@ export const App = withState(function App(component) {
         }))
     }
 
-    if (page === "gameOver") return createElement(GameOver({ isWon }))
+    if (page === "gameOver") return createElement(GameOver({ isWon, setPage, setPlayerName, setNameError, setPlayers, setMessages, wsRef }))
 })
 
 export default App

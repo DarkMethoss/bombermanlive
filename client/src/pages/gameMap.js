@@ -75,6 +75,20 @@ export default function GameMap({ map, players, player }) {
                                     }
                                 ]
                             },
+                            {
+                                tag: 'div',
+                                key: 'gameMap-component-div5',
+                                attrs: { className: "powerup" },
+                                children: [
+                                    '👾',
+                                    {
+                                        tag: 'span',
+                                        key: 'gameMap-component-span5',
+                                        attrs: {},
+                                        children: [`x${player.passBombs}`]
+                                    }
+                                ]
+                            },
                         ]
                     },
                 ]

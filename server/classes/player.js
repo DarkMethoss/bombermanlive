@@ -1,4 +1,3 @@
-import { throttle } from "../utils/utils.js"
 
 export class Player {
     constructor(wss, ws, id) {
@@ -9,7 +8,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.07
+        this.unity = 0.15
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1
@@ -20,7 +19,11 @@ export class Player {
         this.game = null
         this.initialPosition = null
         this.isRespawned = false
-        this.maxSpeedpowerUps = 4
+        this.livesUp = 0
+        this.passBomb = false
+        this.passBombs = 0
+        this.isLastStanding = true
+        this.respanTimeout = null
     }
 
     isWon() {
@@ -34,7 +37,7 @@ export class Player {
     }
 
     update(deltaTime, playerMovements) {
-        this.handlePlayerCollisionWithFlames()
+        if (playerMovements) this.handlePlayerCollisionWithFlames()
         if (playerMovements) this.handlePlayerMovements(deltaTime, playerMovements)
     }
 
@@ -51,23 +54,23 @@ export class Player {
             let canGetOut
 
             if (movement === "ArrowRight") {
-                x = this.x + deltaTime * this.speed * this.unity
-                isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
+                x = this.x + deltaTime * this.speed * this.unity * 0.5
+                isWalkable = this.game.map.isWalkable(x + this.width, this.y, this) && this.game.map.isWalkable(x + this.width, this.y + this.height, this)
                 canGetOut = this.game.map.canGetOut(x + this.width, this.y) && this.game.map.canGetOut(x + this.width, this.y + this.height)
             }
             if (movement === "ArrowLeft") {
-                x = this.x - deltaTime * this.speed * this.unity
-                isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
+                x = this.x - deltaTime * this.speed * this.unity * 0.5
+                isWalkable = this.game.map.isWalkable(x, this.y, this) && this.game.map.isWalkable(x, this.y + this.height, this)
                 canGetOut = this.game.map.canGetOut(x, this.y) && this.game.map.canGetOut(x, this.y + this.height)
             }
             if (movement === "ArrowUp") {
-                y = this.y - deltaTime * this.speed * this.unity
-                isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
+                y = this.y - deltaTime * this.speed * this.unity * 0.5
+                isWalkable = this.game.map.isWalkable(this.x, y, this) && this.game.map.isWalkable(this.x + this.width, y, this)
                 canGetOut = this.game.map.canGetOut(this.x, y) && this.game.map.canGetOut(this.x + this.width, y)
             }
             if (movement === "ArrowDown") {
-                y = this.y + deltaTime * this.speed * this.unity
-                isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
+                y = this.y + deltaTime * this.speed * this.unity * 0.5
+                isWalkable = this.game.map.isWalkable(this.x, y + this.height, this) && this.game.map.isWalkable(this.x + this.width, y + this.height, this)
                 canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
             }
             if ((isOnBomb && canGetOut) || isWalkable) {
@@ -75,13 +78,11 @@ export class Player {
                 this.y = y
             }
         });
-
-        // this.handlePowerUpCollision()
+        this.handlePowerUpCollision()
     }
 
-
     //  here we'll be handling the player must collide with the player at least at the center 
-
+    // here we need to see if the player mazal madepassash l max dyal 
     handlePowerUpCollision() {
         // see if the center of the player is there !!
         let playerCenterX = this.x + this.width / 2
@@ -90,13 +91,19 @@ export class Player {
         let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
+            if (powerUp.type == 'speed' && this.speed >= this.game.map.maxSpeedpowerUps) {
+                return
+            }
+            if (powerUp.type == 'life' && this.livesUp >= this.game.map.maxLivesUp) {
+                return
+            }
+            if (powerUp.type == 'pass-bomb' && this.passBombs >= this.game.map.maxPassBomb) {
+                return
+            }
             powerUp.applyTo(this)
             powerUp.update(this)
-            let {speed , bomb , flame}= powerUp.owner
-            console.log("speed", speed, flame, bomb);
         }
     }
-
 
     handlePlayerCollisionWithFlames() {
         let up = this.game.map.getCell(this.x, this.y)
@@ -108,11 +115,34 @@ export class Player {
                 this.x = this.initialPosition.x
                 this.y = this.initialPosition.y
                 this.isRespawned = true
-                setTimeout(() => {
+                this.respanTimeout = setTimeout(() => {
                     this.isRespawned = false
+                    clearTimeout(this.respanTimeout)
                 }, 1000)
+
+                if (this.hearts == 0) {
+                    let standPlayers = [...this.game.players.values()].filter((player) => player.isLastStanding)
+
+                    if (standPlayers.length > 1) {
+                        let heartPlayers = standPlayers.filter((player) => player.hearts.length > 0)
+
+                        if (heartPlayers.length > 1) {
+                            this.isLastStanding = false
+                        } else if (heartPlayers.length === 0) {
+                            const luckyPlayer = Math.floor(Math.random() * standPlayers.length)
+                            standPlayers.forEach((player, index) => index == luckyPlayer ? player.isLastStanding : player.isLastStanding = false)
+                        }
+                    }
+                }
             }
-            if (this.hearts <= 0) this.isLost()
+
+            if (this.hearts <= 0) {
+                if (!this.isLastStanding) {
+                    this.isLost()
+                } else {
+                    this.isWon()
+                }
+            }
         }
     }
 
@@ -124,6 +154,7 @@ export class Player {
             bomb: this.bomb,
             speed: this.speed,
             flame: this.flame,
+            passBombs: this.passBombs,
             color: this.color,
             name: this.userName
         }

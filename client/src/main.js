@@ -1,5 +1,5 @@
-import App, { appComponent } from './App.js'
+import App from './App.js'
 import { render } from '../framework/index.js'
 
 const root = document.getElementById('root')
-render(App(appComponent), root)
+render(App, root)

@@ -23,3 +23,11 @@ export function dispatch(eventType, payload) {
     }
   }
 }
+
+export function on(eventName, callback) {
+  addEventListener(eventName, callback)
+}
+
+export function off(eventName, callback) {
+  removeEventListener(eventName, callback)
+}

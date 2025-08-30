@@ -11,7 +11,7 @@ export default function Map({ map }) {
             children: row.map((col, colIndex) => ({
                 tag: 'div',
                 key: `div2${colIndex}`,
-                attrs: { className: ui[col].className },
+                attrs: { className: ui[col]?.className },
                 children: [ui[col].content],
             }))
         }))
@@ -39,7 +39,7 @@ const ui = {
         content: "🔥"
     },
     51: {
-        className: "powerUp speedUp ",
+        className: "powerUp ",
         content: "⚡"
     },
     52: {
@@ -50,4 +50,12 @@ const ui = {
         className: "powerUp flameUp",
         content: ""
     },
+    54: {
+        className: "powerUp",
+        content: "🧡"
+    },
+    55: {
+        className: "powerUp",
+        content: "👾"
+    }
 }

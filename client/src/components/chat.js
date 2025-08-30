@@ -1,10 +1,7 @@
-import { generateId, useState } from '../../framework/index.js'
+import { createElement } from "../../framework/index.js"
 
-export default function Chat({ ws, playerName, messages }) {
-
-    const [message, setMessage] = useState("")
-
-      const handleMessage = (e) => {
+export default function Chat({ ws, playerName, messages, message, setMessage }) {
+    const handleMessage = (e) => {
         e.preventDefault()
         if (message.trim()) {
             let payload = { type: "chat", data: { sender: playerName, content: message } }
@@ -13,8 +10,7 @@ export default function Chat({ ws, playerName, messages }) {
         setMessage("")
     }
 
-
-    return {
+    return createElement({
         tag: 'div',
         key: 'chat-component-div',
         attrs: { className: "chat-container" },
@@ -29,23 +25,27 @@ export default function Chat({ ws, playerName, messages }) {
                 tag: 'div',
                 key: 'chat-component-div1',
                 attrs: { className: 'chat-window' },
-                children: [
-                    messages.length > 0
-                        ? messages.map((message, index) => MessageBubble({message, index, playerName}))
-                        : "type something and start chating"
-                ] 
+                children: [...messages?.map((message, index) => {
+                    return MessageBubble({ message, index, playerName })
+                })
+                ]
             },
             {
                 tag: 'form',
                 key: 'chat-component-form',
                 attrs: {
-                    onSubmit: (e) => handleMessage(e)
+                    onsubmit: (e) => handleMessage(e)
                 },
                 children: [
                     {
                         tag: 'input',
                         key: 'chat-component-input',
-                        attrs: { placeholder: 'send a message', type: 'text', name: 'message', value: message, onChange: (e) => setMessage(e.target.value) },
+                        attrs: {
+                            placeholder: 'send a message', type: 'text', name: 'message', value: message,
+                            oninput: (e) => {
+                                setMessage(e.target.value)
+                            }
+                        },
                         children: [],
                     },
                     {
@@ -57,10 +57,10 @@ export default function Chat({ ws, playerName, messages }) {
                 ]
             }
         ],
-    }
+    })
 }
 
-function MessageBubble({ playerName, index, message }) {
+function MessageBubble({ message, index, playerName }) {
     return {
         tag: 'div',
         key: `message-${index}`,
@@ -68,12 +68,12 @@ function MessageBubble({ playerName, index, message }) {
         children: [
             {
                 tag: 'span',
-                key: `span${id}`,
+                key: `span${index}`,
                 children: [message.sender],
             },
             {
                 tag: 'p',
-                key: `p${id}`,
+                key: `p${index}`,
                 children: [message.content]
             }
         ]

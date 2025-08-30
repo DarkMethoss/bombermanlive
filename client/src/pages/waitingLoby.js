@@ -1,7 +1,7 @@
 
 import Chat from "../components/chat.js"
 
-export default function WaitingLobby({ ws, players, seconds, lobbyState, messages, playerName }) {
+export default function WaitingLobby({ ws, players, seconds, lobbyState, messages, playerName, message, setMessage }) {
 
     return {
         tag: 'section',
@@ -13,17 +13,28 @@ export default function WaitingLobby({ ws, players, seconds, lobbyState, message
                 key: 'waitingLobby-component-div',
                 attrs: { className: 'count-down-container' },
                 children: [
-                    lobbyState === "waitingCountDown" ? {tag: 'h1', key: 'waitingLobby-component-h1', attrs:{}, children: ['Waiting for players...'] } : '',
-                    lobbyState === "gameStartCountDown" ? {tag: 'h1', key: 'waitingLobby-component-h11', attrs:{}, children: ['Game starts in:'] } : '',
+                    lobbyState === "waitingCountDown" ? { tag: 'h1', key: 'waitingLobby-component-h1', attrs: {}, children: ['Waiting for players...'] } : '',
+                    lobbyState === "gameStartCountDown" ? { tag: 'h1', key: 'waitingLobby-component-h11', attrs: {}, children: ['Game starts in:'] } : '',
                     players.length > 1 ?
                         {
                             tag: 'span',
                             key: 'waitingLobby-component-span',
-                            attrs: { style: 'font-size: 2rem; font-weight: bold' },
+                            attrs: {
+                                className: 'counterTime',
+                                style: 'font-size: 2rem; font-weight: bold'
+                            },
                             children: [
                                 '00:' + (seconds < 10 ? `0${seconds}` : seconds)
                             ],
                         } : '',
+                ]
+            },
+            {
+                tag: 'div',
+                key: 'waitingLobby-component-div10',
+                attrs: { className: 'playerCounter' },
+                children: [
+                    `${players.length}/4`
                 ]
             },
             {
@@ -39,7 +50,7 @@ export default function WaitingLobby({ ws, players, seconds, lobbyState, message
                     }
                 })
             },
-            Chat({ws, playerName, messages})
+            Chat({ ws, playerName, messages, message, setMessage })
         ]
     }
 }

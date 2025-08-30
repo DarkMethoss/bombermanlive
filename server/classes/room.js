@@ -1,13 +1,12 @@
 import Game from "./game.js"
 
-
 export default class Room {
     constructor(id, server) {
         this.id = id
         this.gameServer = server
         this.players = new Map()
-        this.waitingCounter = 5
-        this.gameStartCounter = 1
+        this.waitingCounter = 20
+        this.gameStartCounter = 10
         this.isClosed = false
         this.countDownInterval = null
         this.game = null
@@ -52,7 +51,7 @@ export default class Room {
 
         if (pCnt == 1) {
             this.isClosed = false
-            this.waitingCounter = 5
+            this.waitingCounter = 20
 
             this.stopWaitingCountdown()
         }
@@ -68,14 +67,14 @@ export default class Room {
                 this.waitingCounter--
                 this.brodcast("waitingLobby")
             } else {
-                this.gameStartCounter = 1
+                this.gameStartCounter = 10
                 this.startGameStartCountDown()
             }
         }, 1000);
     }
 
     stopWaitingCountdown() {
-        this.waitingCounter = 5
+        this.waitingCounter = 20
         if (this.countDownInterval) {
             clearInterval(this.countDownInterval)
             this.countDownInterval = null
@@ -115,17 +114,16 @@ export default class Room {
                 message.data = { players, seconds, state }
                 break;
             case "startGame":
-                message.data = this.game.gameData
+                message.data = this.game?.gameData
                 break;
             case "gameUpdates":
-                message.data = this.game.gameData
+                message.data = this.game?.gameData
                 break;
             case "chat":
                 message.data = options
             default:
                 break;
         }
-
 
         [...this.players.values()].forEach(player => {
             player.ws.send(JSON.stringify(message))

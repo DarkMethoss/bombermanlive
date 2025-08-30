@@ -1,7 +1,6 @@
-import { deepEqual } from './utils/deepEqual.js'
 export { createElement, generateId } from './core/createElement.js'
 export { render, createDomNode } from './core/render.js'
 export { useState, useRef, useEffect, withState, rerender } from './state/store.js'
-export { dispatch, subscribe } from './events/eventSystem.js'
+export { dispatch, subscribe, on, off } from './events/eventSystem.js'
 export { reconcile } from './core/reconcile.js'
 export { getCurrentPath, resolveRoute, startRouter } from './router/router.js'
