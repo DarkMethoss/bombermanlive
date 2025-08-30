@@ -22,6 +22,7 @@ export class Player {
         this.livesUp = 0
         this.passBomb = false
         this.passBombs = 0
+        this.respanTimeout = null
     }
 
     isWon() {
@@ -35,7 +36,8 @@ export class Player {
     }
 
     update(deltaTime, playerMovements) {
-        this.handlePlayerCollisionWithFlames()
+        console.log(this.game.flames)
+        if (playerMovements) this.handlePlayerCollisionWithFlames()
         if (playerMovements) this.handlePlayerMovements(deltaTime, playerMovements)
     }
 
@@ -106,6 +108,8 @@ export class Player {
     }
 
     handlePlayerCollisionWithFlames() {
+        console.log(`2 => `, [...this.game.flames.keys()])
+        
         let up = this.game.map.getCell(this.x, this.y)
         let down = this.game.map.getCell(this.x + this.width, this.y + this.height)
 
@@ -115,9 +119,10 @@ export class Player {
                 this.x = this.initialPosition.x
                 this.y = this.initialPosition.y
                 this.isRespawned = true
-                setTimeout(() => {
+                this.respanTimeout = setTimeout(() => {
                     this.isRespawned = false
-                }, 1000)
+                    clearTimeout(this.respanTimeout)
+                }, 5000)
             }
             if (this.hearts <= 0) this.isLost()
         }

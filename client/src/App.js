@@ -135,7 +135,6 @@ export const App = withState(function App(component) {
                     break;
 
                 case "startGame":
-                    console.log("game start type")
                     setMap(data.map)
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])

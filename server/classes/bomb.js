@@ -36,10 +36,10 @@ export default class Bomb {
     handleExplosion() {
         let flameRange = this.player.flame
         const directions = [
-            {dx: -1, dy: 0}, // left
-            {dx: 1, dy: 0},  // right
-            {dx: 0, dy: -1}, // up
-            {dx: 0, dy: 1}   // down
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }   // down
         ]
 
         directions.forEach(dir => {
@@ -59,15 +59,83 @@ export default class Bomb {
                 this.flamesPosition.push({ x: x, y: y })
             }
         })
-
+        
+        
         this.flamesPosition.forEach(obj => {
             let mapIndex = `${obj.x}-${obj.y}`
             const lastCellValue = this.game.bombs.has(mapIndex) ? 3 : 0;
-            const flame = new Flame(this.game, obj, lastCellValue)
-            this.game.flames.has(mapIndex) ? this.game.flames.get(mapIndex).push(flame) : this.game.flames.set(mapIndex, [flame]);
+            new Flame(this.game, obj, lastCellValue)
         })
+
+        
+
+        console.log(`1 => `,[...this.game.flames.keys()])
 
         clearTimeout(this.detonationTimeOut)
     }
-    
+
+    // handleExplosion() {
+    //     let flameRange = this.player.flame
+    //     for (let i = this.x - 1; i >= this.x - flameRange; i--) {
+    //         if (this.game.map.isFlameBlocked(i, this.y)) {
+    //             if (this.game.map.isBricks(i, this.y)) {
+    //                 this.game.bricks.delete(`${i}-${this.y}`)
+    //                 this.map.board[this.y][i] = 0
+    //                 this.game.affectedBricks.push({ col: i, row: this.y })
+    //                 this.flamesPosition.push({ x: i, y: this.y })
+    //             }
+    //             break
+    //         }
+    //         this.flamesPosition.push({ x: i, y: this.y })
+    //     }
+    //     for (let i = this.x + 1; i <= this.x + flameRange; i++) {
+    //         if (this.game.map.isFlameBlocked(i, this.y)) {
+    //             if (this.game.map.isBricks(i, this.y)) {
+    //                 this.game.bricks.delete(`${i}-${this.y}`)
+    //                 this.map.board[this.y][i] = 0
+    //                 this.game.affectedBricks.push({ col: i, row: this.y })
+    //                 this.flamesPosition.push({ x: i, y: this.y })
+    //             }
+    //             break
+    //         }
+    //         this.flamesPosition.push({ x: i, y: this.y })
+    //     }
+    //     for (let i = this.y - 1; i >= this.y - flameRange; i--) {
+    //         if (this.game.map.isFlameBlocked(this.x, i)) {
+    //             if (this.game.map.isBricks(this.x, i)) {
+    //                 this.game.bricks.delete(`${this.x}-${i}`)
+    //                 this.map.board[i][this.x] = 0
+    //                 this.game.affectedBricks.push({ col: this.x, row: i })
+    //                this.flamesPosition.push({ x: this.x, y: i })
+    //             }
+    //             break
+    //         }
+    //         this.flamesPosition.push({ x: this.x, y: i })
+    //     }
+    //     for (let i = this.y + 1; i <= this.y + flameRange; i++) {
+    //         if (this.game.map.isFlameBlocked(this.x, i)) {
+    //             if (this.game.map.isBricks(this.x, i)) {
+    //                 // what about delete them from the map direclty
+    //                 this.game.bricks.delete(`${this.x}-${i}`)
+    //                 this.map.board[i][this.x] = 0
+    //                 this.game.affectedBricks.push({ col: this.x, row: i })
+    //                 this.flamesPosition.push({ x: this.x, y: i })
+    //             }
+    //             break
+    //         }
+    //         this.flamesPosition.push({ x: this.x, y: i })
+    //     }
+
+
+    //     this.flamesPosition.forEach(obj => {
+    //         let mapIndex = `${obj.x}-${obj.y}`
+    //         // const lastCellValue = this.game.map.getCellValue(this.x, this.y) === 3 ? 3 : 0;
+    //         const lastCellValue = this.game.bombs.has(mapIndex) ? 3 : 0;
+    //         const flame = new Flame(this.game, obj, lastCellValue)
+    //         this.game.flames.has(mapIndex) ? this.game.flames.get(mapIndex).push(flame) : this.game.flames.set(mapIndex, [flame]);
+    //     })
+
+    //     clearTimeout(this.detonationTimeOut)
+    // }
+
 }

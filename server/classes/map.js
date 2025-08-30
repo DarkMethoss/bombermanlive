@@ -69,7 +69,6 @@ export default class GameMap {
                 this.#shuffle(powerUpKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
-                console.log(countSpeed)
                 //  now 3awtani khassni nrdha map 
                 if (powerUpKeys[powerUpKeyIndex] == 'speed') {
                     if (countSpeed >= (this.game.players.size * (this.maxSpeedpowerUps - 1))) {
@@ -126,8 +125,8 @@ export default class GameMap {
     isWalkable(x, y, player) {
         const { col, row } = this.getCell(x, y)
         let cellValue = this.board[row][col]
-        if (player.passBomb) return ![1, 2].includes(cellValue)
-        else return ![1, 2, 3].includes(cellValue)
+        if (player.passBomb) return ![1].includes(cellValue)
+        else return ![1, 3].includes(cellValue)
     }
 
     canGetOut(x, y) {
