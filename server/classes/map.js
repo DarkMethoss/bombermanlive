@@ -61,7 +61,7 @@ export default class GameMap {
     // we need 
     generatePowerUps() {
         // shuflle the array to (more randomness)
-        let powerUpKeys = ['bomb', 'bomb', 'bomb', 'bomb', 'flame', 'flame', 'flame', 'flame', 'speed', 'speed']
+        let powerUpKeys = ['speed', 'speed', 'speed', 'speed', 'speed', 'speed', 'speed', 'speed', 'speed', 'speed']
         if (this.game.bricks.length != 0) {
             let countSpeed = 0
             let powerUpsIndices = this.#getUniqueIndices(this.game.bricks, 0.1)
@@ -69,9 +69,10 @@ export default class GameMap {
                 this.#shuffle(powerUpKeys)
                 let powerUpKeyIndex = Math.floor(Math.random() * (powerUpKeys.length - 1))
                 let positionXY = Array.from(this.game.bricks)[element]
+                console.log(countSpeed)
                 //  now 3awtani khassni nrdha map 
                 if (powerUpKeys[powerUpKeyIndex] == 'speed') {
-                    if (countSpeed >= (this.game.players.size * this.maxSpeedpowerUps)) {
+                    if (countSpeed >= (this.game.players.size * (this.maxSpeedpowerUps - 1))) {
                         return;
                     }
                     countSpeed += 1
