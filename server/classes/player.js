@@ -136,6 +136,7 @@ export class Player {
             bomb: this.bomb,
             speed: this.speed,
             flame: this.flame,
+            passBombs: this.passBombs,
             color: this.color,
             name: this.userName
         }

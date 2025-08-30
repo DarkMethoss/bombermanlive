@@ -1,5 +1,4 @@
 import { reconcile } from "../core/reconcile.js"
-import { deepEqual } from "../utils/deepEqual.js"
 
 let currentComponent = null
 
