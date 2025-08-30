@@ -31,7 +31,6 @@ export function useState(initialValue) {
 
 export function useRef(initialValue) {
     const component = currentComponent
-    if (!component.refs) component.refs = []
     const refIndex = component.refIndex++
 
     if (!component.refs[refIndex]) {
