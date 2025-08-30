@@ -105,7 +105,6 @@ export const App = withState(function App(component) {
 
     useEffect(() => {
         if (page === "gameOver" && !isWon) {
-            console.log("Game over: ", isWon)
             ws.close()
         }
     }, [isWon])
