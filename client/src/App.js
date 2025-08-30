@@ -1,4 +1,4 @@
-import { createElement, withState, useEffect, useState, useRef } from '../framework/index.js'
+import { createElement, withState, useEffect, useState, useRef, on, off } from '../framework/index.js'
 import EntryName from './pages/entryName.js'
 import WaitingLobby from './pages/waitingLoby.js'
 import GameMap from './pages/gameMap.js'
@@ -42,17 +42,17 @@ export const App = withState(function App(component) {
         }
 
         if (page === "startGame") {
-            document.addEventListener("keydown", addMovement)
-            document.addEventListener("keyup", removeMovement)
-            window.addEventListener("blur", clearMovement)
+            on("keydown", addMovement)
+            on("keyup", removeMovement)
+            on("blur", clearMovement)
         } else {
-            document.removeEventListener("keydown", addMovement)
-            document.removeEventListener("keyup", removeMovement)
+            off("keydown", addMovement)
+            off("keyup", removeMovement)
         }
 
         return () => {
-            document.removeEventListener("keydown", addMovement)
-            document.removeEventListener("keyup", removeMovement)
+            off("keydown", addMovement)
+            off("keyup", removeMovement)
         }
     }, [page])
 
