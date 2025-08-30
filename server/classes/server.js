@@ -24,19 +24,23 @@ export default class Server {
         })
 
         ws.on("message", (message) => {
-            const parsed = JSON.parse(message);
-            const { type, data } = parsed;
-            switch (type) {
-                case "setName":
-                    this.handlePlayer(ws, data.name, playerId)
-                    break
-                case "getGameUpdates":
-                    this.handleGamesUpdates(playerId, data)
-                    break
-                case "chat":
-                    this.handleChat(playerId, data)
-                default:
-                    break
+            try {
+                const parsed = JSON.parse(message);
+                const { type, data } = parsed;
+                switch (type) {
+                    case "setName":
+                        this.handlePlayer(ws, data.name, playerId)
+                        break
+                    case "getGameUpdates":
+                        this.handleGamesUpdates(playerId, data)
+                        break
+                    case "chat":
+                        this.handleChat(playerId, data)
+                    default:
+                        break
+                }   
+            } catch (error) {
+                console.error(error);
             }
         })
     }
