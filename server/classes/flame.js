@@ -17,7 +17,6 @@ export default class Flame {
     }
 
     flamesCounter() {
-        console.log(`3 => `, [...this.game.flames.keys()])
         let index = `${this.x}-${this.y}`
         this.game.flames.has(index) ? this.game.flames.get(index).push(this) : this.game.flames.set(index, [this]);
 

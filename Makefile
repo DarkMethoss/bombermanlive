@@ -7,6 +7,5 @@ run-frontend:
 	cd client && npm start
 
 run-all:
-	npx concurrently --names "BACKEND,FRONTEND" -c "bgBlue.bold,bgGreen.bold" \
-		"cd server && npm i && npm start" \
-		"cd client && python3 -m http.server" \
+	cd server && npm i && npm start \
+	cd client && python3 -m http.server \

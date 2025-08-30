@@ -17,7 +17,7 @@ export default class GameMap {
         this.width = 750
         this.height = 750
         this.size = size
-        this.proportionBricks = 1
+        this.proportionBricks = 0.9
         this.board = Array(this.size).fill(0).map(() => Array(this.size).fill(0))
         this.maxSpeedpowerUps = 4
         this.maxLivesUp = 2

@@ -8,7 +8,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.2
+        this.unity = 0.3
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1
@@ -36,7 +36,6 @@ export class Player {
     }
 
     update(deltaTime, playerMovements) {
-        console.log(this.game.flames)
         if (playerMovements) this.handlePlayerCollisionWithFlames()
         if (playerMovements) this.handlePlayerMovements(deltaTime, playerMovements)
     }
@@ -107,8 +106,6 @@ export class Player {
     }
 
     handlePlayerCollisionWithFlames() {
-        console.log(`2 => `, [...this.game.flames.keys()])
-
         let up = this.game.map.getCell(this.x, this.y)
         let down = this.game.map.getCell(this.x + this.width, this.y + this.height)
 
@@ -157,6 +154,7 @@ export class Player {
             bomb: this.bomb,
             speed: this.speed,
             flame: this.flame,
+            passBombs: this.passBombs,
             color: this.color,
             name: this.userName
         }
