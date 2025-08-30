@@ -52,6 +52,10 @@ const ui = {
     },
     54: {
         className: "powerUp",
-        content: "💛"
+        content: "🧡"
+    },
+    55: {
+        className: "powerUp",
+        content: "👾"
     }
 }

@@ -9,7 +9,7 @@ export class Player {
         this.y = null
         this.width = 40
         this.height = 40
-        this.unity = 0.12
+        this.unity = 0.15
         this.bombsPlaced = 0
         this.userName = null
         this.bomb = 1
@@ -19,9 +19,9 @@ export class Player {
         this.game = null
         this.initialPosition = null
         this.isRespawned = false
-        this.maxSpeedpowerUps = 4
-        this.maxLivesUp = 2
         this.livesUp = 0
+        this.passBomb = false
+        this.passBombs = 0
     }
 
     isWon() {
@@ -53,22 +53,22 @@ export class Player {
 
             if (movement === "ArrowRight") {
                 x = this.x + deltaTime * this.speed * this.unity * 0.5
-                isWalkable = this.game.map.isWalkable(x + this.width, this.y) && this.game.map.isWalkable(x + this.width, this.y + this.height)
+                isWalkable = this.game.map.isWalkable(x + this.width, this.y, this) && this.game.map.isWalkable(x + this.width, this.y + this.height, this)
                 canGetOut = this.game.map.canGetOut(x + this.width, this.y) && this.game.map.canGetOut(x + this.width, this.y + this.height)
             }
             if (movement === "ArrowLeft") {
                 x = this.x - deltaTime * this.speed * this.unity * 0.5
-                isWalkable = this.game.map.isWalkable(x, this.y) && this.game.map.isWalkable(x, this.y + this.height)
+                isWalkable = this.game.map.isWalkable(x, this.y, this) && this.game.map.isWalkable(x, this.y + this.height, this)
                 canGetOut = this.game.map.canGetOut(x, this.y) && this.game.map.canGetOut(x, this.y + this.height)
             }
             if (movement === "ArrowUp") {
                 y = this.y - deltaTime * this.speed * this.unity * 0.5
-                isWalkable = this.game.map.isWalkable(this.x, y) && this.game.map.isWalkable(this.x + this.width, y)
+                isWalkable = this.game.map.isWalkable(this.x, y, this) && this.game.map.isWalkable(this.x + this.width, y, this)
                 canGetOut = this.game.map.canGetOut(this.x, y) && this.game.map.canGetOut(this.x + this.width, y)
             }
             if (movement === "ArrowDown") {
                 y = this.y + deltaTime * this.speed * this.unity * 0.5
-                isWalkable = this.game.map.isWalkable(this.x, y + this.height) && this.game.map.isWalkable(this.x + this.width, y + this.height)
+                isWalkable = this.game.map.isWalkable(this.x, y + this.height, this) && this.game.map.isWalkable(this.x + this.width, y + this.height, this)
                 canGetOut = this.game.map.canGetOut(this.x, y + this.height) && this.game.map.canGetOut(this.x + this.width, y + this.height)
             }
 
@@ -76,13 +76,10 @@ export class Player {
                 this.x = x
                 this.y = y
             }
-
         });
 
         this.handlePowerUpCollision()
-
     }
-
 
     //  here we'll be handling the player must collide with the player at least at the center 
     // here we need to see if the player mazal madepassash l max dyal 
@@ -94,19 +91,19 @@ export class Player {
         let { col, row } = this.game.map.getCell(playerCenterX, playerCenterY)
         if (this.game.map.HoldsPowerUp(col, row)) {
             let powerUp = this.game.powerUps.get(`${col}-${row}`);
-            if (powerUp.type == 'speed' && this.speed >= this.maxSpeedpowerUps) {
+            if (powerUp.type == 'speed' && this.speed >= this.game.map.maxSpeedpowerUps) {
                 return
             }
-            if (powerUp.type == 'life' && this.livesUp >= this.maxLivesUp) {
+            if (powerUp.type == 'life' && this.livesUp >= this.game.map.maxLivesUp) {
                 return
             }
-
+            if (powerUp.type == 'pass-bomb' && this.passBombs >= this.game.map.maxPassBomb) {
+                return
+            }
             powerUp.applyTo(this)
             powerUp.update(this)
         }
-
     }
-
 
     handlePlayerCollisionWithFlames() {
         let up = this.game.map.getCell(this.x, this.y)
@@ -138,7 +135,4 @@ export class Player {
             name: this.userName
         }
     }
-
-
-
 }

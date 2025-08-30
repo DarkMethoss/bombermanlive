@@ -14,6 +14,7 @@ export const App = withState(function App(component) {
 
     const [ws, setWs] = useState(null)
     const wsRef = useRef(null)
+    const requestAnimationRef = useRef(null)
 
     //* Game Map States
     const [players, setPlayers] = useState([])
@@ -90,7 +91,7 @@ export const App = withState(function App(component) {
             wsRef.current?.send(JSON.stringify(message))
             bombPlacedRef.current = false
 
-            requestAnimationFrame(gameLoop)
+            requestAnimationRef.current = requestAnimationFrame(gameLoop)
         }
         gameLoop(0)
     }, [page])
@@ -134,6 +135,7 @@ export const App = withState(function App(component) {
                     break;
 
                 case "startGame":
+                    console.log("game start type")
                     setMap(data.map)
                     setPlayers(data.players)
                     setPlayer(data.players.filter((player) => player.name === playerName)[0])
@@ -147,11 +149,11 @@ export const App = withState(function App(component) {
                     break;
 
                 case "gameOver":
-
                     setPage("gameOver")
                     setIsWon(data.isWon)
-                    console.log("game over: ", data.isWon)
                     if (wsRef.current && !data.isWon) wsRef.current.close()
+                    cancelAnimationFrame(requestAnimationRef.current)
+                    requestAnimationRef.current = null
                     break;
 
                 case "chat":
@@ -206,7 +208,7 @@ export const App = withState(function App(component) {
         }))
     }
 
-    if (page === "gameOver") return createElement(GameOver({ ws, isWon, setPage, setPlayerName, setNameError, setPlayers, setMessages }))
+    if (page === "gameOver") return createElement(GameOver({ isWon, setPage, setPlayerName, setNameError, setPlayers, setMessages, wsRef }))
 })
 
 export default App

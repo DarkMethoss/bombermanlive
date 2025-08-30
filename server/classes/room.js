@@ -1,6 +1,5 @@
 import Game from "./game.js"
 
-
 export default class Room {
     constructor(id, server) {
         this.id = id
@@ -125,7 +124,6 @@ export default class Room {
             default:
                 break;
         }
-
 
         [...this.players.values()].forEach(player => {
             player.ws.send(JSON.stringify(message))
